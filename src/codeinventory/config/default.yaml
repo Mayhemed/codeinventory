@@ -1,0 +1,36 @@
+scanner:
+  paths:
+    - "~/Projects"
+    - "~/Scripts"
+    - "~/Documents/Code"
+  exclude:
+    - "__pycache__"
+    - ".git"
+    - "node_modules"
+    - "venv"
+    - ".venv"
+    - "build"
+    - "dist"
+  max_file_size: 1048576  # 1MB
+  extensions:
+    python: [".py", ".pyw"]
+    javascript: [".js", ".jsx", ".mjs"]
+    typescript: [".ts", ".tsx"]
+    shell: [".sh", ".bash", ".zsh"]
+    config: ["Dockerfile", "Makefile", "package.json", "pyproject.toml"]
+
+analyzer:
+  ollama:
+    host: "http://localhost:11434"
+    model: "codellama"
+    temperature: 0.3
+  batch_size: 10
+  timeout: 30
+
+database:
+  path: "~/.codeinventory/inventory.db"
+  backup_interval: "daily"
+
+watcher:
+  enabled: false
+  poll_interval: 60

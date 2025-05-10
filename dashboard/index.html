@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CodeInventory Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>CodeInventory</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search your code...">
+                <button onclick="search()">Search</button>
+            </div>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showView('overview')">Overview</a></li>
+                <li><a href="#" onclick="showView('tools')">Tools</a></li>
+                <li><a href="#" onclick="showView('components')">Components</a></li>
+                <li><a href="#" onclick="showView('relationships')">Relationships</a></li>
+            </ul>
+        </nav>
+        
+        <main id="content">
+            <div id="overview" class="view active">
+                <h2>Overview</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>Total Tools</h3>
+                        <p id="totalTools">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Components</h3>
+                        <p id="totalComponents">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Languages</h3>
+                        <p id="languageCount">0</p>
+                    </div>
+                </div>
+                <div class="charts">
+                    <canvas id="categoryChart"></canvas>
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+            
+            <div id="tools" class="view">
+                <h2>Tools</h2>
+                <div id="toolsList"></div>
+            </div>
+            
+            <div id="components" class="view">
+                <h2>Reusable Components</h2>
+                <div id="componentsList"></div>
+            </div>
+            
+            <div id="relationships" class="view">
+                <h2>Relationship Map</h2>
+                <div id="networkGraph"></div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="renderer.js"></script>
+</body>
+</html>
