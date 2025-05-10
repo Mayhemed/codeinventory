@@ -1,6 +1,7 @@
 import json
 import requests
 from typing import Dict, Optional
+from codeinventory.scanner.enhanced_scanner import EnhancedAnalyzer
 
 class OllamaAnalyzer:
     def __init__(self, config: Dict):
@@ -8,7 +9,8 @@ class OllamaAnalyzer:
         self.model = config['analyzer']['ollama']['model']
         self.temperature = config['analyzer']['ollama']['temperature']
         self.timeout = config['analyzer']['timeout']
-    
+        self.enhanced_analyzer = EnhancedAnalyzer()
+
     def analyze(self, file_info: Dict) -> Optional[Dict]:
         """Analyze file content using Ollama."""
         prompt = self._create_prompt(file_info['content'], file_info['language'])
@@ -20,7 +22,6 @@ class OllamaAnalyzer:
                     'model': self.model,
                     'prompt': prompt,
                     'stream': False,
-                    'temperature': self.temperature,
                     'format': 'json'
                 },
                 timeout=self.timeout
@@ -28,7 +29,23 @@ class OllamaAnalyzer:
             
             if response.status_code == 200:
                 result = response.json()
-                return json.loads(result['response'])
+                try:
+                    ai_analysis = json.loads(result['response'])
+                    
+                    # Add enhanced analysis
+                    enhanced_info = self.enhanced_analyzer.analyze_file(
+                        file_info['path'],
+                        file_info['content'],
+                        file_info['language']
+                    )
+                    
+                    # Merge the results
+                    ai_analysis.update(enhanced_info)
+                    
+                    return ai_analysis
+                except json.JSONDecodeError as e:
+                    print(f"JSON decode error: {e}")
+                    return None
             else:
                 print(f"Ollama error: {response.status_code}")
                 return None

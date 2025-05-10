@@ -1,0 +1,19 @@
+        CREATE TABLE IF NOT EXISTS tools (
+            id TEXT PRIMARY KEY,
+            path TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            language TEXT NOT NULL,
+            file_hash TEXT NOT NULL,
+            purpose TEXT,
+            description TEXT,
+            category TEXT,
+            complexity TEXT,
+            last_modified INTEGER,
+            last_analyzed INTEGER,
+            created_at INTEGER DEFAULT (strftime('%s', 'now')),
+            execution_command TEXT,
+            requires_args BOOLEAN,
+            environment_vars TEXT,
+            importable_items TEXT
+        );

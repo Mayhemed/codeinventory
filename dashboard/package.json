@@ -8,9 +8,10 @@
     "build": "electron-builder"
   },
   "dependencies": {
+    "chart.js": "^4.4.1",
     "electron": "^27.1.0",
-    "vis-network": "^9.1.9",
-    "chart.js": "^4.4.1"
+    "node-fetch": "^2.7.0",
+    "vis-network": "^9.1.9"
   },
   "devDependencies": {
     "electron-builder": "^24.9.1"

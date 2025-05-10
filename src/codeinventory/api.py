@@ -5,6 +5,21 @@ import yaml
 from .database.db import InventoryDB
 
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    """API root endpoint."""
+    return jsonify({
+        'message': 'CodeInventory API',
+        'version': '1.0.0',
+        'endpoints': {
+            '/api/stats': 'Get overview statistics',
+            '/api/tools': 'Get all tools',
+            '/api/components': 'Get all components',
+            '/api/relationships': 'Get tool relationships for visualization',
+            '/api/search?q=<query>': 'Search tools'
+        }
+    })
 CORS(app)
 
 # Load configuration
@@ -12,8 +27,12 @@ config_path = Path(__file__).parent / 'config' / 'default.yaml'
 with open(config_path) as f:
    config = yaml.safe_load(f)
 
-# Initialize database
-db = InventoryDB(config['database']['path'])
+def get_db_connection():
+    """Create a new database connection for each request."""
+    db_path = Path(config['database']['path']).expanduser()
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route('/api/stats')
 def get_stats():

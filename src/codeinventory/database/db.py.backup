@@ -32,11 +32,7 @@ class InventoryDB:
             complexity TEXT,
             last_modified INTEGER,
             last_analyzed INTEGER,
-            created_at INTEGER DEFAULT (strftime('%s', 'now')),
-            execution_command TEXT,
-            requires_args BOOLEAN,
-            environment_vars TEXT,
-            importable_items TEXT
+            created_at INTEGER DEFAULT (strftime('%s', 'now'))
         );
         
         CREATE TABLE IF NOT EXISTS components (

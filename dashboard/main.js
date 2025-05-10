@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const fetch = require('node-fetch');
 
 let mainWindow;
 let pythonProcess;
@@ -15,16 +16,10 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadFile('dashboard/index.html');
+  mainWindow.loadFile(path.join(__dirname, 'index.html'));
   
-  // Start Python backend
-  pythonProcess = spawn('python', ['-m', 'codeinventory.api'], {
-    cwd: path.join(__dirname, '..')
-  });
-  
-  pythonProcess.stdout.on('data', (data) => {
-    console.log(`Python: ${data}`);
-  });
+  // Open DevTools to see errors
+  mainWindow.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
@@ -46,8 +41,10 @@ app.on('activate', () => {
 
 // Handle API calls from renderer
 ipcMain.handle('api-call', async (event, endpoint, method = 'GET', data = null) => {
-  const fetch = require('node-fetch');
-  const url = `http://localhost:8000${endpoint}`;
+  // Force IPv4 by using 127.0.0.1
+  const apiUrl = new URL(endpoint, 'http://127.0.0.1:8001');
+  
+  console.log(`API call to: ${apiUrl.toString()}`); // Debug log
   
   const options = {
     method,
@@ -61,8 +58,10 @@ ipcMain.handle('api-call', async (event, endpoint, method = 'GET', data = null) 
   }
   
   try {
-    const response = await fetch(url, options);
-    return response.json();
+    const response = await fetch(apiUrl.toString(), options);
+    const result = await response.json();
+    console.log(`API response:`, result); // Debug log
+    return result;
   } catch (error) {
     console.error('API call failed:', error);
     throw error;

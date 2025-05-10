@@ -1,4 +1,4 @@
-# Create README
+# Create a properly formatted README
 cat > README.md << 'README'
 # CodeInventory
 
@@ -23,35 +23,35 @@ An AI-powered code inventory system that helps you discover, understand, and man
 ## Installation
 
 1. Clone the repository:
-  ```bash
-  git clone <repository-url>
-  cd codeinventory
+   ```bash
+   git clone <repository-url>
+   cd codeinventory
 Install Python dependencies:
-bashuv install
+uv install
 
 Install dashboard dependencies:
-bashcd dashboard
+ cd dashboard
 npm install
 cd ..
 
 Start Ollama with codellama:
-bashollama pull codellama
+ ollama pull codellama
 ollama serve
 
 
 Usage
 Command Line Interface
 Scan a directory:
-bashcodeinventory scan ~/Projects
+ codeinventory scan ~/Projects
 Search your inventory:
-bashcodeinventory search "file operations"
+ codeinventory search "file operations"
 Show tool details:
-bashcodeinventory show <tool-id>
+ codeinventory show <tool-id>
 Dashboard
 Start the dashboard:
-bashnpm run dashboard
+ npm run dashboard
 Or start the API server and dashboard separately:
-bash# Terminal 1: Start API server
+# Terminal 1: Start API server
 python -m codeinventory.api
 
 # Terminal 2: Start Electron dashboard
@@ -75,7 +75,7 @@ Dashboard: Electron app with visualization
 
 Development
 Run tests:
-bashpytest tests/
+pytest tests/
 License
 MIT License - see LICENSE file for details
 README
@@ -99,7 +99,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 LICENSE
-Install Python dependencies with uv
+# Install Python dependencies with uv
 echo "Installing Python dependencies..."
 uv sync
 Install Node dependencies for dashboard
@@ -107,7 +107,7 @@ echo "Installing dashboard dependencies..."
 cd dashboard
 npm install
 cd ..
-Create initial commit
+# Create initial commit
 git add .
 git commit -m "Initial commit: CodeInventory - AI-powered code inventory system"
 echo "✅ CodeInventory project created successfully!"
@@ -142,5 +142,5 @@ The project structure includes:
 - API server using Flask
 
 To use the script:
-```bash
+```
 ./setup-codeinventory.sh
