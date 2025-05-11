@@ -79,7 +79,7 @@ class InventoryDB:
         
         self.conn.commit()
     
-    def save_tool(self, file_info: Dict, analysis: Dict) -> str:
+    def save_tool(self, file_info: Dict, analysis: Optional[Dict]) -> Optional[str]:
         """Save tool and its analysis to database."""
         tool_id = str(uuid.uuid4())
         cursor = self.conn.cursor()
@@ -90,6 +90,10 @@ class InventoryDB:
             existing = cursor.fetchone()
             
             # Serialize complex data structures
+            if analysis is None:
+                return None
+            if analysis is None:
+                return None
             environment_vars = json.dumps(analysis.get('environment_vars', []))
             importable_items = json.dumps(analysis.get('importable_items', {}))
             
