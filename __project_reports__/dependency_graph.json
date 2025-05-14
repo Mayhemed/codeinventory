@@ -1,0 +1,927 @@
+{
+  "nodes": [
+    {
+      "id": "enhanced_scanner.py",
+      "name": "enhanced_scanner.py",
+      "path": "enhanced_scanner.py",
+      "dependencies": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "requests",
+        "sqlite3",
+        "time"
+      ]
+    },
+    {
+      "id": "debug_scan.py",
+      "name": "debug_scan.py",
+      "path": "debug_scan.py",
+      "dependencies": [
+        "codeinventory.analyzer.ollama_analyzer",
+        "codeinventory.cli.cli",
+        "codeinventory.database.db",
+        "codeinventory.scanner.scanner",
+        "pathlib",
+        "sys",
+        "time"
+      ]
+    },
+    {
+      "id": "view_database.py",
+      "name": "view_database.py",
+      "path": "view_database.py",
+      "dependencies": [
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3"
+      ]
+    },
+    {
+      "id": "fixed_api_server.py",
+      "name": "fixed_api_server.py",
+      "path": "fixed_api_server.py",
+      "dependencies": [
+        "flask",
+        "flask",
+        "flask_cors",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3"
+      ]
+    },
+    {
+      "id": "run_api.py",
+      "name": "run_api.py",
+      "path": "run_api.py",
+      "dependencies": [
+        "codeinventory.api",
+        "os",
+        "sys"
+      ]
+    },
+    {
+      "id": "codeinventory_run.py",
+      "name": "codeinventory_run.py",
+      "path": "codeinventory_run.py",
+      "dependencies": [
+        "codeinventory.cli.cli",
+        "os",
+        "sys"
+      ]
+    },
+    {
+      "id": "update_schema.py",
+      "name": "update_schema.py",
+      "path": "update_schema.py",
+      "dependencies": [
+        "pathlib",
+        "sqlite3"
+      ]
+    },
+    {
+      "id": "fix_schema.py",
+      "name": "fix_schema.py",
+      "path": "fix_schema.py",
+      "dependencies": [
+        "re"
+      ]
+    },
+    {
+      "id": "tests/test_scanner/test_scanner.py",
+      "name": "test_scanner.py",
+      "path": "tests/test_scanner/test_scanner.py",
+      "dependencies": [
+        "codeinventory.scanner.scanner",
+        "pathlib",
+        "pytest"
+      ]
+    },
+    {
+      "id": "update_schema_execution.py",
+      "name": "update_schema_execution.py",
+      "path": "update_schema_execution.py",
+      "dependencies": [
+        "pathlib",
+        "sqlite3",
+        "yaml"
+      ]
+    },
+    {
+      "id": "README.md",
+      "name": "README.md",
+      "path": "README.md",
+      "dependencies": []
+    },
+    {
+      "id": "dashboard/renderer.js",
+      "name": "renderer.js",
+      "path": "dashboard/renderer.js",
+      "dependencies": []
+    },
+    {
+      "id": "dashboard/index.html",
+      "name": "index.html",
+      "path": "dashboard/index.html",
+      "dependencies": []
+    },
+    {
+      "id": "dashboard/styles.css",
+      "name": "styles.css",
+      "path": "dashboard/styles.css",
+      "dependencies": []
+    },
+    {
+      "id": "dashboard/update_schema.py",
+      "name": "update_schema.py",
+      "path": "dashboard/update_schema.py",
+      "dependencies": [
+        "pathlib",
+        "sqlite3",
+        "yaml"
+      ]
+    },
+    {
+      "id": "dashboard/main.js",
+      "name": "main.js",
+      "path": "dashboard/main.js",
+      "dependencies": []
+    },
+    {
+      "id": "dashboard/package.json",
+      "name": "package.json",
+      "path": "dashboard/package.json",
+      "dependencies": []
+    },
+    {
+      "id": "fix_database_schema.py",
+      "name": "fix_database_schema.py",
+      "path": "fix_database_schema.py",
+      "dependencies": [
+        "os",
+        "pathlib",
+        "sqlite3"
+      ]
+    },
+    {
+      "id": "run_api_custom_port.py",
+      "name": "run_api_custom_port.py",
+      "path": "run_api_custom_port.py",
+      "dependencies": [
+        "codeinventory.api",
+        "os",
+        "sys"
+      ]
+    },
+    {
+      "id": "fixed_api.py",
+      "name": "fixed_api.py",
+      "path": "fixed_api.py",
+      "dependencies": [
+        "flask",
+        "flask",
+        "flask",
+        "flask_cors",
+        "json",
+        "pathlib",
+        "sqlite3",
+        "yaml"
+      ]
+    },
+    {
+      "id": "comprehensive_scanner.py",
+      "name": "comprehensive_scanner.py",
+      "path": "comprehensive_scanner.py",
+      "dependencies": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "requests",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback",
+        "typing",
+        "typing",
+        "typing",
+        "typing"
+      ]
+    },
+    {
+      "id": "test_api.py",
+      "name": "test_api.py",
+      "path": "test_api.py",
+      "dependencies": [
+        "flask",
+        "flask",
+        "pathlib",
+        "sqlite3"
+      ]
+    },
+    {
+      "id": "make-readme.sh",
+      "name": "make-readme.sh",
+      "path": "make-readme.sh",
+      "dependencies": []
+    },
+    {
+      "id": "main.py",
+      "name": "main.py",
+      "path": "main.py",
+      "dependencies": []
+    },
+    {
+      "id": "explore_db.py",
+      "name": "explore_db.py",
+      "path": "explore_db.py",
+      "dependencies": [
+        "pathlib",
+        "sqlite3"
+      ]
+    },
+    {
+      "id": "src/codeinventory/database/fix_db.py",
+      "name": "fix_db.py",
+      "path": "src/codeinventory/database/fix_db.py",
+      "dependencies": []
+    },
+    {
+      "id": "src/codeinventory/database/db.py",
+      "name": "db.py",
+      "path": "src/codeinventory/database/db.py",
+      "dependencies": [
+        "datetime",
+        "json",
+        "pathlib",
+        "sqlite3",
+        "typing",
+        "typing",
+        "typing",
+        "uuid"
+      ]
+    },
+    {
+      "id": "src/codeinventory/database/targeted_scan.py",
+      "name": "targeted_scan.py",
+      "path": "src/codeinventory/database/targeted_scan.py",
+      "dependencies": [
+        "codeinventory.analyzer.ollama_analyzer",
+        "codeinventory.cli.cli",
+        "codeinventory.database.db",
+        "codeinventory.scanner.scanner",
+        "pathlib",
+        "sys",
+        "time",
+        "yaml"
+      ]
+    },
+    {
+      "id": "src/codeinventory/config/default.yaml",
+      "name": "default.yaml",
+      "path": "src/codeinventory/config/default.yaml",
+      "dependencies": []
+    },
+    {
+      "id": "src/codeinventory/cli/__init__.py",
+      "name": "__init__.py",
+      "path": "src/codeinventory/cli/__init__.py",
+      "dependencies": [
+        "cli"
+      ]
+    },
+    {
+      "id": "src/codeinventory/cli/cli.py",
+      "name": "cli.py",
+      "path": "src/codeinventory/cli/cli.py",
+      "dependencies": [
+        "analyzer.ollama_analyzer",
+        "click",
+        "database.db",
+        "pathlib",
+        "rich.console",
+        "rich.progress",
+        "rich.table",
+        "scanner.scanner",
+        "yaml"
+      ]
+    },
+    {
+      "id": "src/codeinventory/api.py",
+      "name": "api.py",
+      "path": "src/codeinventory/api.py",
+      "dependencies": [
+        "database.db",
+        "flask",
+        "flask",
+        "flask",
+        "flask_cors",
+        "pathlib",
+        "yaml"
+      ]
+    },
+    {
+      "id": "src/codeinventory/scanner/enhanced_scanner.py",
+      "name": "enhanced_scanner.py",
+      "path": "src/codeinventory/scanner/enhanced_scanner.py",
+      "dependencies": [
+        "ast",
+        "pathlib",
+        "re",
+        "typing",
+        "typing",
+        "typing"
+      ]
+    },
+    {
+      "id": "src/codeinventory/scanner/scanner.py",
+      "name": "scanner.py",
+      "path": "src/codeinventory/scanner/scanner.py",
+      "dependencies": [
+        "datetime",
+        "glob",
+        "hashlib",
+        "mimetypes",
+        "os",
+        "pathlib",
+        "typing",
+        "typing",
+        "typing",
+        "typing"
+      ]
+    },
+    {
+      "id": "src/codeinventory/analyzer/__init__.py",
+      "name": "__init__.py",
+      "path": "src/codeinventory/analyzer/__init__.py",
+      "dependencies": []
+    },
+    {
+      "id": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "name": "ollama_analyzer.py",
+      "path": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "dependencies": [
+        "codeinventory.scanner.enhanced_scanner",
+        "json",
+        "requests",
+        "typing",
+        "typing"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "enhanced_scanner.py",
+      "target": "ast"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "datetime"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "hashlib"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "json"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "os"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "re"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "requests"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "enhanced_scanner.py",
+      "target": "time"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "codeinventory.analyzer.ollama_analyzer"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "codeinventory.cli.cli"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "codeinventory.database.db"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "codeinventory.scanner.scanner"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "sys"
+    },
+    {
+      "source": "debug_scan.py",
+      "target": "time"
+    },
+    {
+      "source": "view_database.py",
+      "target": "json"
+    },
+    {
+      "source": "view_database.py",
+      "target": "os"
+    },
+    {
+      "source": "view_database.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "view_database.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "flask"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "flask"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "flask_cors"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "json"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "os"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "fixed_api_server.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "run_api.py",
+      "target": "codeinventory.api"
+    },
+    {
+      "source": "run_api.py",
+      "target": "os"
+    },
+    {
+      "source": "run_api.py",
+      "target": "sys"
+    },
+    {
+      "source": "codeinventory_run.py",
+      "target": "codeinventory.cli.cli"
+    },
+    {
+      "source": "codeinventory_run.py",
+      "target": "os"
+    },
+    {
+      "source": "codeinventory_run.py",
+      "target": "sys"
+    },
+    {
+      "source": "update_schema.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "update_schema.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "fix_schema.py",
+      "target": "re"
+    },
+    {
+      "source": "tests/test_scanner/test_scanner.py",
+      "target": "codeinventory.scanner.scanner"
+    },
+    {
+      "source": "tests/test_scanner/test_scanner.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "tests/test_scanner/test_scanner.py",
+      "target": "pytest"
+    },
+    {
+      "source": "update_schema_execution.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "update_schema_execution.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "update_schema_execution.py",
+      "target": "yaml"
+    },
+    {
+      "source": "dashboard/update_schema.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "dashboard/update_schema.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "dashboard/update_schema.py",
+      "target": "yaml"
+    },
+    {
+      "source": "fix_database_schema.py",
+      "target": "os"
+    },
+    {
+      "source": "fix_database_schema.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "fix_database_schema.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "run_api_custom_port.py",
+      "target": "codeinventory.api"
+    },
+    {
+      "source": "run_api_custom_port.py",
+      "target": "os"
+    },
+    {
+      "source": "run_api_custom_port.py",
+      "target": "sys"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "flask"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "flask"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "flask"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "flask_cors"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "json"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "fixed_api.py",
+      "target": "yaml"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "ast"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "datetime"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "hashlib"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "json"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "os"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "re"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "requests"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "sys"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "time"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "traceback"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "comprehensive_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "test_api.py",
+      "target": "flask"
+    },
+    {
+      "source": "test_api.py",
+      "target": "flask"
+    },
+    {
+      "source": "test_api.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "test_api.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "explore_db.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "explore_db.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "datetime"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "json"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "sqlite3"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/database/db.py",
+      "target": "uuid"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "codeinventory.analyzer.ollama_analyzer"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "codeinventory.cli.cli"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "codeinventory.database.db"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "codeinventory.scanner.scanner"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "sys"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "time"
+    },
+    {
+      "source": "src/codeinventory/database/targeted_scan.py",
+      "target": "yaml"
+    },
+    {
+      "source": "src/codeinventory/cli/__init__.py",
+      "target": "cli"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "analyzer.ollama_analyzer"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "click"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "database.db"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "rich.console"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "rich.progress"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "rich.table"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "scanner.scanner"
+    },
+    {
+      "source": "src/codeinventory/cli/cli.py",
+      "target": "yaml"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "database.db"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "flask"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "flask"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "flask"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "flask_cors"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "src/codeinventory/api.py",
+      "target": "yaml"
+    },
+    {
+      "source": "src/codeinventory/scanner/enhanced_scanner.py",
+      "target": "ast"
+    },
+    {
+      "source": "src/codeinventory/scanner/enhanced_scanner.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "src/codeinventory/scanner/enhanced_scanner.py",
+      "target": "re"
+    },
+    {
+      "source": "src/codeinventory/scanner/enhanced_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/scanner/enhanced_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/scanner/enhanced_scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "datetime"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "glob"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "hashlib"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "mimetypes"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "os"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "pathlib"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/scanner/scanner.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "target": "codeinventory.scanner.enhanced_scanner"
+    },
+    {
+      "source": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "target": "json"
+    },
+    {
+      "source": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "target": "requests"
+    },
+    {
+      "source": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "target": "typing"
+    },
+    {
+      "source": "src/codeinventory/analyzer/ollama_analyzer.py",
+      "target": "typing"
+    }
+  ]
+}

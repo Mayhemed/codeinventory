@@ -1,0 +1,1028 @@
+{
+  "file": "comprehensive_scanner.py",
+  "path": "comprehensive_scanner.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:50:34.739544",
+  "metrics": {
+    "size": 46180,
+    "lines": {
+      "total": 1243,
+      "code": 1003,
+      "comment": 240
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 21,
+      "classes": 1,
+      "imports": 16
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "import",
+        "module": "hashlib",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "requests",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "import",
+        "module": "re",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "ast",
+        "alias": null,
+        "line": 10
+      },
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 11
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Tuple",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "import",
+        "module": "traceback",
+        "alias": null,
+        "line": 862
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_file_info",
+        "args": [
+          {
+            "name": "filepath",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get comprehensive file information.",
+        "is_async": false,
+        "line": 256,
+        "complexity": 2
+      },
+      {
+        "name": "get_language",
+        "args": [
+          {
+            "name": "filepath",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Determine file language from extension.",
+        "is_async": false,
+        "line": 280,
+        "complexity": 1
+      },
+      {
+        "name": "analyze_with_ollama",
+        "args": [
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get comprehensive AI analysis with better prompts.",
+        "is_async": false,
+        "line": 301,
+        "complexity": 6
+      },
+      {
+        "name": "extract_fields_fallback",
+        "args": [
+          {
+            "name": "text",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Fallback method to extract fields from malformed JSON.",
+        "is_async": false,
+        "line": 380,
+        "complexity": 3
+      },
+      {
+        "name": "generate_enhanced_analysis",
+        "args": [
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Generate enhanced analysis without AI.",
+        "is_async": false,
+        "line": 399,
+        "complexity": 27
+      },
+      {
+        "name": "generate_documentation",
+        "args": [
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "analysis",
+            "type": null,
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Generate comprehensive documentation.",
+        "is_async": false,
+        "line": 493,
+        "complexity": 1
+      },
+      {
+        "name": "init_database",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Initialize database with comprehensive schema.",
+        "is_async": false,
+        "line": 545,
+        "complexity": 1
+      },
+      {
+        "name": "save_to_db",
+        "args": [
+          {
+            "name": "conn",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 2
+          },
+          {
+            "name": "analysis",
+            "type": null,
+            "default": null,
+            "position": 3
+          },
+          {
+            "name": "documentation",
+            "type": null,
+            "default": null,
+            "position": 4
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Save comprehensive analysis to database.",
+        "is_async": false,
+        "line": 628,
+        "complexity": 5
+      },
+      {
+        "name": "scan_directory",
+        "args": [
+          {
+            "name": "directory",
+            "type": "Path",
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "exclude_patterns",
+            "type": "List[str]",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "List[Path]",
+        "decorators": [],
+        "docstring": "Recursively scan directory for files.",
+        "is_async": false,
+        "line": 728,
+        "complexity": 8
+      },
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 759,
+        "complexity": 14
+      },
+      {
+        "name": "create_markdown_doc",
+        "args": [
+          {
+            "name": "documentation",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "output_path",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Create a comprehensive markdown documentation file.",
+        "is_async": false,
+        "line": 883,
+        "complexity": 18
+      },
+      {
+        "name": "generate_project_reports",
+        "args": [
+          {
+            "name": "conn",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "scan_path",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Generate comprehensive project reports.",
+        "is_async": false,
+        "line": 1005,
+        "complexity": 1
+      },
+      {
+        "name": "create_project_markdown_report",
+        "args": [
+          {
+            "name": "report",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "output_path",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Create a comprehensive markdown project report.",
+        "is_async": false,
+        "line": 1120,
+        "complexity": 8
+      },
+      {
+        "name": "create_dependency_graph",
+        "args": [
+          {
+            "name": "conn",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "output_path",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Create a dependency graph data file.",
+        "is_async": false,
+        "line": 1201,
+        "complexity": 4
+      },
+      {
+        "name": "__init__",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 24,
+        "complexity": 1
+      },
+      {
+        "name": "reset",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 27,
+        "complexity": 1
+      },
+      {
+        "name": "analyze_python_code",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "code",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Extract comprehensive information from Python code.",
+        "is_async": false,
+        "line": 37,
+        "complexity": 20
+      },
+      {
+        "name": "_extract_function_info",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "node",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Extract detailed function information.",
+        "is_async": false,
+        "line": 118,
+        "complexity": 8
+      },
+      {
+        "name": "_extract_class_info",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "node",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Extract detailed class information.",
+        "is_async": false,
+        "line": 169,
+        "complexity": 15
+      },
+      {
+        "name": "_get_decorator_name",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "decorator",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Extract decorator name.",
+        "is_async": false,
+        "line": 238,
+        "complexity": 4
+      },
+      {
+        "name": "_calculate_complexity",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "node",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Calculate cyclomatic complexity.",
+        "is_async": false,
+        "line": 246,
+        "complexity": 4
+      }
+    ],
+    "classes": [
+      {
+        "name": "CodeAnalyzer",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 24,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "reset",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 27,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze_python_code",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "code",
+                "type": null,
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Extract comprehensive information from Python code.",
+            "is_async": false,
+            "line": 37,
+            "complexity": 20,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_extract_function_info",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "node",
+                "type": null,
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Extract detailed function information.",
+            "is_async": false,
+            "line": 118,
+            "complexity": 8,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_extract_class_info",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "node",
+                "type": null,
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Extract detailed class information.",
+            "is_async": false,
+            "line": 169,
+            "complexity": 15,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_get_decorator_name",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "decorator",
+                "type": null,
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Extract decorator name.",
+            "is_async": false,
+            "line": 238,
+            "complexity": 4,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_calculate_complexity",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "node",
+                "type": null,
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Calculate cyclomatic complexity.",
+            "is_async": false,
+            "line": 246,
+            "complexity": 4,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          }
+        ],
+        "attributes": [],
+        "decorators": [],
+        "docstring": null,
+        "line": 23,
+        "is_dataclass": false,
+        "metaclass": null
+      }
+    ],
+    "global_vars": [],
+    "constants": [
+      {
+        "name": "OLLAMA_HOST",
+        "line": 15,
+        "is_constant": true,
+        "value": "http://localhost:11434"
+      },
+      {
+        "name": "MODEL",
+        "line": 16,
+        "is_constant": true,
+        "value": "codellama"
+      },
+      {
+        "name": "DB_PATH",
+        "line": 17,
+        "is_constant": true
+      },
+      {
+        "name": "TIMEOUT",
+        "line": 18,
+        "is_constant": true,
+        "value": 20
+      }
+    ],
+    "dependencies": [
+      "datetime",
+      "re",
+      "time",
+      "typing",
+      "ast",
+      "json",
+      "pathlib",
+      "hashlib",
+      "sqlite3",
+      "requests",
+      "traceback",
+      "os",
+      "sys"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This code serves as an example of comprehensive code analysis using Ollama.",
+    "description": "The CodeAnalyzer class provides a comprehensive analysis of Python code, including extracting information from module docstrings and identifying external dependencies. The analyze_python_code() method parses the code using ast.parse(), then walks through the abstract syntax tree to identify various aspects of the code's functionality, such as imports, functions, classes, global variables, constants, decorators, and docstrings.",
+    "category": "model",
+    "complexity": "moderate",
+    "main_functionality": [
+      "comprehensive analysis"
+    ],
+    "dependencies_analysis": [
+      "Identifies external dependencies in the code."
+    ],
+    "potential_issues": [],
+    "usage_examples": [
+      "This code can be used to analyze Python code for comprehensive information."
+    ],
+    "architectural_role": "Code analyzer",
+    "patterns": [
+      "ast.parse()",
+      "ast.walk()"
+    ],
+    "test_coverage": "High",
+    "security_considerations": [],
+    "performance_notes": "The performance of this code can be optimized by caching the results of previous analyses or using faster methods for extracting information from module docstrings.",
+    "maintainability": "Medium"
+  },
+  "documentation": {
+    "summary": "This code serves as an example of comprehensive code analysis using Ollama.",
+    "description": "The CodeAnalyzer class provides a comprehensive analysis of Python code, including extracting information from module docstrings and identifying external dependencies. The analyze_python_code() method parses the code using ast.parse(), then walks through the abstract syntax tree to identify various aspects of the code's functionality, such as imports, functions, classes, global variables, constants, decorators, and docstrings.",
+    "category": "model",
+    "complexity": "moderate",
+    "architectural_role": "Code analyzer",
+    "main_functionality": [
+      "comprehensive analysis"
+    ],
+    "patterns": [
+      "ast.parse()",
+      "ast.walk()"
+    ],
+    "dependencies_analysis": [
+      "Identifies external dependencies in the code."
+    ],
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "The performance of this code can be optimized by caching the results of previous analyses or using faster methods for extracting information from module docstrings.",
+    "maintainability": "Medium",
+    "test_coverage": "High"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "import",
+        "module": "hashlib",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "requests",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "import",
+        "module": "re",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "ast",
+        "alias": null,
+        "line": 10
+      },
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 11
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Tuple",
+        "alias": null,
+        "line": 12
+      },
+      {
+        "type": "import",
+        "module": "traceback",
+        "alias": null,
+        "line": 862
+      }
+    ],
+    "dependencies": [
+      "datetime",
+      "re",
+      "time",
+      "typing",
+      "ast",
+      "json",
+      "pathlib",
+      "hashlib",
+      "sqlite3",
+      "requests",
+      "traceback",
+      "os",
+      "sys"
+    ],
+    "exported": {
+      "functions": [
+        "get_file_info",
+        "get_language",
+        "analyze_with_ollama",
+        "extract_fields_fallback",
+        "generate_enhanced_analysis",
+        "generate_documentation",
+        "init_database",
+        "save_to_db",
+        "scan_directory",
+        "main",
+        "create_markdown_doc",
+        "generate_project_reports",
+        "create_project_markdown_report",
+        "create_dependency_graph",
+        "__init__",
+        "reset",
+        "analyze_python_code",
+        "_extract_function_info",
+        "_extract_class_info",
+        "_get_decorator_name",
+        "_calculate_complexity"
+      ],
+      "classes": [
+        "CodeAnalyzer"
+      ],
+      "variables": [],
+      "constants": [
+        {
+          "name": "OLLAMA_HOST",
+          "line": 15,
+          "is_constant": true,
+          "value": "http://localhost:11434"
+        },
+        {
+          "name": "MODEL",
+          "line": 16,
+          "is_constant": true,
+          "value": "codellama"
+        },
+        {
+          "name": "DB_PATH",
+          "line": 17,
+          "is_constant": true
+        },
+        {
+          "name": "TIMEOUT",
+          "line": 18,
+          "is_constant": true,
+          "value": 20
+        }
+      ]
+    }
+  }
+}

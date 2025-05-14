@@ -1,0 +1,247 @@
+{
+  "project_name": "",
+  "scan_date": "2025-05-11T02:53:35.444619",
+  "overview": {
+    "total_files": 36,
+    "languages": 8,
+    "categories": 9,
+    "total_size": 169039,
+    "total_code_lines": 4175,
+    "total_comment_lines": 1002
+  },
+  "languages": [
+    {
+      "language": "python",
+      "count": 28,
+      "size": 127195
+    },
+    {
+      "language": "javascript",
+      "count": 2,
+      "size": 23445
+    },
+    {
+      "language": "css",
+      "count": 1,
+      "size": 5691
+    },
+    {
+      "language": "html",
+      "count": 1,
+      "size": 4993
+    },
+    {
+      "language": "json",
+      "count": 1,
+      "size": 406
+    },
+    {
+      "language": "markdown",
+      "count": 1,
+      "size": 1995
+    },
+    {
+      "language": "shell",
+      "count": 1,
+      "size": 4604
+    },
+    {
+      "language": "yaml",
+      "count": 1,
+      "size": 710
+    }
+  ],
+  "categories": [
+    {
+      "category": "utility",
+      "count": 10
+    },
+    {
+      "category": "api",
+      "count": 7
+    },
+    {
+      "category": "data-processing",
+      "count": 7
+    },
+    {
+      "category": "ui",
+      "count": 5
+    },
+    {
+      "category": "cli",
+      "count": 3
+    },
+    {
+      "category": "config",
+      "count": 1
+    },
+    {
+      "category": "model",
+      "count": 1
+    },
+    {
+      "category": "test",
+      "count": 1
+    },
+    {
+      "category": "util",
+      "count": 1
+    }
+  ],
+  "complexity": [
+    {
+      "level": "moderate",
+      "count": 27
+    },
+    {
+      "level": "simple",
+      "count": 9
+    }
+  ],
+  "top_dependencies": [
+    {
+      "dependency": "pathlib",
+      "usage_count": 19
+    },
+    {
+      "dependency": "typing",
+      "usage_count": 16
+    },
+    {
+      "dependency": "sqlite3",
+      "usage_count": 12
+    },
+    {
+      "dependency": "flask",
+      "usage_count": 10
+    },
+    {
+      "dependency": "os",
+      "usage_count": 9
+    },
+    {
+      "dependency": "json",
+      "usage_count": 7
+    },
+    {
+      "dependency": "sys",
+      "usage_count": 6
+    },
+    {
+      "dependency": "yaml",
+      "usage_count": 6
+    },
+    {
+      "dependency": "datetime",
+      "usage_count": 4
+    },
+    {
+      "dependency": "re",
+      "usage_count": 4
+    },
+    {
+      "dependency": "time",
+      "usage_count": 4
+    },
+    {
+      "dependency": "ast",
+      "usage_count": 3
+    },
+    {
+      "dependency": "codeinventory.cli.cli",
+      "usage_count": 3
+    },
+    {
+      "dependency": "codeinventory.scanner.scanner",
+      "usage_count": 3
+    },
+    {
+      "dependency": "flask_cors",
+      "usage_count": 3
+    },
+    {
+      "dependency": "hashlib",
+      "usage_count": 3
+    },
+    {
+      "dependency": "requests",
+      "usage_count": 3
+    },
+    {
+      "dependency": "codeinventory.analyzer.ollama_analyzer",
+      "usage_count": 2
+    },
+    {
+      "dependency": "codeinventory.api",
+      "usage_count": 2
+    },
+    {
+      "dependency": "codeinventory.database.db",
+      "usage_count": 2
+    }
+  ],
+  "largest_files": [
+    {
+      "name": "comprehensive_scanner.py",
+      "path": "comprehensive_scanner.py",
+      "size": 46180,
+      "code_lines": 1003
+    },
+    {
+      "name": "renderer.js",
+      "path": "dashboard/renderer.js",
+      "size": 21884,
+      "code_lines": 536
+    },
+    {
+      "name": "enhanced_scanner.py",
+      "path": "enhanced_scanner.py",
+      "size": 17690,
+      "code_lines": 392
+    },
+    {
+      "name": "fixed_api_server.py",
+      "path": "fixed_api_server.py",
+      "size": 10045,
+      "code_lines": 253
+    },
+    {
+      "name": "db.py",
+      "path": "src/codeinventory/database/db.py",
+      "size": 7626,
+      "code_lines": 174
+    },
+    {
+      "name": "enhanced_scanner.py",
+      "path": "src/codeinventory/scanner/enhanced_scanner.py",
+      "size": 7613,
+      "code_lines": 153
+    },
+    {
+      "name": "styles.css",
+      "path": "dashboard/styles.css",
+      "size": 5691,
+      "code_lines": 289
+    },
+    {
+      "name": "index.html",
+      "path": "dashboard/index.html",
+      "size": 4993,
+      "code_lines": 116
+    },
+    {
+      "name": "targeted_scan.py",
+      "path": "src/codeinventory/database/targeted_scan.py",
+      "size": 4813,
+      "code_lines": 115
+    },
+    {
+      "name": "fixed_api.py",
+      "path": "fixed_api.py",
+      "size": 4812,
+      "code_lines": 135
+    }
+  ],
+  "complex_files": []
+}

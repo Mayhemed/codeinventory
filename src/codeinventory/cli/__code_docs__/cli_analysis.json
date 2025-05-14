@@ -1,0 +1,348 @@
+{
+  "file": "cli.py",
+  "path": "src/codeinventory/cli/cli.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:52:43.683920",
+  "metrics": {
+    "size": 4026,
+    "lines": {
+      "total": 127,
+      "code": 98,
+      "comment": 29
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 6,
+      "classes": 0,
+      "imports": 9
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "click",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "rich.console",
+        "name": "Console",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "rich.table",
+        "name": "Table",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "rich.progress",
+        "name": "Progress",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "from",
+        "module": "database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "functions": [
+      {
+        "name": "load_config",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Load configuration file.",
+        "is_async": false,
+        "line": 14,
+        "complexity": 1
+      },
+      {
+        "name": "cli",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "CodeInventory - AI-powered code inventory system.",
+        "is_async": false,
+        "line": 21,
+        "complexity": 1
+      },
+      {
+        "name": "scan",
+        "args": [
+          {
+            "name": "directory",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "recursive",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Scan directory and analyze code.",
+        "is_async": false,
+        "line": 28,
+        "complexity": 3
+      },
+      {
+        "name": "search",
+        "args": [
+          {
+            "name": "query",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Search the code inventory.",
+        "is_async": false,
+        "line": 62,
+        "complexity": 3
+      },
+      {
+        "name": "show",
+        "args": [
+          {
+            "name": "tool_id",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Show detailed information about a tool.",
+        "is_async": false,
+        "line": 92,
+        "complexity": 6
+      },
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 122,
+        "complexity": 1
+      }
+    ],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "console",
+        "line": 12,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "analyzer",
+      "scanner",
+      "pathlib",
+      "rich",
+      "click",
+      "yaml",
+      "database"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "The purpose of this code is to provide a command-line interface for CodeInventory, an AI-powered code inventory system. The CLI allows users to scan directories and analyze code, search for specific code elements, and display information about the analyzed code.",
+    "description": "This code file defines a CLI for CodeInventory using Python's Click library. It provides a group of commands that can be used to interact with the system. The main functionality includes scanning directories, analyzing code, searching for specific code elements, and displaying information about the analyzed code.",
+    "category": "cli",
+    "complexity": "moderate",
+    "main_functionality": [
+      "scan directory",
+      "analyze code",
+      "search",
+      "display information"
+    ],
+    "dependencies_analysis": "The code depends on external libraries such as Click, YAML, and Rich for handling command-line arguments, reading configuration files, and printing output.",
+    "potential_issues": [
+      "Lack of error handling",
+      "Insufficient test coverage",
+      "Complexity of the code"
+    ],
+    "usage_examples": [
+      "python cli.py scan --directory /path/to/code --recursive",
+      "python cli.py search --query 'import os'",
+      "python cli.py show --file path/to/file.py"
+    ],
+    "architectural_role": "The CLI is the primary entry point for users to interact with CodeInventory.",
+    "patterns": [
+      "Command pattern",
+      "Builder pattern",
+      "Facade pattern"
+    ],
+    "test_coverage": "Improvement needed",
+    "security_considerations": "No security concerns or considerations have been identified.",
+    "performance_notes": "The code has moderate performance characteristics, with potential for optimization opportunities.",
+    "maintainability": "Moderate"
+  },
+  "documentation": {
+    "summary": "The purpose of this code is to provide a command-line interface for CodeInventory, an AI-powered code inventory system. The CLI allows users to scan directories and analyze code, search for specific code elements, and display information about the analyzed code.",
+    "description": "This code file defines a CLI for CodeInventory using Python's Click library. It provides a group of commands that can be used to interact with the system. The main functionality includes scanning directories, analyzing code, searching for specific code elements, and displaying information about the analyzed code.",
+    "category": "cli",
+    "complexity": "moderate",
+    "architectural_role": "The CLI is the primary entry point for users to interact with CodeInventory.",
+    "main_functionality": [
+      "scan directory",
+      "analyze code",
+      "search",
+      "display information"
+    ],
+    "patterns": [
+      "Command pattern",
+      "Builder pattern",
+      "Facade pattern"
+    ],
+    "dependencies_analysis": "The code depends on external libraries such as Click, YAML, and Rich for handling command-line arguments, reading configuration files, and printing output.",
+    "potential_issues": [
+      "Lack of error handling",
+      "Insufficient test coverage",
+      "Complexity of the code"
+    ],
+    "security_considerations": "No security concerns or considerations have been identified.",
+    "performance_notes": "The code has moderate performance characteristics, with potential for optimization opportunities.",
+    "maintainability": "Moderate",
+    "test_coverage": "Improvement needed"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "click",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "rich.console",
+        "name": "Console",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "rich.table",
+        "name": "Table",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "rich.progress",
+        "name": "Progress",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "from",
+        "module": "database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "dependencies": [
+      "analyzer",
+      "scanner",
+      "pathlib",
+      "rich",
+      "click",
+      "yaml",
+      "database"
+    ],
+    "exported": {
+      "functions": [
+        "load_config",
+        "cli",
+        "scan",
+        "search",
+        "show",
+        "main"
+      ],
+      "classes": [],
+      "variables": [
+        {
+          "name": "console",
+          "line": 12,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}

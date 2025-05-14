@@ -1,0 +1,492 @@
+{
+  "file": "enhanced_scanner.py",
+  "path": "src/codeinventory/scanner/enhanced_scanner.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:53:04.589171",
+  "metrics": {
+    "size": 7613,
+    "lines": {
+      "total": 206,
+      "code": 153,
+      "comment": 53
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 5,
+      "classes": 1,
+      "imports": 6
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "ast",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "re",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 4
+      }
+    ],
+    "functions": [
+      {
+        "name": "__init__",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 7,
+        "complexity": 1
+      },
+      {
+        "name": "analyze_file",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "str",
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "default": null,
+            "position": 2
+          },
+          {
+            "name": "language",
+            "type": "str",
+            "default": null,
+            "position": 3
+          }
+        ],
+        "returns": "Dict",
+        "decorators": [],
+        "docstring": "Analyze a file for execution and import information.",
+        "is_async": false,
+        "line": 10,
+        "complexity": 4
+      },
+      {
+        "name": "analyze_python",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "str",
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": "Dict",
+        "decorators": [],
+        "docstring": "Analyze Python file for execution and import patterns.",
+        "is_async": false,
+        "line": 20,
+        "complexity": 23
+      },
+      {
+        "name": "analyze_javascript",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "str",
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": "Dict",
+        "decorators": [],
+        "docstring": "Analyze JavaScript file for execution patterns.",
+        "is_async": false,
+        "line": 109,
+        "complexity": 9
+      },
+      {
+        "name": "analyze_shell",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "str",
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": "Dict",
+        "decorators": [],
+        "docstring": "Analyze shell script for execution patterns.",
+        "is_async": false,
+        "line": 175,
+        "complexity": 5
+      }
+    ],
+    "classes": [
+      {
+        "name": "EnhancedAnalyzer",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 7,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze_file",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "str",
+                "default": null,
+                "position": 1
+              },
+              {
+                "name": "content",
+                "type": "str",
+                "default": null,
+                "position": 2
+              },
+              {
+                "name": "language",
+                "type": "str",
+                "default": null,
+                "position": 3
+              }
+            ],
+            "returns": "Dict",
+            "decorators": [],
+            "docstring": "Analyze a file for execution and import information.",
+            "is_async": false,
+            "line": 10,
+            "complexity": 4,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze_python",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "str",
+                "default": null,
+                "position": 1
+              },
+              {
+                "name": "content",
+                "type": "str",
+                "default": null,
+                "position": 2
+              }
+            ],
+            "returns": "Dict",
+            "decorators": [],
+            "docstring": "Analyze Python file for execution and import patterns.",
+            "is_async": false,
+            "line": 20,
+            "complexity": 23,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze_javascript",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "str",
+                "default": null,
+                "position": 1
+              },
+              {
+                "name": "content",
+                "type": "str",
+                "default": null,
+                "position": 2
+              }
+            ],
+            "returns": "Dict",
+            "decorators": [],
+            "docstring": "Analyze JavaScript file for execution patterns.",
+            "is_async": false,
+            "line": 109,
+            "complexity": 9,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze_shell",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "str",
+                "default": null,
+                "position": 1
+              },
+              {
+                "name": "content",
+                "type": "str",
+                "default": null,
+                "position": 2
+              }
+            ],
+            "returns": "Dict",
+            "decorators": [],
+            "docstring": "Analyze shell script for execution patterns.",
+            "is_async": false,
+            "line": 175,
+            "complexity": 5,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          }
+        ],
+        "attributes": [],
+        "decorators": [],
+        "docstring": null,
+        "line": 6,
+        "is_dataclass": false,
+        "metaclass": null
+      }
+    ],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "re",
+      "typing",
+      "ast",
+      "pathlib"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This code is an enhanced scanner that analyzes Python files for execution and import patterns.",
+    "description": "The EnhancedAnalyzer class provides a comprehensive analysis of Python files by identifying their execution command, importable items, requires_args flag, environment variables, dependencies, and more. It can also analyze JavaScript, TypeScript, and shell scripts.",
+    "category": "utility",
+    "complexity": "moderate",
+    "main_functionality": [
+      "execution",
+      "import"
+    ],
+    "dependencies_analysis": "The code imports the ast module for parsing Python files and the re module for regular expression matching. It also uses the pathlib library to handle file paths.",
+    "potential_issues": [],
+    "usage_examples": [
+      {
+        "example": "analyze_file('src/codeinventory/scanner/enhanced_scanner.py', 'Python', None)"
+      }
+    ],
+    "architectural_role": "This code provides a centralized function for analyzing Python files, making it a valuable utility for any project that involves parsing and analyzing Python source code.",
+    "patterns": [
+      "Factory pattern"
+    ],
+    "test_coverage": "Complete test coverage is required to ensure the correctness of this code's functionality. Unit tests are essential for testing the analyze_file() method and verifying its behavior.",
+    "security_considerations": [],
+    "performance_notes": "The code uses regular expressions for parsing Python files, which may result in slower performance compared to other analysis methods. However, it provides a comprehensive set of features and can be optimized further by using faster regex libraries or alternative analysis methods.",
+    "maintainability": "This code is well-organized with clear structure and naming conventions. The usage of the ast module provides a modular and extensible architecture for analyzing Python files, making it easier to maintain and expand in the future."
+  },
+  "documentation": {
+    "summary": "This code is an enhanced scanner that analyzes Python files for execution and import patterns.",
+    "description": "The EnhancedAnalyzer class provides a comprehensive analysis of Python files by identifying their execution command, importable items, requires_args flag, environment variables, dependencies, and more. It can also analyze JavaScript, TypeScript, and shell scripts.",
+    "category": "utility",
+    "complexity": "moderate",
+    "architectural_role": "This code provides a centralized function for analyzing Python files, making it a valuable utility for any project that involves parsing and analyzing Python source code.",
+    "main_functionality": [
+      "execution",
+      "import"
+    ],
+    "patterns": [
+      "Factory pattern"
+    ],
+    "dependencies_analysis": "The code imports the ast module for parsing Python files and the re module for regular expression matching. It also uses the pathlib library to handle file paths.",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "The code uses regular expressions for parsing Python files, which may result in slower performance compared to other analysis methods. However, it provides a comprehensive set of features and can be optimized further by using faster regex libraries or alternative analysis methods.",
+    "maintainability": "This code is well-organized with clear structure and naming conventions. The usage of the ast module provides a modular and extensible architecture for analyzing Python files, making it easier to maintain and expand in the future.",
+    "test_coverage": "Complete test coverage is required to ensure the correctness of this code's functionality. Unit tests are essential for testing the analyze_file() method and verifying its behavior."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "ast",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "re",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 4
+      }
+    ],
+    "dependencies": [
+      "re",
+      "typing",
+      "ast",
+      "pathlib"
+    ],
+    "exported": {
+      "functions": [
+        "__init__",
+        "analyze_file",
+        "analyze_python",
+        "analyze_javascript",
+        "analyze_shell"
+      ],
+      "classes": [
+        "EnhancedAnalyzer"
+      ],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

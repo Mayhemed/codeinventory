@@ -1,0 +1,2131 @@
+console.log('Renderer.js loaded!');
+
+const { ipcRenderer } = require('electron');
+
+let currentView = 'dashboard';
+let allTools = []; // This will be populated by /api/tools, primarily for listing
+let projectData = {}; // Used by updateProjectSummary
+// Charts are initialized to null and created when data is available
+let languageChart = null;
+let complexityChart = null;
+// Note: categoryChart was declared but not used in the original renderer.js
+
+function debugLog(message, data) {
+  console.log(`DEBUG: ${message}`);
+  if (data !== undefined) {
+    console.log(data);
+  }
+}
+// At the beginning of renderer.js
+function checkExternalLibraries() {
+  const requiredLibraries = [
+    { name: 'Chart.js', global: 'Chart', cdn: 'https://cdn.jsdelivr.net/npm/chart.js' },
+    { name: 'vis-network', global: 'vis', cdn: 'https://unpkg.com/vis-network/standalone/umd/vis-network.min.js' }
+  ];
+  
+  const missingLibraries = requiredLibraries.filter(lib => !window[lib.global]);
+  
+  if (missingLibraries.length > 0) {
+    console.warn('Missing required libraries:', missingLibraries.map(lib => lib.name).join(', '));
+    console.log('Attempting to load missing libraries dynamically...');
+    
+    // Try to load them
+    const promises = missingLibraries.map(lib => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = lib.cdn;
+        script.onload = () => resolve(lib.name);
+        script.onerror = () => reject(new Error(`Failed to load ${lib.name}`));
+        document.head.appendChild(script);
+      });
+    });
+    
+    Promise.all(promises)
+      .then(loaded => {
+        console.log('Successfully loaded libraries:', loaded.join(', '));
+        // Reload current view
+        showView(currentView);
+      })
+      .catch(error => {
+        console.error('Failed to load libraries:', error);
+        alert('Some required libraries failed to load. The application may not function correctly.');
+      });
+  }
+}
+
+
+// Initialize dashboard
+async function init() {
+    console.log('Initializing dashboard...');
+    checkExternalLibraries();
+    await loadDashboardData();
+    // Ensure the initial view's specific load function is called if needed beyond loadDashboardData
+    if (currentView === 'dashboard') {
+        // dashboard specific loading, if any, beyond common data.
+    } else if (currentView === 'insights' && typeof drawDependencyGraph === 'function') {
+        // The new drawDependencyGraph is complex and fetches its own data.
+        // It's called when the insights view is shown.
+    }
+}
+
+// Show different views
+function showView(view) {
+    console.log('Switching to view:', view);
+    currentView = view;
+
+    // Update navigation
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    const activeLink = document.querySelector(`nav a[onclick="showView('${view}')"]`);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
+
+    // Show the selected view
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const activeView = document.getElementById(view);
+    if (activeView) {
+        activeView.classList.add('active');
+    }
+
+    // Load data for the view
+    switch (view) {
+        case 'dashboard':
+            // loadDashboardData is called by init and when switching back.
+            // Consider if it needs to be re-called every time or only if data is stale.
+            loadDashboardData();
+            break;
+        case 'projects':
+            loadProjectsView();
+            break;
+        case 'explorer':
+            // loadExplorerView populates the file tree.
+            // Details are loaded when a file is clicked.
+            loadExplorerView();
+            break;
+        case 'insights':
+            loadInsightsView(); // This will call your new D3 graph function
+            break;
+    }
+}
+
+function getEmptyStateHTML(message = 'No data available') {
+  return `
+    <div class="empty-state">
+      <div class="empty-state-icon">📊</div>
+      <h3>No Data Available</h3>
+      <p>${message}</p>
+      <p class="empty-state-hint">Try scanning some projects with the CLI:</p>
+      <pre>codeinventory scan ~/Projects</pre>
+    </div>
+  `;
+}
+
+// Add this CSS to your styles.css
+// .empty-state {
+//   text-align: center;
+//   padding: 40px 20px;
+//   color: #7f8c8d;
+// }
+// 
+// .empty-state-icon {
+//   font-size: 48px;
+//   margin-bottom: 20px;
+// }
+// 
+// .empty-state h3 {
+//   color: #34495e;
+//   margin-bottom: 10px;
+// }
+// 
+// .empty-state-hint {
+//   margin-top: 20px;
+//   font-weight: 500;
+// }
+// 
+// .empty-state pre {
+//   display: inline-block;
+//   background: #2c3e50;
+//   color: white;
+//   padding: 10px 15px;
+//   border-radius: 4px;
+//   margin-top: 10px;
+// }
+
+// Dashboard view functions
+async function loadDashboardData() {
+  console.log('Loading dashboard data...');
+  try {
+    // Get all tools
+    const tools = await ipcRenderer.invoke('api-call', '/api/tools');
+    debugLog('API response for tools:', tools);
+    
+    // Validate tools data
+    const toolsArray = Array.isArray(tools) ? tools : [];
+    
+    if (!Array.isArray(tools)) {
+      console.warn('Fetched tools is not an array:', tools);
+      displayEmptyDashboard('No valid tools data received from the API');
+      return;
+    }
+    
+    // Store tools globally for reuse across views
+    window.allTools = toolsArray;
+    
+    // Get stats
+    const stats = await ipcRenderer.invoke('api-call', '/api/stats');
+    debugLog('Received stats response:', stats);
+    
+    // Validate stats data
+    if (!stats || typeof stats !== 'object' || stats.error) {
+      console.error('Failed to load stats or stats object is malformed:', stats);
+      displayEmptyDashboard('Error loading statistics data');
+      return;
+    }
+    
+    // Update dashboard components
+    updateQuickStats(stats, toolsArray);
+    updateRecentActivity(toolsArray);
+    updateProjectSummary(toolsArray);
+    
+    // Draw charts if data exists
+    if (stats.languages && Object.keys(stats.languages).length > 0) {
+      drawLanguageChart(stats.languages);
+    } else {
+      console.log('No language data for tech stack chart.');
+      document.getElementById('techStackChart').innerHTML = '<p>No language data available.</p>';
+    }
+  } catch (error) {
+    console.error('Dashboard data loading error:', error);
+    displayEmptyDashboard('Error loading dashboard data: ' + error.message);
+  }
+}
+function drawLanguageChart(languages) {
+  const container = document.getElementById('techStackChart');
+  if (!container) return;
+  
+  // Clear previous content
+  container.innerHTML = '';
+  
+  // Create a new canvas element
+  const canvas = document.createElement('canvas');
+  canvas.id = 'languageChartCanvas';
+  container.appendChild(canvas);
+  
+  // Check if Chart.js is available
+  if (typeof Chart === 'undefined') {
+    console.error('Chart.js not loaded');
+    container.innerHTML = '<p>Chart.js library not loaded. Please refresh the page.</p>';
+    return;
+  }
+  
+  // Validate languages data
+  if (!languages || typeof languages !== 'object' || Object.keys(languages).length === 0) {
+    container.innerHTML = '<p>No language data available.</p>';
+    return;
+  }
+  
+  try {
+    // Sort languages by file count (descending)
+    const sortedLanguages = Object.entries(languages)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8); // Show top 8 languages
+    
+    // Prepare chart data
+    const labels = sortedLanguages.map(([lang]) => lang);
+    const data = sortedLanguages.map(([_, count]) => count);
+    
+    // Color palette for languages
+    const colors = [
+      '#3498db', // blue
+      '#2ecc71', // green
+      '#e74c3c', // red
+      '#f39c12', // orange
+      '#9b59b6', // purple
+      '#1abc9c', // teal
+      '#34495e', // dark blue
+      '#95a5a6'  // gray
+    ];
+    
+    // Create chart
+    const newChart = new Chart(canvas.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colors.slice(0, labels.length),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              boxWidth: 15,
+              padding: 15
+            }
+          },
+          title: {
+            display: true,
+            text: 'Language Distribution'
+          }
+        },
+        cutout: '60%'
+      }
+    });
+    
+    // Store chart instance in container to prevent garbage collection
+    container.chart = newChart;
+  } catch (error) {
+    console.error('Error creating language chart:', error);
+    container.innerHTML = '<p>Error creating language chart: ' + error.message + '</p>';
+  }
+}
+
+function displayEmptyDashboard(message) {
+  const containers = [
+    'recentActivity', 
+    'projectSummary', 
+    'techStackChart'
+  ];
+  
+  containers.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.innerHTML = `<p>${message}</p>`;
+    }
+  });
+  
+  document.getElementById('totalProjects').textContent = 'N/A';
+  document.getElementById('totalFiles').textContent = 'N/A';
+  document.getElementById('totalLines').textContent = 'N/A';
+}
+
+function updateQuickStats(stats, tools) {
+  try {
+    // Count unique projects (if path data is available)
+    let projectCount = 0;
+    let totalCodeLines = 0;
+    
+    if (Array.isArray(tools)) {
+      // Extract project names from paths
+      const projects = new Set();
+      tools.forEach(tool => {
+        if (tool.path) {
+          const parts = tool.path.split('/');
+          if (parts.length > 0 && parts[0]) {
+            projects.add(parts[0]);
+          }
+        }
+        
+        // Sum up code lines from tools if available
+        if (tool.code_lines) {
+          totalCodeLines += parseInt(tool.code_lines, 10) || 0;
+        }
+      });
+      
+      projectCount = projects.size || 0;
+    }
+    
+    // Update DOM elements with stats
+    const totalProjectsElem = document.getElementById('totalProjects');
+    if (totalProjectsElem) {
+      totalProjectsElem.textContent = projectCount || stats.total_projects || 'N/A';
+    }
+    
+    const totalFilesElem = document.getElementById('totalFiles');
+    if (totalFilesElem) {
+      totalFilesElem.textContent = (stats.total_tools || tools.length || 0).toLocaleString();
+    }
+    
+    // Handle code lines - try multiple sources
+    const totalLinesElem = document.getElementById('totalLines');
+    if (totalLinesElem) {
+      // Try to get lines from various possible fields
+      const linesCount = stats.total_code_lines || 
+                          stats.totalCodeLines || 
+                          stats.code_lines || 
+                          totalCodeLines;
+      
+      if (linesCount) {
+        totalLinesElem.textContent = parseInt(linesCount, 10).toLocaleString();
+      } else {
+        console.log('totalCodeLines not found in /api/stats response. Lines of Code set to N/A.');
+        totalLinesElem.textContent = 'N/A';
+      }
+    }
+  } catch (error) {
+    console.error('Error updating quick stats:', error);
+  }
+}
+
+function updateRecentActivity(tools) {
+  const activityContainer = document.getElementById('recentActivity');
+  if (!activityContainer) return;
+  
+  // Sort tools by last_modified (most recent first)
+  const recentTools = [...tools]
+    .filter(tool => tool.last_modified) // Filter out tools without last_modified
+    .sort((a, b) => {
+      // Convert to numbers for comparison if they're not already
+      const timeA = typeof a.last_modified === 'number' ? a.last_modified : parseInt(a.last_modified);
+      const timeB = typeof b.last_modified === 'number' ? b.last_modified : parseInt(b.last_modified);
+      return timeB - timeA; // Descending order (newest first)
+    })
+    .slice(0, 5); // Get top 5 most recent
+  
+  if (recentTools.length === 0) {
+    activityContainer.innerHTML = '<p>No recent activity found.</p>';
+    return;
+  }
+  
+  let html = '';
+  
+  recentTools.forEach(tool => {
+    // Format date
+    let dateDisplay = 'Unknown date';
+    
+    if (tool.last_modified) {
+      try {
+        // Convert to milliseconds if it's in seconds (Unix timestamp)
+        const timestamp = typeof tool.last_modified === 'number' 
+          ? tool.last_modified 
+          : parseInt(tool.last_modified);
+        
+        // If timestamp is in seconds (typical Unix format), convert to milliseconds
+        const milliseconds = timestamp > 1000000000000 ? timestamp : timestamp * 1000;
+        
+        const date = new Date(milliseconds);
+        
+        // Check if date is valid
+        if (!isNaN(date.getTime())) {
+          dateDisplay = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+      } catch (e) {
+        console.warn('Error formatting date:', e);
+      }
+    }
+    
+    // Create activity item
+    html += `
+      <div class="activity-item" data-id="${tool.id}">
+        <div class="activity-header">
+          <span class="activity-file">${tool.name}</span>
+          <span class="activity-time">${dateDisplay}</span>
+        </div>
+        <div class="activity-description">
+          ${tool.purpose || 'No description available'}
+        </div>
+      </div>
+    `;
+  });
+  
+  activityContainer.innerHTML = html;
+  
+  // Add click handlers to activity items
+  activityContainer.querySelectorAll('.activity-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const fileId = item.dataset.id;
+      if (fileId) {
+        // Navigate to explorer view and show file details
+        showView('explorer');
+        showFileDetails(fileId);
+      }
+    });
+  });
+}
+
+
+function updateProjectSummary(tools) {
+  const container = document.getElementById('projectSummary');
+  if (!container) return;
+  
+  // Group tools by project (top-level directory)
+  const projects = {};
+  
+  tools.forEach(tool => {
+    if (!tool.path) return;
+    
+    // Extract project name from path
+    const parts = tool.path.replace(/\\/g, '/').split('/').filter(p => p);
+    const projectName = parts.length > 0 ? parts[0] : 'Unknown';
+    
+    if (!projects[projectName]) {
+      projects[projectName] = {
+        name: projectName,
+        files: [],
+        languages: new Set(),
+        categories: new Set()
+      };
+    }
+    
+    projects[projectName].files.push(tool);
+    
+    if (tool.language) {
+      projects[projectName].languages.add(tool.language);
+    }
+    
+    if (tool.category) {
+      projects[projectName].categories.add(tool.category);
+    }
+  });
+  
+  // Sort projects by file count (descending)
+  const sortedProjects = Object.values(projects)
+    .sort((a, b) => b.files.length - a.files.length)
+    .slice(0, 5); // Show top 5 projects
+  
+  if (sortedProjects.length === 0) {
+    container.innerHTML = '<p>No projects found.</p>';
+    return;
+  }
+  
+  let html = '';
+  
+  sortedProjects.forEach(project => {
+    const languages = Array.from(project.languages).slice(0, 3).join(', ');
+    const fileCount = project.files.length;
+    
+    html += `
+      <div class="project-summary-item" data-project="${project.name}">
+        <div class="project-header">
+          <span class="project-name">${project.name}</span>
+          <span class="project-stats">${fileCount} files</span>
+        </div>
+        <div class="project-languages">
+          ${languages}${project.languages.size > 3 ? ', ...' : ''}
+        </div>
+      </div>
+    `;
+  });
+  
+  // Add total count at the end
+  const totalProjects = Object.keys(projects).length;
+  const totalFiles = tools.length;
+  
+  html += `
+    <div class="projects-total">
+      Total: ${totalProjects} projects, ${totalFiles} files
+    </div>
+  `;
+  
+  container.innerHTML = html;
+  
+  // Add click handlers to project items
+  container.querySelectorAll('.project-summary-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const projectName = item.dataset.project;
+      if (projectName) {
+        // Navigate to projects view and show filtered list
+        showView('projects');
+        filterProjects(projectName);
+      }
+    });
+  });
+}
+
+// Filter projects in projects view
+function filterProjects(projectName) {
+  console.log(`Filtered for project: ${projectName}`);
+  // This is a placeholder. We'll implement project filtering later
+  
+  // Update UI to show we're filtering
+  const titleElement = document.querySelector('#projects h2');
+  if (titleElement) {
+    titleElement.textContent = `Project: ${projectName}`;
+  }
+  
+  // Filter the tools to show only those from this project
+  const allTools = window.allTools || [];
+  const filteredTools = allTools.filter(tool => {
+    const path = tool.path || '';
+    const parts = path.replace(/\\/g, '/').split('/');
+    return parts.length > 0 && parts[0] === projectName;
+  });
+  
+  // Display the filtered tools
+  if (filteredTools.length > 0) {
+    renderProjectsList(filteredTools);
+  } else {
+    const container = document.getElementById('projectsList');
+    if (container) {
+      container.innerHTML = `<p>No files found for project "${projectName}".</p>`;
+    }
+  }
+}
+
+function drawTechStackChart(languages) {
+    const ctx = document.getElementById('techStackChart');
+    if (!ctx) {
+        console.warn("techStackChart canvas not found.");
+        return;
+    }
+    
+    if (languageChart) {
+        languageChart.destroy();
+    }
+    
+    const labels = Object.keys(languages || {});
+    const data = Object.values(languages || {});
+    
+    if (labels.length === 0) {
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height); // Clear canvas
+        console.log("No language data for tech stack chart.");
+        // Optionally display a message on the canvas or nearby
+        return;
+    }
+
+    languageChart = new Chart(ctx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    '#3498db', '#2ecc71', '#e74c3c', '#f39c12', 
+                    '#9b59b6', '#1abc9c', '#34495e', '#e67e22',
+                    '#f1c40f', '#d35400', '#c0392b', '#7f8c8d' // Added more colors
+                ],
+                borderColor: '#fff', // Add border for better separation
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += context.parsed;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Setup navigation event listeners
+function setupNavigation() {
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const viewName = link.getAttribute('data-view');
+      showView(viewName);
+    });
+  });
+  
+  // Setup search button
+  const searchButton = document.querySelector('button');
+  if (searchButton) {
+    searchButton.addEventListener('click', () => {
+      search();
+    });
+  }
+  
+  // Setup search input to respond to Enter key
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        search();
+      }
+    });
+  }
+}
+
+// Call this function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded');
+  setupNavigation();
+  init();
+});
+
+// Projects view functions
+async function loadProjectsView() {
+    try {
+        // Using the /api/projects endpoint from comprehensive_api.py
+        const projectsArray = await ipcRenderer.invoke('api-call', '/api/projects');
+
+        if (!Array.isArray(projectsArray) || projectsArray.error) {
+            console.error("Failed to load projects or data is malformed:", projectsArray);
+            document.getElementById('projectsList').innerHTML = "<p>Could not load projects.</p>";
+            return;
+        }
+
+        const projectsHtml = projectsArray.map(project => {
+            // Calculate average complexity for display if desired, or use a summary metric.
+            // The current API returns totalFiles and complexFiles per project.
+            let complexityScore = 0;
+            if (project.totalFiles > 0) {
+                // This is a simple heuristic, you might want a more sophisticated one
+                complexityScore = (project.complexFiles / project.totalFiles) * 3;
+            }
+
+            return `
+            <div class="project-card" onclick="showProjectDetails('${project.name}')">
+                 {/* Again, showProjectDetails expects a file ID. Clicking a project card
+                     should ideally navigate to a project-specific view or filter the explorer. */}
+                <h3>${project.name}</h3>
+                <p>${project.totalFiles || 0} files</p>
+                <div class="project-meta">
+                    <span>${(project.languages || []).join(', ') || 'N/A'}</span>
+                    <span>Complexity: ${getComplexityLabel(complexityScore)}</span> {/* Adjust as needed */}
+                </div>
+                <div class="project-categories">
+                    ${(project.categories || []).map(cat => 
+                        `<span class="category-tag">${cat}</span>`
+                    ).join('')}
+                </div>
+            </div>
+        `}).join('');
+        
+        document.getElementById('projectsList').innerHTML = projectsHtml || "<p>No projects found.</p>";
+    } catch (error) {
+        console.error('Failed to load projects view:', error);
+        document.getElementById('projectsList').innerHTML = "<p>Error loading projects.</p>";
+    }
+}
+
+
+// // Explorer view functions
+// async function loadExplorerView() {
+//     // allTools should be populated by loadDashboardData or a similar call when app starts/view loads
+//     if (!allTools || allTools.length === 0) {
+//          console.log("loadExplorerView: allTools is empty, fetching from API...");
+//         try {
+//             const tools = await ipcRenderer.invoke('api-call', '/api/tools');
+//             if (!Array.isArray(tools) || tools.error) {
+//                 console.error("Failed to load tools for explorer:", tools);
+//                 allTools = [];
+//             } else {
+//                 allTools = tools;
+//             }
+//         } catch(error) {
+//             console.error("Error fetching tools in loadExplorerView:", error);
+//             allTools = [];
+//         }
+//     }
+//     if (allTools.length > 0) {
+//         renderFileTree(allTools);
+//     } else {
+//         document.getElementById('fileTree').innerHTML = "<p>No files to display. Try scanning your code.</p>";
+//         document.getElementById('fileDetails').innerHTML = "<p>Select a file to view details</p>";
+//     }
+// }
+
+function buildFileTree(tools) {
+    const tree = {};
+    if (!Array.isArray(tools)) {
+        console.error("buildFileTree: tools is not an array", tools);
+        return tree;
+    }
+    
+    tools.forEach(tool => {
+        if (!tool || typeof tool.path !== 'string') {
+            console.warn("Skipping tool with invalid path:", tool);
+            return;
+        }
+        const parts = tool.path.split('/');
+        let current = tree;
+        
+        parts.forEach((part, index) => {
+            if (index === parts.length - 1) { // File
+                current[part] = { type: 'file', data: tool }; // tool itself contains id, name, path etc.
+            } else { // Directory
+                if (!current[part]) {
+                    current[part] = { type: 'directory', children: {} };
+                }
+                current = current[part].children;
+            }
+        });
+    });
+    
+    return tree;
+}
+
+function renderTreeNode(node, level = 0) {
+    let html = '';
+    
+    Object.entries(node).sort(([aKey],[bKey]) => aKey.localeCompare(bKey)).forEach(([name, value]) => { // Sort entries
+        if (value.type === 'file') {
+            html += `
+                <div class="tree-item file" style="padding-left: ${level * 20}px" data-path="${value.data.id}">
+                    📄 ${name}
+                </div>
+            `;
+        } else { // Directory
+            html += `
+                <details style="padding-left: ${level * 10}px;">
+                    <summary class="tree-item directory">
+                        📁 ${name}
+                    </summary>
+                    ${renderTreeNode(value.children, level + 1)}
+                </details>
+            `;
+        }
+    });
+    
+    return html;
+}
+
+function showFileDetails(fileId) {
+  console.log(`Showing details for file ID: ${fileId}`);
+  
+  const fileDetailsContainer = document.getElementById('fileDetails');
+  if (!fileDetailsContainer) {
+    console.error('fileDetails container not found');
+    return;
+  }
+  
+  // Show loading state
+  fileDetailsContainer.innerHTML = '<p>Loading file details...</p>';
+  
+  // First try to find the file in already loaded data
+  const allTools = window.allTools || [];
+  let file = null;
+  
+  // Find the file by ID
+  for (let i = 0; i < allTools.length; i++) {
+    if (allTools[i].id === fileId) {
+      file = allTools[i];
+      break;
+    }
+  }
+  
+  if (file) {
+    renderFileDetails(file);
+  } else {
+    // If not found in global array, try to fetch by ID
+    ipcRenderer.invoke('api-call', `/api/tools/${fileId}`)
+      .then(fileData => {
+        if (fileData && !fileData.error) {
+          renderFileDetails(fileData);
+        } else {
+          fileDetailsContainer.innerHTML = `
+            <div class="error-message">
+              <p>Error loading file details: ${fileData?.message || 'File not found'}</p>
+            </div>
+          `;
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching file details:', error);
+        fileDetailsContainer.innerHTML = `
+          <div class="error-message">
+            <p>Error loading file details: ${error.message}</p>
+          </div>
+        `;
+      });
+  }
+}
+
+function renderFileTree(files) {
+  const container = document.getElementById('fileTree');
+  if (!container) {
+    console.error('fileTree container not found');
+    return;
+  }
+  
+  console.log(`Rendering file tree with ${files.length} files`);
+  
+  // Clear the container first
+  container.innerHTML = '';
+  
+  // Handle empty files array
+  if (!Array.isArray(files) || files.length === 0) {
+    container.innerHTML = '<p>No files found in inventory.</p>';
+    return;
+  }
+  
+  // Limit number of files to prevent performance issues
+  const MAX_FILES = 500;
+  let filesToRender = files;
+  let limitApplied = false;
+  
+  if (files.length > MAX_FILES) {
+    console.log(`Large number of files (${files.length}). Limiting to ${MAX_FILES} for UI performance.`);
+    filesToRender = files.slice(0, MAX_FILES);
+    limitApplied = true;
+  }
+  
+  // Better project detection by analyzing paths
+  const getProjectName = (path) => {
+    if (!path) return 'Unknown';
+    
+    // Normalize path
+    const normalizedPath = path.replace(/\\/g, '/');
+    const parts = normalizedPath.split('/').filter(p => p);
+    
+    // Skip common parent directories like /Users/username
+    if (parts.length >= 3 && parts[0] === 'Users') {
+      // Look for project directories after the username
+      // /Users/username/Projects/MyProject or /Users/username/Documents/MyProject
+      if (parts.length >= 4 && 
+         (parts[2] === 'Projects' || 
+          parts[2] === 'GitHub' || 
+          parts[2] === 'Code' || 
+          parts[2] === 'Documents')) {
+        return parts[3] || parts[2]; // Return project name or fallback to folder name
+      }
+      
+      // If no known project folder, return the directory after username
+      return parts[2] || 'Unknown';
+    }
+    
+    // Fallback to first directory
+    return parts[0] || 'Unknown';
+  };
+  
+  // Group files by project
+  const filesByProject = {};
+  
+  filesToRender.forEach(file => {
+    if (!file.path) return;
+    
+    const projectName = getProjectName(file.path);
+    
+    if (!filesByProject[projectName]) {
+      filesByProject[projectName] = [];
+    }
+    
+    filesByProject[projectName].push(file);
+  });
+  
+  // Create the tree container element
+  const treeContainer = document.createElement('div');
+  treeContainer.className = 'file-tree-container';
+  
+  // Add the expand/collapse controls
+  const controlsDiv = document.createElement('div');
+  controlsDiv.className = 'tree-controls';
+  controlsDiv.innerHTML = `
+    <button class="expand-all-btn">Expand All</button>
+    <button class="collapse-all-btn">Collapse All</button>
+  `;
+  treeContainer.appendChild(controlsDiv);
+  
+  // Sort projects alphabetically
+  const sortedProjects = Object.keys(filesByProject).sort();
+  
+  // Add each project to the tree
+  sortedProjects.forEach(project => {
+    const projectFiles = filesByProject[project];
+    const fileCount = projectFiles.length;
+    
+    // Create the project container
+    const projectContainer = document.createElement('div');
+    projectContainer.className = 'tree-dir-container';
+    
+    // Create project header
+    const projectHeader = document.createElement('div');
+    projectHeader.className = 'tree-item directory project-dir';
+    projectHeader.innerHTML = `
+      <span class="expand-icon">▶</span>
+      <span class="tree-icon">📁</span>
+      <span class="dir-name">${project}</span>
+      <span class="file-count">(${fileCount} files)</span>
+    `;
+    
+    // Create project children container
+    const childrenContainer = document.createElement('div');
+    childrenContainer.className = 'tree-children collapsed';
+    
+    // Group files by subdirectory
+    const filesBySubdir = {};
+    
+    projectFiles.forEach(file => {
+      if (!file.path) return;
+      
+      const normalizedPath = file.path.replace(/\\/g, '/');
+      const parts = normalizedPath.split('/').filter(p => p);
+      
+      // Find the path after the project name
+      let subPath = '';
+      let projectFound = false;
+      
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (projectFound || parts[i] === project) {
+          projectFound = true;
+          if (i > 0 && parts[i] === project) continue;
+          subPath += (subPath ? '/' : '') + parts[i];
+        }
+      }
+      
+      // If no valid subpath was found, use root
+      const subdir = subPath || 'root';
+      
+      if (!filesBySubdir[subdir]) {
+        filesBySubdir[subdir] = [];
+      }
+      
+      filesBySubdir[subdir].push(file);
+    });
+    
+    // Add subdirectories to project
+    const subdirs = Object.keys(filesBySubdir).sort();
+    
+    subdirs.forEach(subdir => {
+      const subdirFiles = filesBySubdir[subdir];
+      
+      // Skip empty subdirectories
+      if (subdirFiles.length === 0) return;
+      
+      // Create subdirectory container
+      const subdirContainer = document.createElement('div');
+      subdirContainer.className = 'tree-subdir-container';
+      
+      // Create subdirectory header if it's not root
+      if (subdir !== 'root') {
+        const subdirHeader = document.createElement('div');
+        subdirHeader.className = 'tree-item directory subdir';
+        subdirHeader.innerHTML = `
+          <span class="expand-icon">▶</span>
+          <span class="tree-icon">📁</span>
+          <span class="dir-name">${subdir.split('/').pop()}</span>
+          <span class="file-count">(${subdirFiles.length} files)</span>
+        `;
+        
+        // Create subdirectory children container
+        const subdirChildren = document.createElement('div');
+        subdirChildren.className = 'tree-children collapsed';
+        
+        // Add files to subdirectory
+        addFilesToContainer(subdirFiles, subdirChildren);
+        
+        // Add click event to toggle subdirectory
+        subdirHeader.addEventListener('click', (e) => {
+          e.stopPropagation();
+          
+          // Toggle collapsed class on children container
+          subdirChildren.classList.toggle('collapsed');
+          
+          // Update expand icon
+          const expandIcon = subdirHeader.querySelector('.expand-icon');
+          if (subdirChildren.classList.contains('collapsed')) {
+            expandIcon.textContent = '▶';
+          } else {
+            expandIcon.textContent = '▼';
+          }
+        });
+        
+        // Add subdirectory header and children to subdirectory container
+        subdirContainer.appendChild(subdirHeader);
+        subdirContainer.appendChild(subdirChildren);
+      } else {
+        // For root, just add files directly
+        addFilesToContainer(subdirFiles, subdirContainer);
+      }
+      
+      // Add subdirectory container to project children
+      childrenContainer.appendChild(subdirContainer);
+    });
+    
+    // Add click event to toggle project
+    projectHeader.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Toggle collapsed class on children container
+      childrenContainer.classList.toggle('collapsed');
+      
+      // Update expand icon
+      const expandIcon = projectHeader.querySelector('.expand-icon');
+      if (childrenContainer.classList.contains('collapsed')) {
+        expandIcon.textContent = '▶';
+      } else {
+        expandIcon.textContent = '▼';
+      }
+    });
+    
+    // Add project header and children to project container
+    projectContainer.appendChild(projectHeader);
+    projectContainer.appendChild(childrenContainer);
+    
+    // Add project container to tree
+    treeContainer.appendChild(projectContainer);
+  });
+  
+  // Helper function to add files to a container
+  function addFilesToContainer(files, container) {
+    // Sort files by name
+    const sortedFiles = files.sort((a, b) => {
+      const nameA = a.name || '';
+      const nameB = b.name || '';
+      return nameA.localeCompare(nameB);
+    });
+    
+    // Add files to the container
+    sortedFiles.forEach(file => {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'tree-item file';
+      fileItem.setAttribute('data-id', file.id || '');
+      fileItem.innerHTML = `
+        <span class="tree-icon">📄</span>
+        <span class="file-name">${file.name || 'Unnamed file'}</span>
+      `;
+      
+      // Add click event to show file details
+      fileItem.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const fileId = fileItem.getAttribute('data-id');
+        if (fileId) {
+          showFileDetails(fileId);
+          
+          // Highlight selected file
+          document.querySelectorAll('.tree-item.file').forEach(item => {
+            item.classList.remove('selected');
+          });
+          fileItem.classList.add('selected');
+        }
+      });
+      
+      container.appendChild(fileItem);
+    });
+  }
+  
+  // Add notice if we limited the number of files
+  if (limitApplied) {
+    const noticeDiv = document.createElement('div');
+    noticeDiv.className = 'tree-notice';
+    noticeDiv.textContent = `Showing ${MAX_FILES} of ${files.length} files. Use search to find specific files.`;
+    treeContainer.appendChild(noticeDiv);
+  }
+  
+  // Add the tree container to the main container
+  container.appendChild(treeContainer);
+  
+  // Add click handlers for expand/collapse all buttons
+  const expandAllBtn = container.querySelector('.expand-all-btn');
+  const collapseAllBtn = container.querySelector('.collapse-all-btn');
+  
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Expand all directories
+      const children = container.querySelectorAll('.tree-children');
+      children.forEach(child => child.classList.remove('collapsed'));
+      
+      // Update all icons
+      const icons = container.querySelectorAll('.expand-icon');
+      icons.forEach(icon => icon.textContent = '▼');
+    });
+  }
+  
+  if (collapseAllBtn) {
+    collapseAllBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Collapse all directories
+      const children = container.querySelectorAll('.tree-children');
+      children.forEach(child => child.classList.add('collapsed'));
+      
+      // Update all icons
+      const icons = container.querySelectorAll('.expand-icon');
+      icons.forEach(icon => icon.textContent = '▶');
+    });
+  }
+}
+
+// Insights view functions
+function loadInsightsView() {
+  console.log('Loading insights view...');
+  
+  // Set loading state for chart containers
+  ['complexityChart', 'dependencyGraph', 'codePatterns', 'recommendations'].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.innerHTML = '<p>Loading data...</p>';
+    }
+  });
+  
+  // Use ipcRenderer for both API calls
+  Promise.all([
+    ipcRenderer.invoke('api-call', '/api/stats'),
+    ipcRenderer.invoke('api-call', '/api/tools')
+  ])
+  .then(([stats, tools]) => {
+    debugLog('Insights view received data', { stats, toolsCount: Array.isArray(tools) ? tools.length : 'not an array' });
+    
+    // Validate data before processing
+    if (!Array.isArray(tools)) {
+      console.error('Invalid tools data:', tools);
+      document.getElementById('codePatterns').innerHTML = '<p>Error: Could not load code insights.</p>';
+      return;
+    }
+    
+    // Use a reasonable maximum to prevent UI issues
+    const MAX_FILES_TO_PROCESS = 1000;
+    if (tools.length > MAX_FILES_TO_PROCESS) {
+      console.warn(`Large number of files (${tools.length}). Limiting to ${MAX_FILES_TO_PROCESS} for UI performance.`);
+      tools = tools.slice(0, MAX_FILES_TO_PROCESS);
+    }
+    
+    // Store tools globally if not already stored
+    window.allTools = tools;
+    
+    // Now process and display the data
+    drawComplexityChart(tools, stats);
+    drawDependencyGraph(tools);
+    showCodePatterns(tools);
+    showRecommendations(tools);
+  })
+
+  .catch(error => {
+    console.error('Error loading insights data:', error);
+    ['complexityChart', 'dependencyGraph', 'codePatterns', 'recommendations'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.innerHTML = '<p>Error loading insights data: ' + error.message + '</p>';
+      }
+    });
+  });
+}
+
+// Update drawComplexityChart to handle empty or invalid data
+function drawComplexityChart(tools, stats) {
+  const container = document.getElementById('complexityChart');
+  if (!container) return;
+  
+  // Clear previous content
+  container.innerHTML = '';
+  
+  // Create a new canvas element
+  const canvas = document.createElement('canvas');
+  canvas.id = 'complexityChartCanvas';
+  container.appendChild(canvas);
+  
+  // Check if Chart.js is available
+  if (typeof Chart === 'undefined') {
+    console.error('Chart.js not loaded');
+    container.innerHTML = '<p>Chart.js library not loaded. Please refresh the page.</p>';
+    return;
+  }
+  
+  // Use stats data if available, otherwise calculate from tools
+  let complexityData;
+  
+  if (stats && stats.complexity && typeof stats.complexity === 'object') {
+    // Use pre-calculated stats
+    complexityData = stats.complexity;
+  } else {
+    // Calculate from tools
+    complexityData = {
+      simple: tools.filter(t => t.complexity === 'simple').length,
+      moderate: tools.filter(t => t.complexity === 'moderate').length,
+      complex: tools.filter(t => t.complexity === 'complex').length,
+      unknown: tools.filter(t => !t.complexity || t.complexity === 'unknown').length
+    };
+  }
+  
+  try {
+    // Prepare chart data
+    const labels = Object.keys(complexityData);
+    const data = Object.values(complexityData);
+    
+    // Create chart with appropriate colors
+    const newChart = new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Number of Files',
+          data: data,
+          backgroundColor: ['#2ecc71', '#f39c12', '#e74c3c', '#95a5a6']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Code Complexity Distribution'
+          }
+        }
+      }
+    });
+    
+    // Store chart instance in a place it won't be garbage collected
+    // but don't use window.complexityChart as it might be causing issues
+    container.chart = newChart;
+  } catch (error) {
+    console.error('Error creating complexity chart:', error);
+    container.innerHTML = '<p>Error creating complexity chart: ' + error.message + '</p>';
+  }
+}
+
+// D3 based dependency graph (ensure D3 is loaded in index.html)
+// Your provided drawDependencyGraph and createD3DependencyGraph functions
+// will be called by loadInsightsView.
+// Make sure the container ID in index.html is 'dependencyGraph' if createD3DependencyGraph uses that.
+// The provided comprehensive_api.py /api/insights returns 'dependencyGraph' object.
+
+function drawDependencyGraph(tools) {
+  const container = document.getElementById('dependencyGraph');
+  if (!container) return;
+  
+  // Check if vis.js is available
+  if (!window.vis) {
+    container.innerHTML = '<p>Visualization library not loaded. Please refresh the page.</p>';
+    return;
+  }
+  
+  // Clear container
+  container.innerHTML = '';
+  
+  // Prepare data for visualization
+  // For simplicity, let's show the most common dependencies
+  
+  // Extract dependencies from tools
+  const dependencies = {};
+  const nodes = [];
+  const edges = [];
+  
+  // Process up to a limited number of tools to avoid performance issues
+  const MAX_TOOLS = 100;
+  const toolsToProcess = tools.slice(0, MAX_TOOLS);
+  
+  // Add tools as nodes
+  toolsToProcess.forEach((tool, index) => {
+    // Add node for the tool
+    nodes.push({
+      id: tool.id || `tool_${index}`,
+      label: tool.name || `Tool ${index}`,
+      group: tool.category || 'unknown'
+    });
+    
+    // Process dependencies if available
+    if (tool.dependencies && Array.isArray(tool.dependencies)) {
+      tool.dependencies.forEach(dep => {
+        // Count dependency occurrences
+        dependencies[dep] = (dependencies[dep] || 0) + 1;
+        
+        // Add edge from tool to dependency
+        edges.push({
+          from: tool.id || `tool_${index}`,
+          to: `dep_${dep}`,
+          arrows: 'to'
+        });
+      });
+    }
+  });
+  
+  // Add top dependencies as nodes
+  const TOP_DEPENDENCIES = 20;
+  Object.entries(dependencies)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, TOP_DEPENDENCIES)
+    .forEach(([dep, count]) => {
+      nodes.push({
+        id: `dep_${dep}`,
+        label: `${dep} (${count})`,
+        group: 'dependency',
+        shape: 'box'
+      });
+    });
+  
+  // Create a network
+  try {
+    const data = {
+      nodes: new vis.DataSet(nodes),
+      edges: new vis.DataSet(edges)
+    };
+    
+    const options = {
+      nodes: {
+        shape: 'dot',
+        size: 16,
+        font: {
+          size: 12
+        }
+      },
+      edges: {
+        width: 0.5,
+        color: { opacity: 0.6 }
+      },
+      physics: {
+        forceAtlas2Based: {
+          gravitationalConstant: -26,
+          centralGravity: 0.005,
+          springLength: 100,
+          springConstant: 0.18
+        },
+        maxVelocity: 146,
+        solver: 'forceAtlas2Based',
+        timestep: 0.35,
+        stabilization: { iterations: 150 }
+      },
+      groups: {
+        dependency: {
+          color: { background: '#3498db', border: '#2980b9' },
+          shape: 'box'
+        },
+        utility: { color: { background: '#2ecc71' } },
+        api: { color: { background: '#e74c3c' } },
+        'data-processing': { color: { background: '#f39c12' } },
+        ui: { color: { background: '#9b59b6' } },
+        config: { color: { background: '#1abc9c' } },
+        unknown: { color: { background: '#95a5a6' } }
+      }
+    };
+    
+    new vis.Network(container, data, options);
+  } catch (error) {
+    console.error('Error creating network graph:', error);
+    container.innerHTML = '<p>Error creating dependency graph: ' + error.message + '</p>';
+  }
+}
+
+
+function createD3DependencyGraph(containerId, graphData) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Container with ID ${containerId} not found for D3 graph.`);
+        return;
+    }
+    const width = container.clientWidth || 600; // Fallback width
+    const height = container.clientHeight || 500; // Fallback height
+    
+    d3.select(`#${containerId}`).select("svg").remove(); // Clear previous SVG
+    
+    const svg = d3.select(`#${containerId}`)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`) // Ensure responsiveness
+        .style("max-width", "100%");
+
+
+    const g = svg.append("g");
+
+    const zoom = d3.zoom()
+        .scaleExtent([0.1, 8]) // Adjusted scaleExtent
+        .on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        });
+    svg.call(zoom);
+
+    svg.append("defs").append("marker")
+        .attr("id", "arrowhead")
+        .attr("viewBox", "-0 -5 10 10") // Adjusted viewBox for better arrow appearance
+        .attr("refX", 20) // Increased refX for larger nodes
+        .attr("refY", 0)
+        .attr("markerWidth", 6) // Adjusted marker size
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-5L10,0L0,5")
+        .attr("class", "arrowhead") // For styling via CSS if needed
+        .style("fill", "#777");
+
+
+    const simulation = d3.forceSimulation(graphData.nodes)
+        .force("link", d3.forceLink(graphData.edges).id(d => d.id).distance(120)) // Increased distance
+        .force("charge", d3.forceManyBody().strength(-400)) // Adjusted strength
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(d => (d.type === 'file' ? 25 : 15))); // Increased collision radius
+
+
+    const links = g.append("g")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6)
+        .selectAll("line")
+        .data(graphData.edges)
+        .join("line")
+        .attr("stroke-width", d => Math.sqrt(d.value || 1.5)) // Use value if available
+        .attr("marker-end", "url(#arrowhead)");
+
+    const nodeGroups = g.append("g")
+        .selectAll("g.node-group")
+        .data(graphData.nodes)
+        .join("g")
+        .attr("class", "node-group")
+        .call(drag(simulation));
+
+    nodeGroups.append("circle")
+        .attr("r", d => d.type === 'file' ? 20 : 10) // Larger radius
+        .attr("fill", d => d.type === 'file' ? "#60a5fa" : "#34d399") // Tailwind-ish colors
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5);
+
+    nodeGroups.append("text")
+        .text(d => d.name)
+        .attr("x", 0) // Centered by default due to text-anchor
+        .attr("y", d => (d.type === 'file' ? -25 : -15)) // Position above node
+        .attr("text-anchor", "middle")
+        .style("font-size", "10px")
+        .style("fill", "#333")
+        .style("pointer-events", "none"); // Prevent text from interfering with drag
+
+    nodeGroups.append("title") // Tooltip
+        .text(d => `${d.name}\nType: ${d.type}\nPath: ${d.path || 'N/A'}`);
+
+    simulation.on("tick", () => {
+        links
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        
+        nodeGroups.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    function drag(simulation) {
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+        return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
+    }
+
+    // Optional: Center graph on initial load
+    // svg.call(zoom.transform, d3.zoomIdentity.translate(width / 4, height / 4).scale(0.5));
+}
+
+
+function showCodePatterns(tools) {
+  const container = document.getElementById('codePatterns');
+  if (!container) return;
+  
+  // Identify patterns in the code
+  const patterns = {
+    'Entry Points': tools.filter(t => t.is_entry_point === true).length,
+    'File Operations': tools.filter(t => t.category === 'file-ops' || t.purpose?.toLowerCase().includes('file')).length,
+    'API Components': tools.filter(t => t.category === 'api').length,
+    'Data Processing': tools.filter(t => t.category === 'data-processing').length,
+    'UI Components': tools.filter(t => t.category === 'ui').length,
+    'Configuration': tools.filter(t => t.category === 'config').length,
+    'Test Files': tools.filter(t => t.name?.toLowerCase().includes('test') || t.path?.toLowerCase().includes('test')).length
+  };
+  
+  // Build HTML
+  let html = '<ul class="pattern-list">';
+  
+  Object.entries(patterns).forEach(([pattern, count]) => {
+    if (count > 0) {
+      html += `
+        <li class="pattern-item">
+          <span class="pattern-name">${pattern}:</span>
+          <span class="pattern-count">${count} files</span>
+        </li>
+      `;
+    }
+  });
+  
+  html += '</ul>';
+  
+  // If no patterns found
+  if (Object.values(patterns).every(count => count === 0)) {
+    html = '<p>No significant code patterns detected.</p>';
+  }
+  
+  container.innerHTML = html;
+}
+
+function showRecommendations(tools) {
+  const container = document.getElementById('recommendations');
+  if (!container) return;
+  
+  const recommendations = [];
+  
+  // Generate recommendations based on code analysis
+  
+  // Check for potentially complex files
+  const complexFiles = tools.filter(t => t.complexity === 'complex');
+  if (complexFiles.length > 5) {
+    recommendations.push({
+      title: 'Consider refactoring complex files',
+      description: `You have ${complexFiles.length} complex files that might benefit from refactoring.`
+    });
+  }
+  
+  // Check test coverage
+  const testFiles = tools.filter(t => t.name?.toLowerCase().includes('test') || t.path?.toLowerCase().includes('test'));
+  const testRatio = testFiles.length / tools.length;
+  if (testRatio < 0.1 && tools.length > 20) {
+    recommendations.push({
+      title: 'Improve test coverage',
+      description: 'Your codebase has relatively few test files. Consider adding more tests.'
+    });
+  }
+  
+  // Check for inconsistent categorization
+  const uncategorized = tools.filter(t => !t.category || t.category === 'unknown');
+  if (uncategorized.length > tools.length * 0.3) {
+    recommendations.push({
+      title: 'Categorize uncategorized files',
+      description: `${uncategorized.length} files (${Math.round(uncategorized.length / tools.length * 100)}%) are uncategorized. Consider rescanning with better categorization.`
+    });
+  }
+  
+  // Check Python-specific recommendations
+  const pythonFiles = tools.filter(t => t.language === 'python');
+  if (pythonFiles.length > 10) {
+    const initFiles = pythonFiles.filter(t => t.name === '__init__.py');
+    if (initFiles.length < pythonFiles.length * 0.2) {
+      recommendations.push({
+        title: 'Organize Python files into packages',
+        description: 'Consider organizing Python files into proper packages with __init__.py files.'
+      });
+    }
+  }
+  
+  // Generate HTML
+  if (recommendations.length > 0) {
+    let html = '<ul class="recommendations-list">';
+    
+    recommendations.forEach(rec => {
+      html += `
+        <li class="recommendation-item">
+          <h4>${rec.title}</h4>
+          <p>${rec.description}</p>
+        </li>
+      `;
+    });
+    
+    html += '</ul>';
+    container.innerHTML = html;
+  } else {
+    container.innerHTML = '<p>No specific recommendations at this time.</p>';
+  }
+}
+
+// Utility functions
+function getTimeAgo(dateInput) {
+    if (!dateInput) return "Unknown time";
+    const date = (typeof dateInput === 'string' || typeof dateInput === 'number') ? new Date(dateInput) : dateInput;
+    if (isNaN(date.getTime())) return "Invalid date";
+
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    let interval = seconds / 31536000; // 60 * 60 * 24 * 365
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    
+    interval = seconds / 2592000; // 60 * 60 * 24 * 30
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    
+    interval = seconds / 86400; // 60 * 60 * 24
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    
+    interval = seconds / 3600; // 60 * 60
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " minutes ago";
+    
+    if (seconds < 0) return "In the future"; // Handle edge case of future timestamp
+    return Math.max(0, Math.floor(seconds)) + " seconds ago"; // Ensure non-negative
+}
+
+function getComplexityLabel(score) {
+    if (score === undefined || score === null || isNaN(score)) return 'Unknown';
+    if (score > 2.0) return 'High'; // Adjusted threshold
+    if (score > 1.0) return 'Medium'; // Adjusted threshold
+    return 'Low';
+}
+
+function showProjectDetails(projectNameOrPath) {
+    // This function is currently called with project name from summary/cards
+    // and also from activity items (where it could be a file path or ID).
+    // It needs to be smarter or split into two functions.
+    // For now, if it looks like a project name, switch to projects view.
+    // If it looks like a file path/ID, call showFileDetails.
+
+    if (allTools.some(tool => tool.id === projectNameOrPath || tool.path === projectNameOrPath)) {
+        showView('explorer'); // Switch to explorer if it's likely a file
+        showFileDetails(projectNameOrPath); // And try to show its details
+    } else {
+        // Assume it's a project name; just switch to projects view.
+        // Actual filtering/display of project details would need more logic here or a dedicated view.
+        showView('projects');
+        console.log(`Mapsd to projects view. Filtering for '${projectNameOrPath}' would be next.`);
+        // Example: You could filter the displayed project cards here
+        // Or, if you had a dedicated project detail view, navigate to that.
+    }
+}
+
+
+// Search functionality
+function search() {
+  const query = document.getElementById('searchInput').value.trim();
+  if (!query) return;
+  
+  console.log(`Searching for: ${query}`);
+  
+  // Show loading indicator
+  const resultsElement = document.getElementById('fileTree');
+  if (resultsElement) {
+    resultsElement.innerHTML = '<p>Searching...</p>';
+  }
+  
+  // Perform search
+  ipcRenderer.invoke('api-call', `/api/search?q=${encodeURIComponent(query)}`)
+    .then(results => {
+      console.log('Search results:', results);
+      
+      // Switch to explorer view
+      showView('explorer');
+      
+      // Display results
+      if (Array.isArray(results) && results.length > 0) {
+        renderFileTree(results);
+      } else {
+        if (resultsElement) {
+          resultsElement.innerHTML = `<div class="no-results">
+            <p>No results found for "${query}"</p>
+            <p>Try a different search term or scan more code.</p>
+          </div>`;
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Search error:', error);
+      if (resultsElement) {
+        resultsElement.innerHTML = `<div class="error-message">
+          <p>Error performing search: ${error.message}</p>
+          <p>Please try again.</p>
+        </div>`;
+      }
+    });
+}
+
+function expandAllDirectories() {
+  const container = document.getElementById('fileTree');
+  if (!container) return;
+  
+  container.querySelectorAll('.tree-item.directory').forEach(dirItem => {
+    dirItem.setAttribute('data-expanded', 'true');
+    const expandIcon = dirItem.querySelector('.expand-icon');
+    if (expandIcon) expandIcon.textContent = '▼';
+    
+    const childrenContainer = dirItem.nextElementSibling;
+    if (childrenContainer) {
+      childrenContainer.classList.remove('collapsed');
+    }
+  });
+}
+
+function collapseAllDirectories() {
+  const container = document.getElementById('fileTree');
+  if (!container) return;
+  
+  container.querySelectorAll('.tree-item.directory').forEach(dirItem => {
+    dirItem.setAttribute('data-expanded', 'false');
+    const expandIcon = dirItem.querySelector('.expand-icon');
+    if (expandIcon) expandIcon.textContent = '▶';
+    
+    const childrenContainer = dirItem.nextElementSibling;
+    if (childrenContainer) {
+      childrenContainer.classList.add('collapsed');
+    }
+  });
+}
+
+// function renderFileTree(files) {
+//   const container = document.getElementById('fileTree');
+//   if (!container) {
+//     console.error('fileTree container not found');
+//     return;
+//   }
+  
+//   console.log(`Rendering file tree with ${files.length} files`);
+  
+//   // Clear the container first
+//   container.innerHTML = '';
+  
+//   // Handle empty files array
+//   if (!Array.isArray(files) || files.length === 0) {
+//     container.innerHTML = '<p>No files found in inventory.</p>';
+//     return;
+//   }
+  
+//   // Limit number of files to prevent performance issues
+//   const MAX_FILES = 500;
+//   let filesToRender = files;
+//   let limitApplied = false;
+  
+//   if (files.length > MAX_FILES) {
+//     console.log(`Large number of files (${files.length}). Limiting to ${MAX_FILES} for UI performance.`);
+//     filesToRender = files.slice(0, MAX_FILES);
+//     limitApplied = true;
+//   }
+  
+//   // Group files by top-level directory
+//   const filesByTopDir = {};
+  
+//   filesToRender.forEach(file => {
+//     if (!file.path) return;
+    
+//     // Normalize path
+//     const normalizedPath = file.path.replace(/\\/g, '/');
+//     const parts = normalizedPath.split('/').filter(p => p);
+    
+//     if (parts.length === 0) return;
+    
+//     // Get top-level directory or use filename if there's no directory
+//     const topDir = parts.length > 1 ? parts[0] : '(root)';
+    
+//     if (!filesByTopDir[topDir]) {
+//       filesByTopDir[topDir] = [];
+//     }
+    
+//     filesByTopDir[topDir].push(file);
+//   });
+  
+//   // Create the tree container element
+//   const treeContainer = document.createElement('div');
+//   treeContainer.className = 'file-tree-container';
+  
+//   // Add the expand/collapse controls
+//   const controlsDiv = document.createElement('div');
+//   controlsDiv.className = 'tree-controls';
+//   controlsDiv.innerHTML = `
+//     <button class="expand-all-btn">Expand All</button>
+//     <button class="collapse-all-btn">Collapse All</button>
+//   `;
+//   treeContainer.appendChild(controlsDiv);
+  
+//   // Sort directories alphabetically
+//   const sortedDirs = Object.keys(filesByTopDir).sort();
+  
+//   // Add each directory to the tree
+//   sortedDirs.forEach(dir => {
+//     const dirFiles = filesByTopDir[dir];
+//     const fileCount = dirFiles.length;
+    
+//     // Create the directory container
+//     const dirContainer = document.createElement('div');
+//     dirContainer.className = 'tree-dir-container';
+    
+//     // Create directory header
+//     const dirHeader = document.createElement('div');
+//     dirHeader.className = 'tree-item directory';
+//     dirHeader.innerHTML = `
+//       <span class="expand-icon">▶</span>
+//       <span class="tree-icon">📁</span>
+//       <span class="dir-name">${dir}</span>
+//       <span class="file-count">(${fileCount} files)</span>
+//     `;
+    
+//     // Create directory children container
+//     const childrenContainer = document.createElement('div');
+//     childrenContainer.className = 'tree-children collapsed';
+    
+//     // Sort files by name
+//     const sortedFiles = dirFiles.sort((a, b) => {
+//       const nameA = a.name || '';
+//       const nameB = b.name || '';
+//       return nameA.localeCompare(nameB);
+//     });
+    
+//     // Add files to the children container
+//     sortedFiles.forEach(file => {
+//       const fileItem = document.createElement('div');
+//       fileItem.className = 'tree-item file';
+//       fileItem.setAttribute('data-id', file.id || '');
+//       fileItem.innerHTML = `
+//         <span class="tree-icon">📄</span>
+//         <span class="file-name">${file.name || 'Unnamed file'}</span>
+//       `;
+      
+//       // Add click event to show file details
+//       fileItem.addEventListener('click', (e) => {
+//         e.stopPropagation();
+//         const fileId = fileItem.getAttribute('data-id');
+//         if (fileId) {
+//           showFileDetails(fileId);
+          
+//           // Highlight selected file
+//           document.querySelectorAll('.tree-item.file').forEach(item => {
+//             item.classList.remove('selected');
+//           });
+//           fileItem.classList.add('selected');
+//         }
+//       });
+      
+//       childrenContainer.appendChild(fileItem);
+//     });
+    
+//     // Add click event to toggle directory
+//     dirHeader.addEventListener('click', (e) => {
+//       e.stopPropagation();
+      
+//       // Toggle collapsed class on children container
+//       childrenContainer.classList.toggle('collapsed');
+      
+//       // Update expand icon
+//       const expandIcon = dirHeader.querySelector('.expand-icon');
+//       if (childrenContainer.classList.contains('collapsed')) {
+//         expandIcon.textContent = '▶';
+//       } else {
+//         expandIcon.textContent = '▼';
+//       }
+//     });
+    
+//     // Add directory header and children to directory container
+//     dirContainer.appendChild(dirHeader);
+//     dirContainer.appendChild(childrenContainer);
+    
+//     // Add directory container to tree
+//     treeContainer.appendChild(dirContainer);
+//   });
+  
+//   // Add notice if we limited the number of files
+//   if (limitApplied) {
+//     const noticeDiv = document.createElement('div');
+//     noticeDiv.className = 'tree-notice';
+//     noticeDiv.textContent = `Showing ${MAX_FILES} of ${files.length} files. Use search to find specific files.`;
+//     treeContainer.appendChild(noticeDiv);
+//   }
+  
+//   // Add the tree container to the main container
+//   container.appendChild(treeContainer);
+  
+//   // Add click handlers for expand/collapse all buttons
+//   const expandAllBtn = container.querySelector('.expand-all-btn');
+//   const collapseAllBtn = container.querySelector('.collapse-all-btn');
+  
+//   if (expandAllBtn) {
+//     expandAllBtn.addEventListener('click', (e) => {
+//       e.stopPropagation();
+      
+//       // Expand all directories
+//       const children = container.querySelectorAll('.tree-children');
+//       children.forEach(child => child.classList.remove('collapsed'));
+      
+//       // Update all icons
+//       const icons = container.querySelectorAll('.expand-icon');
+//       icons.forEach(icon => icon.textContent = '▼');
+//     });
+//   }
+  
+//   if (collapseAllBtn) {
+//     collapseAllBtn.addEventListener('click', (e) => {
+//       e.stopPropagation();
+      
+//       // Collapse all directories
+//       const children = container.querySelectorAll('.tree-children');
+//       children.forEach(child => child.classList.add('collapsed'));
+      
+//       // Update all icons
+//       const icons = container.querySelectorAll('.expand-icon');
+//       icons.forEach(icon => icon.textContent = '▶');
+//     });
+//   }
+// }
+
+
+function buildFileTree(files) {
+  const tree = {};
+  
+  files.forEach(file => {
+    let path = file.path.split('/');
+    let currentLevel = tree;
+    
+    // Build the tree structure
+    path.forEach((part, index) => {
+      if (index === path.length - 1) {
+        // Last part is the file
+        currentLevel[part] = { 
+          type: 'file',
+          id: file.id,
+          data: file 
+        };
+      } else {
+        // Directories
+        if (!currentLevel[part]) {
+          currentLevel[part] = { 
+            type: 'directory',
+            children: {} 
+          };
+        }
+        currentLevel = currentLevel[part].children;
+      }
+    });
+  });
+  
+  return tree;
+}
+
+function generateTreeHTML(tree, level = 0) {
+  let html = '';
+  
+  // Sort entries: directories first, then files
+  const sortedEntries = Object.entries(tree).sort((a, b) => {
+    // If types are different, directories come first
+    if (a[1].type !== b[1].type) {
+      return a[1].type === 'directory' ? -1 : 1;
+    }
+    // If types are the same, sort alphabetically
+    return a[0].localeCompare(b[0]);
+  });
+  
+  sortedEntries.forEach(([name, item]) => {
+    if (item.type === 'directory') {
+      html += `
+        <div class="tree-item directory" style="padding-left: ${level * 20}px">
+          <span class="tree-icon">📁</span> ${name}
+        </div>
+        <div class="tree-children">
+          ${generateTreeHTML(item.children, level + 1)}
+        </div>
+      `;
+    } else {
+      html += `
+        <div class="tree-item file" style="padding-left: ${level * 20}px" data-id="${item.id}">
+          <span class="tree-icon">📄</span> ${name}
+        </div>
+      `;
+    }
+  });
+  
+  return html;
+}
+
+function loadExplorerView() {
+  console.log('Loading explorer view...');
+  
+  // Make sure the file structure and details panels exist
+  const fileExplorerContainer = document.getElementById('explorer');
+  if (fileExplorerContainer) {
+    // Check if we need to initialize the structure
+    if (!document.getElementById('fileTree') || !document.getElementById('fileDetails')) {
+      // Create the two-panel layout if it doesn't exist
+      fileExplorerContainer.innerHTML = `
+        <div class="explorer-layout">
+          <div class="file-structure">
+            <h3>File Structure</h3>
+            <div id="fileTree">
+              <p>Loading file structure...</p>
+            </div>
+          </div>
+          <div class="file-details-panel">
+            <h3>File Details</h3>
+            <div id="fileDetails">
+              <p>Select a file to view details</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+  
+  // Get the file tree container
+  const fileTreeContainer = document.getElementById('fileTree');
+  if (fileTreeContainer) {
+    fileTreeContainer.innerHTML = '<p>Loading file structure...</p>';
+  }
+  
+  // Use ipcRenderer to call the API
+  ipcRenderer.invoke('api-call', '/api/tools')
+    .then(files => {
+      debugLog('Explorer view received files', files);
+      
+      // Check if we have valid file data
+      if (Array.isArray(files) && files.length > 0) {
+        // Store globally for reuse
+        window.allTools = files;
+        
+        // Render the file tree
+        renderFileTree(files);
+      } else {
+        if (fileTreeContainer) {
+          fileTreeContainer.innerHTML = '<p>No files found in inventory. Try scanning some code first.</p>';
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error loading files:', error);
+      if (fileTreeContainer) {
+        fileTreeContainer.innerHTML = '<p>Error loading file structure. Please try again.</p>';
+      }
+    });
+}
+
+// Add a function to search within the file tree
+function searchFileTree() {
+  const searchInput = document.getElementById('treeSearchInput');
+  if (!searchInput) return;
+  
+  const query = searchInput.value.toLowerCase().trim();
+  if (!query) return;
+  
+  const allTools = window.allTools || [];
+  
+  // Filter files that match the query
+  const matchingFiles = allTools.filter(tool => {
+    const name = (tool.name || '').toLowerCase();
+    const path = (tool.path || '').toLowerCase();
+    const purpose = (tool.purpose || '').toLowerCase();
+    
+    return name.includes(query) || 
+           path.includes(query) || 
+           purpose.includes(query);
+  });
+  
+  // Re-render tree with filtered files
+  if (matchingFiles.length > 0) {
+    renderFileTree(matchingFiles);
+    
+    // Show search results message
+    const container = document.getElementById('fileTree');
+    if (container) {
+      container.insertAdjacentHTML('afterbegin', 
+        `<div class="search-results-info">Found ${matchingFiles.length} files matching "${query}"</div>`
+      );
+    }
+  } else {
+    // No matches found
+    const container = document.getElementById('fileTree');
+    if (container) {
+      container.innerHTML = `<div class="no-results">No files found matching "${query}"</div>`;
+    }
+  }
+}
+
+
+// Initialize when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+    init();
+});
+
+// Make functions available globally for onclick handlers in HTML
+window.showView = showView;
+window.search = search;
+window.showFileDetails = showFileDetails;
+window.showProjectDetails = showProjectDetails;

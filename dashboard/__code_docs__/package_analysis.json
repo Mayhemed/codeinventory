@@ -1,0 +1,75 @@
+{
+  "file": "package.json",
+  "path": "dashboard/package.json",
+  "language": "json",
+  "last_analyzed": "2025-05-11T02:49:50.982596",
+  "metrics": {
+    "size": 406,
+    "lines": {
+      "total": 20,
+      "code": 19,
+      "comment": 1
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "dependencies": []
+  },
+  "analysis": {
+    "purpose": "package.json is a configuration file for the CodeInventory dashboard application.",
+    "description": "This file specifies metadata about the project and its dependencies, as well as defines scripts for building and running the application.",
+    "category": "ui",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Specifies the main functionality of the CodeInventory dashboard application"
+    ],
+    "dependencies_analysis": "The file specifies dependencies on chart.js, electron, node-fetch, and vis-network.",
+    "potential_issues": [],
+    "usage_examples": [],
+    "architectural_role": "Defines the configuration for the CodeInventory dashboard application",
+    "patterns": [
+      "uses the Dependency Injection pattern"
+    ],
+    "test_coverage": "The file specifies scripts for building and running the application, but does not contain any tests.",
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "The code is relatively straightforward and easy to understand, but it could benefit from additional comments and documentation."
+  },
+  "documentation": {
+    "summary": "package.json is a configuration file for the CodeInventory dashboard application.",
+    "description": "This file specifies metadata about the project and its dependencies, as well as defines scripts for building and running the application.",
+    "category": "ui",
+    "complexity": "moderate",
+    "architectural_role": "Defines the configuration for the CodeInventory dashboard application",
+    "main_functionality": [
+      "Specifies the main functionality of the CodeInventory dashboard application"
+    ],
+    "patterns": [
+      "uses the Dependency Injection pattern"
+    ],
+    "dependencies_analysis": "The file specifies dependencies on chart.js, electron, node-fetch, and vis-network.",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "The code is relatively straightforward and easy to understand, but it could benefit from additional comments and documentation.",
+    "test_coverage": "The file specifies scripts for building and running the application, but does not contain any tests."
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

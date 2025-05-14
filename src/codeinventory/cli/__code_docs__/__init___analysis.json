@@ -1,0 +1,105 @@
+{
+  "file": "__init__.py",
+  "path": "src/codeinventory/cli/__init__.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:52:33.281421",
+  "metrics": {
+    "size": 22,
+    "lines": {
+      "total": 2,
+      "code": 1,
+      "comment": 1
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 1
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "cli",
+        "name": "main",
+        "alias": null,
+        "line": 1
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "cli"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Initialize the CLI for CodeInventory.",
+    "description": "This file initializes the Command Line Interface (CLI) of CodeInventory. It imports the main function from the cli module and defines it as the entry point of the program.",
+    "category": "cli",
+    "complexity": "simple",
+    "main_functionality": [
+      "Initialize the CLI"
+    ],
+    "dependencies_analysis": [
+      "Imports the main function from the cli module"
+    ],
+    "potential_issues": [],
+    "usage_examples": [
+      "python src/codeinventory/cli/__init__.py"
+    ],
+    "architectural_role": "Entry point of the program",
+    "patterns": [
+      "Import statement"
+    ],
+    "test_coverage": "None",
+    "security_considerations": [],
+    "performance_notes": "None",
+    "maintainability": "Low"
+  },
+  "documentation": {
+    "summary": "Initialize the CLI for CodeInventory.",
+    "description": "This file initializes the Command Line Interface (CLI) of CodeInventory. It imports the main function from the cli module and defines it as the entry point of the program.",
+    "category": "cli",
+    "complexity": "simple",
+    "architectural_role": "Entry point of the program",
+    "main_functionality": [
+      "Initialize the CLI"
+    ],
+    "patterns": [
+      "Import statement"
+    ],
+    "dependencies_analysis": [
+      "Imports the main function from the cli module"
+    ],
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "None",
+    "maintainability": "Low",
+    "test_coverage": "None"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "cli",
+        "name": "main",
+        "alias": null,
+        "line": 1
+      }
+    ],
+    "dependencies": [
+      "cli"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

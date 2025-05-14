@@ -1,0 +1,311 @@
+{
+  "file": "fixed_api.py",
+  "path": "fixed_api.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:50:24.112658",
+  "metrics": {
+    "size": 4812,
+    "lines": {
+      "total": 175,
+      "code": 135,
+      "comment": 40
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 7,
+      "classes": 0,
+      "imports": 8
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "Flask",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "jsonify",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "request",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask_cors",
+        "name": "CORS",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 6
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_db_connection",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Create a new database connection for each request.",
+        "is_async": false,
+        "line": 16,
+        "complexity": 1
+      },
+      {
+        "name": "index",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "API root endpoint.",
+        "is_async": false,
+        "line": 24,
+        "complexity": 1
+      },
+      {
+        "name": "get_stats",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get overview statistics.",
+        "is_async": false,
+        "line": 39,
+        "complexity": 3
+      },
+      {
+        "name": "get_tools",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get all tools.",
+        "is_async": false,
+        "line": 79,
+        "complexity": 4
+      },
+      {
+        "name": "get_components",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get all components.",
+        "is_async": false,
+        "line": 102,
+        "complexity": 2
+      },
+      {
+        "name": "get_relationships",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get tool relationships for visualization.",
+        "is_async": false,
+        "line": 124,
+        "complexity": 3
+      },
+      {
+        "name": "search",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Search tools.",
+        "is_async": false,
+        "line": 149,
+        "complexity": 3
+      }
+    ],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "app",
+        "line": 8,
+        "is_constant": false
+      },
+      {
+        "name": "config_path",
+        "line": 12,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "flask",
+      "flask_cors",
+      "json",
+      "pathlib",
+      "sqlite3",
+      "yaml"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "A RESTful API for querying CodeInventory data.",
+    "description": "This API provides endpoints for retrieving overview statistics, tools, components, relationships, and searching for specific tools. It uses Flask as the web framework and sqlite3 as the database engine. The configuration file is loaded from a YAML file in the same directory as this code.",
+    "category": "api",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Querying CodeInventory data"
+    ],
+    "dependencies_analysis": "Imports Flask, flask_cors, pathlib, yaml, sqlite3, and json. Uses the CORS decorator from flask-cors to enable cross-origin resource sharing (CORS).",
+    "potential_issues": [
+      "Configuration file location hardcoded",
+      "Database connection created for each request"
+    ],
+    "usage_examples": [
+      "Request statistics: curl http://localhost:5000/api/stats",
+      "Search for tools containing 'java': curl http://localhost:5000/api/search?q=java"
+    ],
+    "architectural_role": "Provides a RESTful API for querying CodeInventory data.",
+    "patterns": [
+      "Model-View-Controller (MVC) pattern"
+    ],
+    "test_coverage": "Test coverage needs assessment: minimal test coverage, focus on integration testing",
+    "security_considerations": [],
+    "performance_notes": "Performance characteristics or optimization opportunities: minimal performance considerations, focus on simplicity and maintainability",
+    "maintainability": "Maintainability assessment: moderate maintainability, focus on simplicity and readability"
+  },
+  "documentation": {
+    "summary": "A RESTful API for querying CodeInventory data.",
+    "description": "This API provides endpoints for retrieving overview statistics, tools, components, relationships, and searching for specific tools. It uses Flask as the web framework and sqlite3 as the database engine. The configuration file is loaded from a YAML file in the same directory as this code.",
+    "category": "api",
+    "complexity": "moderate",
+    "architectural_role": "Provides a RESTful API for querying CodeInventory data.",
+    "main_functionality": [
+      "Querying CodeInventory data"
+    ],
+    "patterns": [
+      "Model-View-Controller (MVC) pattern"
+    ],
+    "dependencies_analysis": "Imports Flask, flask_cors, pathlib, yaml, sqlite3, and json. Uses the CORS decorator from flask-cors to enable cross-origin resource sharing (CORS).",
+    "potential_issues": [
+      "Configuration file location hardcoded",
+      "Database connection created for each request"
+    ],
+    "security_considerations": [],
+    "performance_notes": "Performance characteristics or optimization opportunities: minimal performance considerations, focus on simplicity and maintainability",
+    "maintainability": "Maintainability assessment: moderate maintainability, focus on simplicity and readability",
+    "test_coverage": "Test coverage needs assessment: minimal test coverage, focus on integration testing"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "Flask",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "jsonify",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "request",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask_cors",
+        "name": "CORS",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 6
+      }
+    ],
+    "dependencies": [
+      "flask",
+      "flask_cors",
+      "json",
+      "pathlib",
+      "sqlite3",
+      "yaml"
+    ],
+    "exported": {
+      "functions": [
+        "get_db_connection",
+        "index",
+        "get_stats",
+        "get_tools",
+        "get_components",
+        "get_relationships",
+        "search"
+      ],
+      "classes": [],
+      "variables": [
+        {
+          "name": "app",
+          "line": 8,
+          "is_constant": false
+        },
+        {
+          "name": "config_path",
+          "line": 12,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}

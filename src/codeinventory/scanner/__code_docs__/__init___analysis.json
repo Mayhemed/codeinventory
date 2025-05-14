@@ -1,0 +1,77 @@
+{
+  "file": "__init__.py",
+  "path": "src/codeinventory/scanner/__init__.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:53:22.615676",
+  "metrics": {
+    "size": 0,
+    "lines": {
+      "total": 1,
+      "code": 0,
+      "comment": 1
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This file is the initialization module for the scanner package.",
+    "description": "The __init__.py file serves as an entry point for the scanner package and imports all necessary modules and dependencies.",
+    "category": "utility",
+    "complexity": "simple",
+    "main_functionality": [],
+    "dependencies_analysis": {},
+    "potential_issues": [],
+    "usage_examples": [
+      "import src.codeinventory.scanner"
+    ],
+    "architectural_role": "entry point for the scanner package",
+    "patterns": [
+      "import"
+    ],
+    "test_coverage": "no test coverage needed",
+    "security_considerations": [],
+    "performance_notes": "no performance optimization opportunities",
+    "maintainability": "simple to maintain and understand"
+  },
+  "documentation": {
+    "summary": "This file is the initialization module for the scanner package.",
+    "description": "The __init__.py file serves as an entry point for the scanner package and imports all necessary modules and dependencies.",
+    "category": "utility",
+    "complexity": "simple",
+    "architectural_role": "entry point for the scanner package",
+    "main_functionality": [],
+    "patterns": [
+      "import"
+    ],
+    "dependencies_analysis": {},
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "no performance optimization opportunities",
+    "maintainability": "simple to maintain and understand",
+    "test_coverage": "no test coverage needed"
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

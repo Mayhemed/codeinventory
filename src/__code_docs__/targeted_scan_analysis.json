@@ -1,0 +1,236 @@
+{
+  "file": "targeted_scan.py",
+  "path": "src/targeted_scan.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:51:24.512735",
+  "metrics": {
+    "size": 4813,
+    "lines": {
+      "total": 134,
+      "code": 115,
+      "comment": 19
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 1,
+      "classes": 0,
+      "imports": 8
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "load_config",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "functions": [
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 12,
+        "complexity": 17
+      }
+    ],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "time",
+      "pathlib",
+      "codeinventory",
+      "yaml",
+      "sys"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This Python script is a targeted scan tool for CodeInventory, which uses Ollama's natural language processing engine to analyze source code and provide insights into the content.",
+    "description": "The script imports several dependencies from the CodeInventory library, including the Scanner class for analyzing code files and the OllamaAnalyzer class for using the Ollama engine. The custom_config dictionary is used to define the configuration for the scanner and analyzer, which includes excluding certain directories, setting a maximum file size limit, and defining the extensions of supported languages. The main function initializes a Scanner object with the custom config, creates an OllamaAnalyzer object from the config, and uses the analyzer to analyze the code inventory database.",
+    "category": "api",
+    "complexity": "moderate",
+    "main_functionality": [
+      "importing dependencies",
+      "initializing classes",
+      "configuring settings",
+      "analyzing code inventory"
+    ],
+    "dependencies_analysis": [
+      "Scanner class from CodeInventory library",
+      "OllamaAnalyzer class from CodeInventory library",
+      "custom config dictionary for scanner and analyzer configuration"
+    ],
+    "potential_issues": [
+      "potential issues with the Ollama engine's performance or accuracy",
+      "potential issues with the Scanner class or custom configuration"
+    ],
+    "usage_examples": [
+      "importing the script and using it to analyze code inventory data"
+    ],
+    "architectural_role": "frontend",
+    "patterns": [
+      "object-oriented programming",
+      "dependency injection"
+    ],
+    "test_coverage": "moderate",
+    "security_considerations": [],
+    "performance_notes": "The performance of the script depends on the complexity and size of the code inventory being analyzed, as well as the performance of the Ollama engine. The script can be optimized for faster analysis by reducing the number of excluded directories or increasing the maximum file size limit.",
+    "maintainability": "moderate"
+  },
+  "documentation": {
+    "summary": "This Python script is a targeted scan tool for CodeInventory, which uses Ollama's natural language processing engine to analyze source code and provide insights into the content.",
+    "description": "The script imports several dependencies from the CodeInventory library, including the Scanner class for analyzing code files and the OllamaAnalyzer class for using the Ollama engine. The custom_config dictionary is used to define the configuration for the scanner and analyzer, which includes excluding certain directories, setting a maximum file size limit, and defining the extensions of supported languages. The main function initializes a Scanner object with the custom config, creates an OllamaAnalyzer object from the config, and uses the analyzer to analyze the code inventory database.",
+    "category": "api",
+    "complexity": "moderate",
+    "architectural_role": "frontend",
+    "main_functionality": [
+      "importing dependencies",
+      "initializing classes",
+      "configuring settings",
+      "analyzing code inventory"
+    ],
+    "patterns": [
+      "object-oriented programming",
+      "dependency injection"
+    ],
+    "dependencies_analysis": [
+      "Scanner class from CodeInventory library",
+      "OllamaAnalyzer class from CodeInventory library",
+      "custom config dictionary for scanner and analyzer configuration"
+    ],
+    "potential_issues": [
+      "potential issues with the Ollama engine's performance or accuracy",
+      "potential issues with the Scanner class or custom configuration"
+    ],
+    "security_considerations": [],
+    "performance_notes": "The performance of the script depends on the complexity and size of the code inventory being analyzed, as well as the performance of the Ollama engine. The script can be optimized for faster analysis by reducing the number of excluded directories or increasing the maximum file size limit.",
+    "maintainability": "moderate",
+    "test_coverage": "moderate"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "load_config",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "dependencies": [
+      "time",
+      "pathlib",
+      "codeinventory",
+      "yaml",
+      "sys"
+    ],
+    "exported": {
+      "functions": [
+        "main"
+      ],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

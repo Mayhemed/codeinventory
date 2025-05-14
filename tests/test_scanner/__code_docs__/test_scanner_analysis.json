@@ -1,0 +1,175 @@
+{
+  "file": "test_scanner.py",
+  "path": "tests/test_scanner/test_scanner.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:48:23.489859",
+  "metrics": {
+    "size": 879,
+    "lines": {
+      "total": 35,
+      "code": 31,
+      "comment": 4
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 2,
+      "classes": 0,
+      "imports": 3
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "pytest",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "functions": [
+      {
+        "name": "test_scanner_initialization",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 5,
+        "complexity": 1
+      },
+      {
+        "name": "test_is_supported",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 19,
+        "complexity": 1
+      }
+    ],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "codeinventory",
+      "pytest",
+      "pathlib"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Test suite for the Scanner class in the codeinventory package.",
+    "description": "The test suite is used to verify that the Scanner class can correctly scan files and directories, exclude certain files or directories, and enforce a maximum file size limit. The test cases also ensure that the Scanner class can handle different types of file extensions and can be configured with a variety of options.",
+    "category": "test",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Testing the Scanner class"
+    ],
+    "dependencies_analysis": [
+      [
+        "pytest"
+      ],
+      [
+        "pathlib"
+      ]
+    ],
+    "potential_issues": [
+      "Insufficient test coverage for edge cases"
+    ],
+    "usage_examples": [
+      "$ pytest tests/test_scanner.py"
+    ],
+    "architectural_role": "Test",
+    "patterns": [
+      "Behavior-driven development (BDD)",
+      "Parameterized testing"
+    ],
+    "test_coverage": "moderate",
+    "security_considerations": [],
+    "performance_notes": [],
+    "maintainability": "good"
+  },
+  "documentation": {
+    "summary": "Test suite for the Scanner class in the codeinventory package.",
+    "description": "The test suite is used to verify that the Scanner class can correctly scan files and directories, exclude certain files or directories, and enforce a maximum file size limit. The test cases also ensure that the Scanner class can handle different types of file extensions and can be configured with a variety of options.",
+    "category": "test",
+    "complexity": "moderate",
+    "architectural_role": "Test",
+    "main_functionality": [
+      "Testing the Scanner class"
+    ],
+    "patterns": [
+      "Behavior-driven development (BDD)",
+      "Parameterized testing"
+    ],
+    "dependencies_analysis": [
+      [
+        "pytest"
+      ],
+      [
+        "pathlib"
+      ]
+    ],
+    "potential_issues": [
+      "Insufficient test coverage for edge cases"
+    ],
+    "security_considerations": [],
+    "performance_notes": [],
+    "maintainability": "good",
+    "test_coverage": "moderate"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "pytest",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "dependencies": [
+      "codeinventory",
+      "pytest",
+      "pathlib"
+    ],
+    "exported": {
+      "functions": [
+        "test_scanner_initialization",
+        "test_is_supported"
+      ],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

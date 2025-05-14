@@ -1,0 +1,74 @@
+{
+  "file": "main.py",
+  "path": "main.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:51:04.224861",
+  "metrics": {
+    "size": 91,
+    "lines": {
+      "total": 7,
+      "code": 4,
+      "comment": 3
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 1,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 1,
+        "complexity": 1
+      }
+    ],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "A simple Hello World program written in Python.",
+    "description": "This is a small Python script that prints a message to the console when executed. It serves as an example of how to write and execute a Python program.",
+    "category": "utility",
+    "complexity": "simple"
+  },
+  "documentation": {
+    "summary": "A simple Hello World program written in Python.",
+    "description": "This is a small Python script that prints a message to the console when executed. It serves as an example of how to write and execute a Python program.",
+    "category": "utility",
+    "complexity": "simple",
+    "architectural_role": "",
+    "main_functionality": [],
+    "patterns": [],
+    "dependencies_analysis": "",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "",
+    "test_coverage": ""
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [
+        "main"
+      ],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

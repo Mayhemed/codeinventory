@@ -1,0 +1,1244 @@
+import os
+import json
+import time
+import sqlite3
+import hashlib
+import requests
+from pathlib import Path
+from datetime import datetime
+import re
+import ast
+import sys
+from typing import Dict, List, Optional, Tuple
+
+
+
+# Configuration
+OLLAMA_HOST = "http://localhost:11434"
+MODEL = "codellama"
+DB_PATH = os.path.expanduser("~/.codeinventory/inventory.db")
+TIMEOUT = 20  # Increased timeout for better analysis
+
+print("Starting Comprehensive Code Scanner...")
+print(f"Database path: {DB_PATH}")
+
+class CodeAnalyzer:
+    def __init__(self):
+        self.reset()
+    
+    def reset(self):
+        self.imports = []
+        self.functions = []
+        self.classes = []
+        self.global_vars = []
+        self.dependencies = set()
+        self.constants = []
+        self.decorators = []
+        self.docstrings = []
+    
+    def analyze_python_code(self, code):
+        """Extract comprehensive information from Python code."""
+        self.reset()
+        try:
+            tree = ast.parse(code)
+            
+            # Extract module docstring
+            module_doc = ast.get_docstring(tree)
+            if module_doc:
+                self.docstrings.append({
+                    'type': 'module',
+                    'content': module_doc
+                })
+            
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    for alias in node.names:
+                        self.imports.append({
+                            'type': 'import',
+                            'module': alias.name,
+                            'alias': alias.asname,
+                            'line': node.lineno
+                        })
+                        self.dependencies.add(alias.name.split('.')[0])
+                        
+                elif isinstance(node, ast.ImportFrom):
+                    module = node.module or ''
+                    for alias in node.names:
+                        self.imports.append({
+                            'type': 'from',
+                            'module': module,
+                            'name': alias.name,
+                            'alias': alias.asname,
+                            'line': node.lineno
+                        })
+                        if module:
+                            self.dependencies.add(module.split('.')[0])
+                
+                elif isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
+                    func_info = self._extract_function_info(node)
+                    self.functions.append(func_info)
+                
+                elif isinstance(node, ast.ClassDef):
+                    class_info = self._extract_class_info(node)
+                    self.classes.append(class_info)
+                
+                elif isinstance(node, ast.Assign) and node.col_offset == 0:
+                    # Global variables and constants
+                    for target in node.targets:
+                        if isinstance(target, ast.Name):
+                            var_name = target.id
+                            is_constant = var_name.isupper()
+                            info = {
+                                'name': var_name,
+                                'line': node.lineno,
+                                'is_constant': is_constant
+                            }
+                            
+                            # Try to get the value for constants
+                            if is_constant and isinstance(node.value, (ast.Constant, ast.Num, ast.Str)):
+                                info['value'] = ast.literal_eval(node.value)
+                            
+                            if is_constant:
+                                self.constants.append(info)
+                            else:
+                                self.global_vars.append(info)
+        
+        except Exception as e:
+            print(f"AST parsing error: {e}")
+        
+        return {
+            'imports': self.imports,
+            'functions': self.functions,
+            'classes': self.classes,
+            'global_vars': self.global_vars,
+            'constants': self.constants,
+            'dependencies': list(self.dependencies),
+            'decorators': self.decorators,
+            'docstrings': self.docstrings
+        }
+    
+    def _extract_function_info(self, node):
+        """Extract detailed function information."""
+        func_info = {
+            'name': node.name,
+            'args': [],
+            'returns': None,
+            'decorators': [],
+            'docstring': ast.get_docstring(node),
+            'is_async': isinstance(node, ast.AsyncFunctionDef),
+            'line': node.lineno,
+            'complexity': self._calculate_complexity(node)
+        }
+        
+        # Extract decorators
+        for decorator in node.decorator_list:
+            dec_name = self._get_decorator_name(decorator)
+            if dec_name:
+                func_info['decorators'].append(dec_name)
+                self.decorators.append({
+                    'name': dec_name,
+                    'target': node.name,
+                    'type': 'function'
+                })
+        
+        # Extract arguments with defaults and type hints
+        for i, arg in enumerate(node.args.args):
+            arg_info = {
+                'name': arg.arg,
+                'type': None,
+                'default': None,
+                'position': i
+            }
+            
+            # Type annotation
+            if arg.annotation:
+                try:
+                    arg_info['type'] = ast.unparse(arg.annotation)
+                except:
+                    arg_info['type'] = str(arg.annotation)
+            
+            func_info['args'].append(arg_info)
+        
+        # Extract return type
+        if node.returns:
+            try:
+                func_info['returns'] = ast.unparse(node.returns)
+            except:
+                func_info['returns'] = str(node.returns)
+        
+        return func_info
+    
+    def _extract_class_info(self, node):
+        """Extract detailed class information."""
+        class_info = {
+            'name': node.name,
+            'bases': [],
+            'methods': [],
+            'attributes': [],
+            'decorators': [],
+            'docstring': ast.get_docstring(node),
+            'line': node.lineno,
+            'is_dataclass': False,
+            'metaclass': None
+        }
+        
+        # Extract decorators
+        for decorator in node.decorator_list:
+            dec_name = self._get_decorator_name(decorator)
+            if dec_name:
+                class_info['decorators'].append(dec_name)
+                if dec_name == 'dataclass':
+                    class_info['is_dataclass'] = True
+                self.decorators.append({
+                    'name': dec_name,
+                    'target': node.name,
+                    'type': 'class'
+                })
+        
+        # Extract base classes
+        for base in node.bases:
+            try:
+                class_info['bases'].append(ast.unparse(base))
+            except:
+                class_info['bases'].append(str(base))
+        
+        # Extract methods and attributes
+        for item in node.body:
+            if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                method_info = self._extract_function_info(item)
+                method_info['is_property'] = any(d == 'property' for d in method_info['decorators'])
+                method_info['is_staticmethod'] = any(d == 'staticmethod' for d in method_info['decorators'])
+                method_info['is_classmethod'] = any(d == 'classmethod' for d in method_info['decorators'])
+                class_info['methods'].append(method_info)
+            
+            elif isinstance(item, ast.Assign):
+                for target in item.targets:
+                    if isinstance(target, ast.Name):
+                        attr_info = {
+                            'name': target.id,
+                            'line': item.lineno,
+                            'has_type_hint': False
+                        }
+                        class_info['attributes'].append(attr_info)
+            
+            elif isinstance(item, ast.AnnAssign) and isinstance(item.target, ast.Name):
+                attr_info = {
+                    'name': item.target.id,
+                    'line': item.lineno,
+                    'has_type_hint': True,
+                    'type': None
+                }
+                if item.annotation:
+                    try:
+                        attr_info['type'] = ast.unparse(item.annotation)
+                    except:
+                        attr_info['type'] = str(item.annotation)
+                class_info['attributes'].append(attr_info)
+        
+        return class_info
+    
+    def _get_decorator_name(self, decorator):
+        """Extract decorator name."""
+        if isinstance(decorator, ast.Name):
+            return decorator.id
+        elif isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name):
+            return decorator.func.id
+        return None
+    
+    def _calculate_complexity(self, node):
+        """Calculate cyclomatic complexity."""
+        complexity = 1
+        for child in ast.walk(node):
+            if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
+                complexity += 1
+            elif isinstance(child, ast.BoolOp):
+                complexity += len(child.values) - 1
+        return complexity
+
+def get_file_info(filepath):
+    """Get comprehensive file information."""
+    stats = filepath.stat()
+    with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+        content = f.read()
+    
+    # Count lines
+    lines = content.split('\n')
+    code_lines = [line for line in lines if line.strip() and not line.strip().startswith('#')]
+    
+    return {
+        'path': str(filepath),
+        'name': filepath.name,
+        'type': 'module',
+        'language': get_language(filepath),
+        'content': content,
+        'hash': hashlib.md5(content.encode()).hexdigest(),
+        'size': stats.st_size,
+        'last_modified': int(stats.st_mtime * 1000),
+        'total_lines': len(lines),
+        'code_lines': len(code_lines),
+        'comment_lines': len(lines) - len(code_lines)
+    }
+
+def get_language(filepath):
+    """Determine file language from extension."""
+    ext = filepath.suffix.lower()
+    mapping = {
+        '.py': 'python',
+        '.js': 'javascript',
+        '.jsx': 'javascript',
+        '.ts': 'typescript',
+        '.tsx': 'typescript',
+        '.sh': 'shell',
+        '.bash': 'shell',
+        '.html': 'html',
+        '.css': 'css',
+        '.json': 'json',
+        '.yaml': 'yaml',
+        '.yml': 'yaml',
+        '.md': 'markdown',
+        '.sql': 'sql'
+    }
+    return mapping.get(ext, 'unknown')
+
+def analyze_with_ollama(file_info, structure_info):
+    """Get comprehensive AI analysis with better prompts."""
+    # Create a detailed context for better analysis
+    functions = structure_info.get('functions', [])
+    classes = structure_info.get('classes', [])
+    imports = structure_info.get('imports', [])
+    
+    function_names = [f['name'] for f in functions]
+    class_names = [c['name'] for c in classes]
+    import_names = [imp['module'] for imp in imports]
+    
+    prompt = f"""You are analyzing a {file_info['language']} code file. Please provide a comprehensive analysis.
+
+File: {file_info['name']}
+Path: {file_info['path']}
+Language: {file_info['language']}
+Size: {file_info['size']} bytes
+Lines: {file_info.get('total_lines', 0)} total, {file_info.get('code_lines', 0)} code
+
+Structure:
+- Imports: {len(imports)} ({', '.join(import_names[:5])}{'...' if len(import_names) > 5 else ''})
+- Functions: {len(functions)} ({', '.join(function_names[:5])}{'...' if len(function_names) > 5 else ''})
+- Classes: {len(classes)} ({', '.join(class_names[:5])}{'...' if len(class_names) > 5 else ''})
+
+Code sample:
+{file_info['content'][:1500]}
+
+Analyze this code and provide a JSON response with the following fields:
+{{
+  "purpose": "A clear, specific description of what this code does and why it exists",
+  "description": "A detailed explanation of the code's functionality, architecture, and design patterns",
+  "category": "Choose the most appropriate: api, ui, data-processing, utility, test, config, model, service, middleware, cli",
+  "complexity": "simple, moderate, or complex (consider cyclomatic complexity, dependencies, and architectural patterns)",
+  "main_functionality": ["List", "of", "main", "features", "or", "capabilities"],
+  "dependencies_analysis": "Analysis of external dependencies and their purposes",
+  "potential_issues": ["List", "of", "potential", "problems", "or", "areas", "for", "improvement"],
+  "usage_examples": ["How", "this", "code", "might", "be", "used"],
+  "architectural_role": "The role this code plays in the larger system architecture",
+  "patterns": ["Design", "patterns", "or", "architectural", "patterns", "used"],
+  "test_coverage": "Assessment of test coverage needs",
+  "security_considerations": ["Any", "security", "concerns", "or", "considerations"],
+  "performance_notes": "Performance characteristics or optimization opportunities",
+  "maintainability": "Assessment of code maintainability and technical debt"
+}}
+
+Provide ONLY the JSON response, no other text."""
+
+    try:
+        response = requests.post(
+            f"{OLLAMA_HOST}/api/generate",
+            json={
+                "model": MODEL,
+                "prompt": prompt,
+                "temperature": 0.3,
+                "stream": False
+            },
+            timeout=TIMEOUT
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            response_text = result.get('response', '{}')
+            
+            # Extract JSON from response
+            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+            if json_match:
+                try:
+                    return json.loads(json_match.group())
+                except json.JSONDecodeError:
+                    print(" (JSON parse error)")
+                    # Try to extract individual fields as fallback
+                    return extract_fields_fallback(response_text)
+    except requests.Timeout:
+        print(" (timeout)")
+    except Exception as e:
+        print(f" (error: {str(e)[:50]})")
+    
+    return None
+
+def extract_fields_fallback(text):
+    """Fallback method to extract fields from malformed JSON."""
+    result = {}
+    
+    # Try to extract fields using regex
+    patterns = {
+        'purpose': r'"purpose"\s*:\s*"([^"]*)"',
+        'description': r'"description"\s*:\s*"([^"]*)"',
+        'category': r'"category"\s*:\s*"([^"]*)"',
+        'complexity': r'"complexity"\s*:\s*"([^"]*)"'
+    }
+    
+    for field, pattern in patterns.items():
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            result[field] = match.group(1)
+    
+    return result if result else None
+
+def generate_enhanced_analysis(file_info, structure_info):
+    """Generate enhanced analysis without AI."""
+    functions = structure_info.get('functions', [])
+    classes = structure_info.get('classes', [])
+    imports = structure_info.get('imports', [])
+    constants = structure_info.get('constants', [])
+    
+    # Analyze imports to determine likely purpose
+    import_categories = {
+        'web': ['flask', 'django', 'fastapi', 'requests', 'httpx', 'aiohttp'],
+        'data': ['pandas', 'numpy', 'scipy', 'sklearn', 'tensorflow', 'torch'],
+        'database': ['sqlite3', 'sqlalchemy', 'pymongo', 'redis', 'psycopg2'],
+        'testing': ['pytest', 'unittest', 'mock', 'nose'],
+        'cli': ['click', 'argparse', 'fire', 'typer'],
+        'async': ['asyncio', 'aiohttp', 'aiofiles', 'trio']
+    }
+    
+    detected_categories = []
+    for category, modules in import_categories.items():
+        if any(imp['module'].split('.')[0] in modules for imp in imports):
+            detected_categories.append(category)
+    
+    # Analyze file name and path for hints
+    name_lower = file_info['name'].lower()
+    path_lower = file_info['path'].lower()
+    
+    # Determine category
+    if 'test' in name_lower or 'test' in path_lower:
+        category = 'test'
+    elif 'api' in name_lower or 'route' in name_lower or 'view' in name_lower:
+        category = 'api'
+    elif 'model' in name_lower:
+        category = 'model'
+    elif 'service' in name_lower:
+        category = 'service'
+    elif 'util' in name_lower or 'helper' in name_lower:
+        category = 'utility'
+    elif 'config' in name_lower or 'settings' in name_lower:
+        category = 'config'
+    elif detected_categories:
+        category = detected_categories[0]
+    else:
+        category = 'utility'
+    
+    # Calculate complexity based on multiple factors
+    total_entities = len(functions) + len(classes)
+    avg_function_complexity = sum(f.get('complexity', 1) for f in functions) / max(len(functions), 1)
+    import_count = len(imports)
+    
+    if total_entities > 15 or avg_function_complexity > 5 or import_count > 20:
+        complexity = 'complex'
+    elif total_entities > 5 or avg_function_complexity > 3 or import_count > 10:
+        complexity = 'moderate'
+    else:
+        complexity = 'simple'
+    
+    # Generate purpose based on analysis
+    purpose_parts = []
+    if classes:
+        purpose_parts.append(f"Defines {len(classes)} class{'es' if len(classes) > 1 else ''}")
+    if functions:
+        purpose_parts.append(f"Implements {len(functions)} function{'s' if len(functions) > 1 else ''}")
+    if constants:
+        purpose_parts.append(f"Contains {len(constants)} constant{'s' if len(constants) > 1 else ''}")
+    
+    purpose = '. '.join(purpose_parts) if purpose_parts else f"A {category} module"
+    
+    # Build description
+    description_parts = []
+    if imports:
+        main_deps = [imp['module'].split('.')[0] for imp in imports[:5]]
+        description_parts.append(f"Uses {', '.join(main_deps)}")
+    
+    if classes:
+        class_info = []
+        for cls in classes[:3]:
+            method_count = len(cls.get('methods', []))
+            class_info.append(f"{cls['name']} ({method_count} methods)")
+        description_parts.append(f"Classes: {', '.join(class_info)}")
+    
+    description = '. '.join(description_parts) if description_parts else f"A {complexity} {category} module"
+    
+    return {
+        'purpose': purpose,
+        'description': description,
+        'category': category,
+        'complexity': complexity,
+        'main_functionality': [f['name'] for f in functions[:5]] + [c['name'] for c in classes[:5]],
+        'dependencies_analysis': f"Uses {len(imports)} imports from {len(set(imp['module'].split('.')[0] for imp in imports))} packages",
+        'architectural_role': f"{category} component",
+        'patterns': [],
+        'maintainability': f"{complexity} complexity with {total_entities} main entities"
+    }
+
+def generate_documentation(file_info, structure_info, analysis):
+    """Generate comprehensive documentation."""
+    doc = {
+        'file': file_info['name'],
+        'path': file_info['path'],
+        'language': file_info['language'],
+        'last_analyzed': datetime.now().isoformat(),
+        'metrics': {
+            'size': file_info['size'],
+            'lines': {
+                'total': file_info.get('total_lines', 0),
+                'code': file_info.get('code_lines', 0),
+                'comment': file_info.get('comment_lines', 0)
+            },
+            'complexity': {
+                'overall': analysis.get('complexity', 'unknown'),
+                'functions': len(structure_info.get('functions', [])),
+                'classes': len(structure_info.get('classes', [])),
+                'imports': len(structure_info.get('imports', []))
+            }
+        },
+        'structure': structure_info,
+        'analysis': analysis,
+        'documentation': {
+            'summary': analysis.get('purpose', 'Unknown'),
+            'description': analysis.get('description', ''),
+            'category': analysis.get('category', 'unknown'),
+            'complexity': analysis.get('complexity', 'unknown'),
+            'architectural_role': analysis.get('architectural_role', ''),
+            'main_functionality': analysis.get('main_functionality', []),
+            'patterns': analysis.get('patterns', []),
+            'dependencies_analysis': analysis.get('dependencies_analysis', ''),
+            'potential_issues': analysis.get('potential_issues', []),
+            'security_considerations': analysis.get('security_considerations', []),
+            'performance_notes': analysis.get('performance_notes', ''),
+            'maintainability': analysis.get('maintainability', ''),
+            'test_coverage': analysis.get('test_coverage', '')
+        },
+        'dependency_graph': {
+            'imports': structure_info.get('imports', []),
+            'dependencies': structure_info.get('dependencies', []),
+            'exported': {
+                'functions': [f['name'] for f in structure_info.get('functions', [])],
+                'classes': [c['name'] for c in structure_info.get('classes', [])],
+                'variables': structure_info.get('global_vars', []),
+                'constants': structure_info.get('constants', [])
+            }
+        }
+    }
+    
+    return doc
+
+def init_database():
+    """Initialize database with comprehensive schema."""
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    # Drop existing tables to start fresh
+    cursor.execute("DROP TABLE IF EXISTS tools")
+    cursor.execute("DROP TABLE IF EXISTS dependencies")
+    cursor.execute("DROP TABLE IF EXISTS functions")
+    cursor.execute("DROP TABLE IF EXISTS classes")
+    
+    # Create enhanced schema
+    cursor.executescript("""
+        CREATE TABLE tools (
+            id TEXT PRIMARY KEY,
+            path TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            language TEXT NOT NULL,
+            file_hash TEXT NOT NULL,
+            purpose TEXT,
+            description TEXT,
+            category TEXT,
+            complexity TEXT,
+            architectural_role TEXT,
+            maintainability TEXT,
+            last_modified INTEGER,
+            last_analyzed INTEGER,
+            created_at INTEGER DEFAULT (strftime('%s', 'now')),
+            documentation TEXT,
+            size INTEGER,
+            total_lines INTEGER,
+            code_lines INTEGER,
+            comment_lines INTEGER
+        );
+        
+        CREATE TABLE dependencies (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tool_id TEXT NOT NULL,
+            dependency TEXT NOT NULL,
+            import_type TEXT,
+            line_number INTEGER,
+            FOREIGN KEY (tool_id) REFERENCES tools(id)
+        );
+        
+        CREATE TABLE functions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tool_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            args TEXT,
+            returns TEXT,
+            docstring TEXT,
+            decorators TEXT,
+            is_async BOOLEAN,
+            complexity INTEGER,
+            line_number INTEGER,
+            FOREIGN KEY (tool_id) REFERENCES tools(id)
+        );
+        
+        CREATE TABLE classes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tool_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            bases TEXT,
+            methods TEXT,
+            attributes TEXT,
+            docstring TEXT,
+            decorators TEXT,
+            is_dataclass BOOLEAN,
+            line_number INTEGER,
+            FOREIGN KEY (tool_id) REFERENCES tools(id)
+        );
+        
+        CREATE INDEX idx_tools_category ON tools(category);
+        CREATE INDEX idx_tools_language ON tools(language);
+        CREATE INDEX idx_tools_complexity ON tools(complexity);
+        CREATE INDEX idx_dependencies_dependency ON dependencies(dependency);
+    """)
+    
+    conn.commit()
+    return conn
+
+def save_to_db(conn, file_info, structure_info, analysis, documentation):
+    """Save comprehensive analysis to database."""
+    cursor = conn.cursor()
+    timestamp = int(datetime.now().timestamp() * 1000)
+    tool_id = file_info['hash']
+    
+    try:
+        # Save main tool info
+        cursor.execute("""
+            INSERT OR REPLACE INTO tools (
+                id, path, name, type, language, file_hash,
+                purpose, description, category, complexity,
+                architectural_role, maintainability,
+                last_modified, last_analyzed, documentation,
+                size, total_lines, code_lines, comment_lines
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            tool_id,
+            file_info['path'],
+            file_info['name'],
+            file_info['type'],
+            file_info['language'],
+            file_info['hash'],
+            documentation['documentation']['summary'],
+            documentation['documentation']['description'],
+            documentation['documentation']['category'],
+            documentation['documentation']['complexity'],
+            documentation['documentation'].get('architectural_role', ''),
+            documentation['documentation'].get('maintainability', ''),
+            file_info['last_modified'],
+            timestamp,
+            json.dumps(documentation),
+            file_info['size'],
+            file_info.get('total_lines', 0),
+            file_info.get('code_lines', 0),
+            file_info.get('comment_lines', 0)
+        ))
+        
+        # Save dependencies with more detail
+        cursor.execute("DELETE FROM dependencies WHERE tool_id = ?", (tool_id,))
+        for imp in structure_info.get('imports', []):
+            cursor.execute("""
+                INSERT INTO dependencies (tool_id, dependency, import_type, line_number)
+                VALUES (?, ?, ?, ?)
+            """, (
+                tool_id,
+                imp['module'],
+                imp['type'],
+                imp.get('line', 0)
+            ))
+        
+        # Save functions with more detail
+        cursor.execute("DELETE FROM functions WHERE tool_id = ?", (tool_id,))
+        for func in structure_info.get('functions', []):
+            cursor.execute("""
+                INSERT INTO functions (
+                    tool_id, name, args, returns, docstring, 
+                    decorators, is_async, complexity, line_number
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                tool_id,
+                func['name'],
+                json.dumps(func.get('args', [])),
+                func.get('returns'),
+                func.get('docstring'),
+                json.dumps(func.get('decorators', [])),
+                func.get('is_async', False),
+                func.get('complexity', 1),
+                func.get('line', 0)
+            ))
+        
+        # Save classes with more detail
+        cursor.execute("DELETE FROM classes WHERE tool_id = ?", (tool_id,))
+        for cls in structure_info.get('classes', []):
+            cursor.execute("""
+                INSERT INTO classes (
+                    tool_id, name, bases, methods, attributes,
+                    docstring, decorators, is_dataclass, line_number
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                tool_id,
+                cls['name'],
+                json.dumps(cls.get('bases', [])),
+                json.dumps(cls.get('methods', [])),
+                json.dumps(cls.get('attributes', [])),
+                cls.get('docstring'),
+                json.dumps(cls.get('decorators', [])),
+                cls.get('is_dataclass', False),
+                cls.get('line', 0)
+            ))
+        
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f" DB error: {e}")
+        conn.rollback()
+        return False
+
+def scan_directory(directory: Path, exclude_patterns: List[str] = None) -> List[Path]:
+    """Recursively scan directory for files."""
+    if exclude_patterns is None:
+        exclude_patterns = [
+            '__pycache__', '.git', 'node_modules', 'venv', '.venv', 
+            'env', '.env', 'build', 'dist', '.pytest_cache', '.tox',
+            '*.pyc', '*.pyo', '*.egg-info', '.DS_Store'
+        ]
+    
+    files = []
+    
+    try:
+        for item in directory.iterdir():
+            # Skip excluded patterns
+            if any(pattern in str(item) for pattern in exclude_patterns):
+                continue
+            
+            if item.is_file():
+                # Include all code files
+                if item.suffix in ['.py', '.js', '.jsx', '.ts', '.tsx', '.sh', 
+                                  '.html', '.css', '.json', '.yaml', '.yml', '.md']:
+                    files.append(item)
+            elif item.is_dir():
+                # Recursively scan subdirectories
+                files.extend(scan_directory(item, exclude_patterns))
+    
+    except PermissionError:
+        print(f"Permission denied: {directory}")
+    
+    return files
+
+def main():
+    if len(sys.argv) > 1:
+        scan_path = Path(sys.argv[1])
+    else:
+        scan_path = Path('.')
+    
+    print(f"Scanning from: {scan_path.absolute()}")
+    
+    # Initialize database
+    conn = init_database()
+    print("Database initialized with enhanced schema")
+    
+    # Scan for all files
+    print("\nScanning for files...")
+    all_files = scan_directory(scan_path)
+    
+    # Group files by directory for better organization
+    files_by_dir = {}
+    for file in all_files:
+        dir_name = str(file.parent.relative_to(scan_path) if file.parent != scan_path else 'root')
+        if dir_name not in files_by_dir:
+            files_by_dir[dir_name] = []
+        files_by_dir[dir_name].append(file)
+    
+    print(f"\nFound {len(all_files)} files in {len(files_by_dir)} directories")
+    for dir_name, files in sorted(files_by_dir.items()):
+        print(f"  {dir_name}: {len(files)} files")
+    
+    # Process files
+    total_files = len(all_files)
+    success_count = 0
+    error_count = 0
+    start_time = time.time()
+    
+    for i, file_path in enumerate(all_files):
+    # Continue from where it was cut off
+       relative_path = file_path.relative_to(scan_path)
+       print(f"\n[{i+1}/{total_files}] Processing: {relative_path}")
+       
+       try:
+           file_info = get_file_info(file_path)
+           print(f"  Size: {file_info['size']:,} bytes, Lines: {file_info.get('total_lines', 0)}")
+           
+           # Skip extremely large files
+           if file_info['size'] > 1024 * 1024:  # 1MB
+               print("  Skipped (too large)")
+               continue
+           
+           # Get structural analysis for supported languages
+           structure_info = {}
+           if file_info['language'] == 'python':
+               print("  Analyzing Python structure...", end='', flush=True)
+               analyzer = CodeAnalyzer()
+               structure_info = analyzer.analyze_python_code(file_info['content'])
+               print(f" Found {len(structure_info.get('functions', []))} functions, "
+                     f"{len(structure_info.get('classes', []))} classes")
+           elif file_info['language'] in ['javascript', 'typescript']:
+               print("  JavaScript/TypeScript analysis not yet implemented")
+               structure_info = {'imports': [], 'functions': [], 'classes': [], 'dependencies': []}
+           else:
+               structure_info = {'imports': [], 'functions': [], 'classes': [], 'dependencies': []}
+           
+           # Get AI analysis
+           print("  Getting AI analysis...", end='', flush=True)
+           ai_analysis = analyze_with_ollama(file_info, structure_info)
+           
+           if ai_analysis and len(ai_analysis) > 3:  # Check if we got meaningful analysis
+               print(" Success!")
+               analysis = ai_analysis
+           else:
+               print(" Using enhanced fallback analysis")
+               analysis = generate_enhanced_analysis(file_info, structure_info)
+           
+           # Generate comprehensive documentation
+           documentation = generate_documentation(file_info, structure_info, analysis)
+           
+           # Save to database
+           if save_to_db(conn, file_info, structure_info, analysis, documentation):
+               print("  ✓ Saved to database")
+               success_count += 1
+               
+               # Save detailed JSON documentation
+               doc_dir = file_path.parent / '__code_docs__'
+               doc_dir.mkdir(exist_ok=True)
+               doc_file = doc_dir / f"{file_path.stem}_analysis.json"
+               
+               with open(doc_file, 'w') as f:
+                   json.dump(documentation, f, indent=2)
+               print(f"  ✓ Documentation saved to: {doc_file}")
+               
+               # Create markdown documentation
+               md_file = doc_dir / f"{file_path.stem}_analysis.md"
+               create_markdown_doc(documentation, md_file)
+               print(f"  ✓ Markdown saved to: {md_file}")
+           else:
+               print("  ✗ Failed to save to database")
+               error_count += 1
+           
+       except KeyboardInterrupt:
+           print("\n\nScan interrupted by user")
+           break
+       except Exception as e:
+           print(f"  Error: {e}")
+           import traceback
+           traceback.print_exc()
+           error_count += 1
+   
+   # Generate project summary
+    elapsed = time.time() - start_time
+   
+    print("\n" + "="*60)
+    print("SCAN COMPLETE")
+    print("="*60)
+    print(f"Total files: {total_files}")
+    print(f"Successfully analyzed: {success_count}")
+    print(f"Errors: {error_count}")
+    print(f"Time taken: {elapsed:.1f} seconds")
+    print(f"Average: {elapsed/max(success_count, 1):.1f} seconds per file")
+    
+   # Generate project-wide reports
+    generate_project_reports(conn, scan_path)
+   
+    conn.close()
+
+def create_markdown_doc(documentation, output_path):
+   """Create a comprehensive markdown documentation file."""
+   md_lines = []
+   
+   # Header
+   md_lines.append(f"# {documentation['file']}")
+   md_lines.append("")
+   md_lines.append(f"**Path:** `{documentation['path']}`")
+   md_lines.append(f"**Language:** {documentation['language']}")
+   md_lines.append(f"**Last analyzed:** {documentation['last_analyzed']}")
+   md_lines.append("")
+   
+   # Summary
+   md_lines.append("## Summary")
+   md_lines.append("")
+   md_lines.append(documentation['documentation']['summary'])
+   md_lines.append("")
+   
+   # Description
+   if documentation['documentation']['description']:
+       md_lines.append("## Description")
+       md_lines.append("")
+       md_lines.append(documentation['documentation']['description'])
+       md_lines.append("")
+   
+   # Metrics
+   md_lines.append("## Metrics")
+   md_lines.append("")
+   metrics = documentation.get('metrics', {})
+   md_lines.append(f"- **Category:** {documentation['documentation']['category']}")
+   md_lines.append(f"- **Complexity:** {documentation['documentation']['complexity']}")
+   md_lines.append(f"- **Size:** {metrics.get('size', 0):,} bytes")
+   md_lines.append(f"- **Lines:** {metrics.get('lines', {}).get('total', 0)} total "
+                  f"({metrics.get('lines', {}).get('code', 0)} code, "
+                  f"{metrics.get('lines', {}).get('comment', 0)} comments)")
+   md_lines.append("")
+   
+   # Architecture
+   if documentation['documentation'].get('architectural_role'):
+       md_lines.append("## Architectural Role")
+       md_lines.append("")
+       md_lines.append(documentation['documentation']['architectural_role'])
+       md_lines.append("")
+   
+   # Dependencies
+   deps = documentation.get('structure', {}).get('dependencies', [])
+   if deps:
+       md_lines.append("## Dependencies")
+       md_lines.append("")
+       for dep in sorted(deps):
+           md_lines.append(f"- {dep}")
+       md_lines.append("")
+   
+   # Functions
+   functions = documentation.get('structure', {}).get('functions', [])
+   if functions:
+       md_lines.append("## Functions")
+       md_lines.append("")
+       for func in functions:
+           args = [arg['name'] for arg in func.get('args', [])]
+           args_str = ', '.join(args)
+           returns = func.get('returns', 'None')
+           
+           md_lines.append(f"### `{func['name']}({args_str}) -> {returns}`")
+           if func.get('docstring'):
+               md_lines.append("")
+               md_lines.append(func['docstring'])
+           md_lines.append("")
+   
+   # Classes
+   classes = documentation.get('structure', {}).get('classes', [])
+   if classes:
+       md_lines.append("## Classes")
+       md_lines.append("")
+       for cls in classes:
+           bases = cls.get('bases', [])
+           bases_str = f"({', '.join(bases)})" if bases else ""
+           
+           md_lines.append(f"### `{cls['name']}{bases_str}`")
+           if cls.get('docstring'):
+               md_lines.append("")
+               md_lines.append(cls['docstring'])
+           
+           # Methods
+           methods = cls.get('methods', [])
+           if methods:
+               md_lines.append("")
+               md_lines.append("**Methods:**")
+               for method in methods:
+                   md_lines.append(f"- `{method['name']}`")
+           md_lines.append("")
+   
+   # Issues and Improvements
+   issues = documentation['documentation'].get('potential_issues', [])
+   if issues:
+       md_lines.append("## Potential Issues")
+       md_lines.append("")
+       for issue in issues:
+           md_lines.append(f"- {issue}")
+       md_lines.append("")
+   
+   # Security Considerations
+   security = documentation['documentation'].get('security_considerations', [])
+   if security:
+       md_lines.append("## Security Considerations")
+       md_lines.append("")
+       for item in security:
+           md_lines.append(f"- {item}")
+       md_lines.append("")
+   
+   # Performance Notes
+   perf = documentation['documentation'].get('performance_notes')
+   if perf:
+       md_lines.append("## Performance Notes")
+       md_lines.append("")
+       md_lines.append(perf)
+       md_lines.append("")
+   
+   # Write the file
+   with open(output_path, 'w') as f:
+       f.write('\n'.join(md_lines))
+
+def generate_project_reports(conn, scan_path):
+   """Generate comprehensive project reports."""
+   cursor = conn.cursor()
+   
+   # Create reports directory
+   reports_dir = scan_path / '__project_reports__'
+   reports_dir.mkdir(exist_ok=True)
+   
+   # 1. Project Overview
+   cursor.execute("""
+       SELECT 
+           COUNT(*) as total_files,
+           COUNT(DISTINCT language) as languages,
+           COUNT(DISTINCT category) as categories,
+           SUM(size) as total_size,
+           SUM(code_lines) as total_code_lines,
+           SUM(comment_lines) as total_comment_lines
+       FROM tools
+   """)
+   overview = cursor.fetchone()
+   
+   # 2. Language Distribution
+   cursor.execute("""
+       SELECT language, COUNT(*) as count, SUM(size) as total_size
+       FROM tools
+       GROUP BY language
+       ORDER BY count DESC
+   """)
+   languages = cursor.fetchall()
+   
+   # 3. Category Distribution
+   cursor.execute("""
+       SELECT category, COUNT(*) as count
+       FROM tools
+       GROUP BY category
+       ORDER BY count DESC
+   """)
+   categories = cursor.fetchall()
+   
+   # 4. Complexity Analysis
+   cursor.execute("""
+       SELECT complexity, COUNT(*) as count
+       FROM tools
+       GROUP BY complexity
+       ORDER BY count DESC
+   """)
+   complexity = cursor.fetchall()
+   
+   # 5. Top Dependencies
+   cursor.execute("""
+       SELECT dependency, COUNT(*) as usage_count
+       FROM dependencies
+       GROUP BY dependency
+       ORDER BY usage_count DESC
+       LIMIT 20
+   """)
+   top_dependencies = cursor.fetchall()
+   
+   # 6. Largest Files
+   cursor.execute("""
+       SELECT name, path, size, code_lines
+       FROM tools
+       ORDER BY size DESC
+       LIMIT 10
+   """)
+   largest_files = cursor.fetchall()
+   
+   # 7. Most Complex Files
+   cursor.execute("""
+       SELECT name, path, complexity, code_lines
+       FROM tools
+       WHERE complexity = 'complex'
+       ORDER BY code_lines DESC
+       LIMIT 10
+   """)
+   complex_files = cursor.fetchall()
+   
+   # Generate main report
+   report = {
+       'project_name': scan_path.name,
+       'scan_date': datetime.now().isoformat(),
+       'overview': {
+           'total_files': overview[0],
+           'languages': overview[1],
+           'categories': overview[2],
+           'total_size': overview[3],
+           'total_code_lines': overview[4],
+           'total_comment_lines': overview[5]
+       },
+       'languages': [{'language': lang, 'count': count, 'size': size} 
+                    for lang, count, size in languages],
+       'categories': [{'category': cat, 'count': count} 
+                     for cat, count in categories],
+       'complexity': [{'level': comp, 'count': count} 
+                     for comp, count in complexity],
+       'top_dependencies': [{'dependency': dep, 'usage_count': count} 
+                          for dep, count in top_dependencies],
+       'largest_files': [{'name': name, 'path': path, 'size': size, 'code_lines': lines}
+                        for name, path, size, lines in largest_files],
+       'complex_files': [{'name': name, 'path': path, 'complexity': comp, 'code_lines': lines}
+                        for name, path, comp, lines in complex_files]
+   }
+   
+   # Save JSON report
+   with open(reports_dir / 'project_analysis.json', 'w') as f:
+       json.dump(report, f, indent=2)
+   
+   # Create markdown report
+   create_project_markdown_report(report, reports_dir / 'project_analysis.md')
+   
+   # Create dependency graph
+   create_dependency_graph(conn, reports_dir / 'dependency_graph.json')
+   
+   print(f"\nProject reports generated in: {reports_dir}")
+
+def create_project_markdown_report(report, output_path):
+   """Create a comprehensive markdown project report."""
+   md_lines = []
+   
+   # Header
+   md_lines.append(f"# {report['project_name']} - Code Analysis Report")
+   md_lines.append("")
+   md_lines.append(f"**Generated on:** {report['scan_date']}")
+   md_lines.append("")
+   
+   # Overview
+   overview = report['overview']
+   md_lines.append("## Project Overview")
+   md_lines.append("")
+   md_lines.append(f"- **Total Files:** {overview['total_files']}")
+   md_lines.append(f"- **Languages:** {overview['languages']}")
+   md_lines.append(f"- **Categories:** {overview['categories']}")
+   md_lines.append(f"- **Total Size:** {overview['total_size']:,} bytes")
+   md_lines.append(f"- **Code Lines:** {overview['total_code_lines']:,}")
+   md_lines.append(f"- **Comment Lines:** {overview['total_comment_lines']:,}")
+   md_lines.append("")
+   
+   # Language Distribution
+   md_lines.append("## Language Distribution")
+   md_lines.append("")
+   md_lines.append("| Language | Files | Size (bytes) |")
+   md_lines.append("|----------|-------|--------------|")
+   for lang in report['languages']:
+       md_lines.append(f"| {lang['language']} | {lang['count']} | {lang['size']:,} |")
+   md_lines.append("")
+   
+   # Category Distribution
+   md_lines.append("## Category Distribution")
+   md_lines.append("")
+   md_lines.append("| Category | Count |")
+   md_lines.append("|----------|-------|")
+   for cat in report['categories']:
+       md_lines.append(f"| {cat['category']} | {cat['count']} |")
+   md_lines.append("")
+   
+   # Complexity Analysis
+   md_lines.append("## Complexity Analysis")
+   md_lines.append("")
+   md_lines.append("| Complexity | Count |")
+   md_lines.append("|------------|-------|")
+   for comp in report['complexity']:
+       md_lines.append(f"| {comp['level']} | {comp['count']} |")
+   md_lines.append("")
+   
+   # Top Dependencies
+   md_lines.append("## Top Dependencies")
+   md_lines.append("")
+   md_lines.append("| Dependency | Usage Count |")
+   md_lines.append("|------------|-------------|")
+   for dep in report['top_dependencies']:
+       md_lines.append(f"| {dep['dependency']} | {dep['usage_count']} |")
+   md_lines.append("")
+   
+   # Largest Files
+   md_lines.append("## Largest Files")
+   md_lines.append("")
+   md_lines.append("| File | Path | Size | Code Lines |")
+   md_lines.append("|------|------|------|------------|")
+   for file in report['largest_files']:
+       md_lines.append(f"| {file['name']} | {file['path']} | {file['size']:,} | {file['code_lines']} |")
+   md_lines.append("")
+   
+   # Complex Files
+   if report['complex_files']:
+       md_lines.append("## Most Complex Files")
+       md_lines.append("")
+       md_lines.append("| File | Path | Code Lines |")
+       md_lines.append("|------|------|------------|")
+       for file in report['complex_files']:
+           md_lines.append(f"| {file['name']} | {file['path']} | {file['code_lines']} |")
+       md_lines.append("")
+   
+   # Write the file
+   with open(output_path, 'w') as f:
+       f.write('\n'.join(md_lines))
+
+def create_dependency_graph(conn, output_path):
+   """Create a dependency graph data file."""
+   cursor = conn.cursor()
+   
+   # Get all files and their dependencies
+   cursor.execute("""
+       SELECT t.name, t.path, d.dependency
+       FROM tools t
+       LEFT JOIN dependencies d ON t.id = d.tool_id
+   """)
+   
+   nodes = {}
+   edges = []
+   
+   for name, path, dependency in cursor.fetchall():
+       # Add node if not exists
+       if path not in nodes:
+           nodes[path] = {
+               'id': path,
+               'name': name,
+               'path': path,
+               'dependencies': []
+           }
+       
+       # Add dependency
+       if dependency:
+           nodes[path]['dependencies'].append(dependency)
+           edges.append({
+               'source': path,
+               'target': dependency
+           })
+   
+   graph_data = {
+       'nodes': list(nodes.values()),
+       'edges': edges
+   }
+   
+   with open(output_path, 'w') as f:
+       json.dump(graph_data, f, indent=2)
+
+if __name__ == '__main__':
+   main()

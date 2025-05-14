@@ -1,0 +1,185 @@
+{
+  "file": "update_schema_execution.py",
+  "path": "update_schema_execution.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:48:38.543821",
+  "metrics": {
+    "size": 808,
+    "lines": {
+      "total": 26,
+      "code": 19,
+      "comment": 7
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 3
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "config_path",
+        "line": 6,
+        "is_constant": false
+      },
+      {
+        "name": "db_path",
+        "line": 10,
+        "is_constant": false
+      },
+      {
+        "name": "conn",
+        "line": 11,
+        "is_constant": false
+      },
+      {
+        "name": "cursor",
+        "line": 12,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "yaml",
+      "pathlib",
+      "sqlite3"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Updates the schema for a database file to include new columns for execution info",
+    "description": "This Python script loads configuration from a YAML file and uses it to connect to a SQLite database. It then adds new columns to the tools table in the database for storing information about tool execution.",
+    "category": "data-processing",
+    "complexity": "simple",
+    "main_functionality": [
+      "load configuration",
+      "connect to database",
+      "add columns"
+    ],
+    "dependencies_analysis": "This script does not have any external dependencies.",
+    "potential_issues": [
+      "It might be a good idea to check for duplicate column names before adding them."
+    ],
+    "usage_examples": [
+      "python update_schema_execution.py"
+    ],
+    "architectural_role": "Database schema updater",
+    "patterns": [
+      "dependency injection",
+      "configuration management"
+    ],
+    "test_coverage": "None specified",
+    "security_considerations": [
+      "This script does not perform any security-sensitive operations."
+    ],
+    "performance_notes": "The performance of this script should be relatively good, as it is primarily disk and CPU bound.",
+    "maintainability": "The maintainability of this code is moderate due to the use of YAML configuration files and SQLite database connections. However, the script could benefit from additional comments and documentation."
+  },
+  "documentation": {
+    "summary": "Updates the schema for a database file to include new columns for execution info",
+    "description": "This Python script loads configuration from a YAML file and uses it to connect to a SQLite database. It then adds new columns to the tools table in the database for storing information about tool execution.",
+    "category": "data-processing",
+    "complexity": "simple",
+    "architectural_role": "Database schema updater",
+    "main_functionality": [
+      "load configuration",
+      "connect to database",
+      "add columns"
+    ],
+    "patterns": [
+      "dependency injection",
+      "configuration management"
+    ],
+    "dependencies_analysis": "This script does not have any external dependencies.",
+    "potential_issues": [
+      "It might be a good idea to check for duplicate column names before adding them."
+    ],
+    "security_considerations": [
+      "This script does not perform any security-sensitive operations."
+    ],
+    "performance_notes": "The performance of this script should be relatively good, as it is primarily disk and CPU bound.",
+    "maintainability": "The maintainability of this code is moderate due to the use of YAML configuration files and SQLite database connections. However, the script could benefit from additional comments and documentation.",
+    "test_coverage": "None specified"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "dependencies": [
+      "yaml",
+      "pathlib",
+      "sqlite3"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [
+        {
+          "name": "config_path",
+          "line": 6,
+          "is_constant": false
+        },
+        {
+          "name": "db_path",
+          "line": 10,
+          "is_constant": false
+        },
+        {
+          "name": "conn",
+          "line": 11,
+          "is_constant": false
+        },
+        {
+          "name": "cursor",
+          "line": 12,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}

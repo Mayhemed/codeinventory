@@ -1,0 +1,85 @@
+{
+  "file": "fix_db.py",
+  "path": "src/codeinventory/database/fix_db.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:51:33.481721",
+  "metrics": {
+    "size": 492,
+    "lines": {
+      "total": 17,
+      "code": 10,
+      "comment": 7
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Fixes indentation in db.py file by adding a None check before the line with an issue",
+    "description": "The code reads the lines of the 'db.py' file and inserts a None check before the line containing the issue if it is found. Then, it writes back the modified lines to the same file.",
+    "category": "utility",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Fixes indentation in db.py file by adding a None check before the line with an issue"
+    ],
+    "dependencies_analysis": "The code depends on the 'json' library to handle JSON encoding and decoding.",
+    "potential_issues": [],
+    "usage_examples": [
+      "This code might be used to fix indentation issues in the 'db.py' file"
+    ],
+    "architectural_role": "The code is a utility function that modifies the contents of a text file, making it part of the system's infrastructure.",
+    "patterns": [
+      "File I/O",
+      "Error handling",
+      "Modular design"
+    ],
+    "test_coverage": "The code should have adequate test coverage to ensure that it works correctly and fixes indentation issues in the 'db.py' file correctly.",
+    "security_considerations": [],
+    "performance_notes": [],
+    "maintainability": "The code is maintainable, as it follows a modular design pattern and has adequate test coverage."
+  },
+  "documentation": {
+    "summary": "Fixes indentation in db.py file by adding a None check before the line with an issue",
+    "description": "The code reads the lines of the 'db.py' file and inserts a None check before the line containing the issue if it is found. Then, it writes back the modified lines to the same file.",
+    "category": "utility",
+    "complexity": "moderate",
+    "architectural_role": "The code is a utility function that modifies the contents of a text file, making it part of the system's infrastructure.",
+    "main_functionality": [
+      "Fixes indentation in db.py file by adding a None check before the line with an issue"
+    ],
+    "patterns": [
+      "File I/O",
+      "Error handling",
+      "Modular design"
+    ],
+    "dependencies_analysis": "The code depends on the 'json' library to handle JSON encoding and decoding.",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": [],
+    "maintainability": "The code is maintainable, as it follows a modular design pattern and has adequate test coverage.",
+    "test_coverage": "The code should have adequate test coverage to ensure that it works correctly and fixes indentation issues in the 'db.py' file correctly."
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

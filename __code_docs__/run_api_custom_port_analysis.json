@@ -1,0 +1,159 @@
+{
+  "file": "run_api_custom_port.py",
+  "path": "run_api_custom_port.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:50:11.798655",
+  "metrics": {
+    "size": 186,
+    "lines": {
+      "total": 9,
+      "code": 6,
+      "comment": 3
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 3
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.api",
+        "name": "app",
+        "alias": null,
+        "line": 5
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "codeinventory",
+      "sys",
+      "os"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This Python script is a custom port configuration for the CodeInventory API.",
+    "description": "The script modifies the default port of the CodeInventory API to 8001. It also enables debug mode and runs the app using Flask's run method.",
+    "category": "api",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Modify",
+      "the",
+      "default",
+      "port",
+      "of",
+      "the",
+      "CodeInventory",
+      "API"
+    ],
+    "dependencies_analysis": "The script has no external dependencies.",
+    "potential_issues": [],
+    "usage_examples": [
+      "Run the API with custom port: python run_api_custom_port.py"
+    ],
+    "architectural_role": "This code is a configuration file that modifies the default behavior of the CodeInventory API.",
+    "patterns": [
+      "Imports",
+      "are",
+      "used",
+      "to",
+      "import",
+      "necessary",
+      "modules",
+      "and",
+      "libraries"
+    ],
+    "test_coverage": "The script has no test coverage as it is a configuration file.",
+    "security_considerations": [],
+    "performance_notes": "The script runs the app using Flask's run method, which may have performance implications.",
+    "maintainability": "The script is relatively simple and easy to understand."
+  },
+  "documentation": {
+    "summary": "This Python script is a custom port configuration for the CodeInventory API.",
+    "description": "The script modifies the default port of the CodeInventory API to 8001. It also enables debug mode and runs the app using Flask's run method.",
+    "category": "api",
+    "complexity": "moderate",
+    "architectural_role": "This code is a configuration file that modifies the default behavior of the CodeInventory API.",
+    "main_functionality": [
+      "Modify",
+      "the",
+      "default",
+      "port",
+      "of",
+      "the",
+      "CodeInventory",
+      "API"
+    ],
+    "patterns": [
+      "Imports",
+      "are",
+      "used",
+      "to",
+      "import",
+      "necessary",
+      "modules",
+      "and",
+      "libraries"
+    ],
+    "dependencies_analysis": "The script has no external dependencies.",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "The script runs the app using Flask's run method, which may have performance implications.",
+    "maintainability": "The script is relatively simple and easy to understand.",
+    "test_coverage": "The script has no test coverage as it is a configuration file."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.api",
+        "name": "app",
+        "alias": null,
+        "line": 5
+      }
+    ],
+    "dependencies": [
+      "codeinventory",
+      "sys",
+      "os"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

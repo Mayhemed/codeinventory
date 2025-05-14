@@ -1,0 +1,531 @@
+{
+  "file": "db.py",
+  "path": "src/codeinventory/database/db.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:51:46.414415",
+  "metrics": {
+    "size": 7626,
+    "lines": {
+      "total": 208,
+      "code": 174,
+      "comment": 34
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 6,
+      "classes": 1,
+      "imports": 8
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "uuid",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 6
+      }
+    ],
+    "functions": [
+      {
+        "name": "__init__",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "db_path",
+            "type": "str",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 9,
+        "complexity": 1
+      },
+      {
+        "name": "_initialize",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Initialize database schema.",
+        "is_async": false,
+        "line": 16,
+        "complexity": 1
+      },
+      {
+        "name": "save_tool",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_info",
+            "type": "Dict",
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "analysis",
+            "type": "Optional[Dict]",
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": "Optional[str]",
+        "decorators": [],
+        "docstring": "Save tool and its analysis to database.",
+        "is_async": false,
+        "line": 82,
+        "complexity": 5
+      },
+      {
+        "name": "search",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "query",
+            "type": "str",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "List[Dict]",
+        "decorators": [],
+        "docstring": "Search tools using LIKE queries.",
+        "is_async": false,
+        "line": 163,
+        "complexity": 2
+      },
+      {
+        "name": "get_tool",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "tool_id",
+            "type": "str",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "Optional[Dict]",
+        "decorators": [],
+        "docstring": "Get tool by ID.",
+        "is_async": false,
+        "line": 179,
+        "complexity": 2
+      },
+      {
+        "name": "close",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Close database connection.",
+        "is_async": false,
+        "line": 205,
+        "complexity": 1
+      }
+    ],
+    "classes": [
+      {
+        "name": "InventoryDB",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "db_path",
+                "type": "str",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 9,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_initialize",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Initialize database schema.",
+            "is_async": false,
+            "line": 16,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "save_tool",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_info",
+                "type": "Dict",
+                "default": null,
+                "position": 1
+              },
+              {
+                "name": "analysis",
+                "type": "Optional[Dict]",
+                "default": null,
+                "position": 2
+              }
+            ],
+            "returns": "Optional[str]",
+            "decorators": [],
+            "docstring": "Save tool and its analysis to database.",
+            "is_async": false,
+            "line": 82,
+            "complexity": 5,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "search",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "query",
+                "type": "str",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "List[Dict]",
+            "decorators": [],
+            "docstring": "Search tools using LIKE queries.",
+            "is_async": false,
+            "line": 163,
+            "complexity": 2,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "get_tool",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "tool_id",
+                "type": "str",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "Optional[Dict]",
+            "decorators": [],
+            "docstring": "Get tool by ID.",
+            "is_async": false,
+            "line": 179,
+            "complexity": 2,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "close",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Close database connection.",
+            "is_async": false,
+            "line": 205,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          }
+        ],
+        "attributes": [],
+        "decorators": [],
+        "docstring": null,
+        "line": 8,
+        "is_dataclass": false,
+        "metaclass": null
+      }
+    ],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "datetime",
+      "uuid",
+      "typing",
+      "json",
+      "pathlib",
+      "sqlite3"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "The InventoryDB class is a python script that creates and manages an inventory database for tools.",
+    "description": "This script uses the sqlite3 module to create a new database file if it does not exist, and it initializes the schema of the database. It also provides functions to save tools, search for tools, and get information about specific tools.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Creating a new inventory database file if it does not exist",
+      "Initializing the schema of the database",
+      "Providing functions to save tools, search for tools, and get information about specific tools"
+    ],
+    "dependencies_analysis": "The script uses the sqlite3 module to interact with the database.",
+    "potential_issues": [
+      "Potential performance issues if the database grows too large",
+      "Potential security concerns if the database is not properly secured"
+    ],
+    "usage_examples": [
+      "To create a new inventory database file:",
+      "InventoryDB('path/to/db.sqlite')",
+      "To save a tool in the database:",
+      "save_tool(tool_id, path, name, type, language, file_hash)",
+      "To search for tools by name or category:",
+      "search('name or category', 'limit')"
+    ],
+    "architectural_role": "The InventoryDB class is a data-processing component that provides functionality to manage the inventory database.",
+    "patterns": [
+      "Database schema initialization",
+      "Data modeling and normalization",
+      "Functional programming"
+    ],
+    "test_coverage": "Low test coverage due to the complexity of the code and the need for extensive testing to fully exercise all functionalities.",
+    "security_considerations": [
+      "Proper error handling and exception handling to prevent errors from crashing the program"
+    ],
+    "performance_notes": "Performance could be improved by using a more efficient data structure for storing tools, such as a hash table or tree-based structure.",
+    "maintainability": "Medium maintainability due to the complexity of the code and the need for extensive testing and documentation."
+  },
+  "documentation": {
+    "summary": "The InventoryDB class is a python script that creates and manages an inventory database for tools.",
+    "description": "This script uses the sqlite3 module to create a new database file if it does not exist, and it initializes the schema of the database. It also provides functions to save tools, search for tools, and get information about specific tools.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "architectural_role": "The InventoryDB class is a data-processing component that provides functionality to manage the inventory database.",
+    "main_functionality": [
+      "Creating a new inventory database file if it does not exist",
+      "Initializing the schema of the database",
+      "Providing functions to save tools, search for tools, and get information about specific tools"
+    ],
+    "patterns": [
+      "Database schema initialization",
+      "Data modeling and normalization",
+      "Functional programming"
+    ],
+    "dependencies_analysis": "The script uses the sqlite3 module to interact with the database.",
+    "potential_issues": [
+      "Potential performance issues if the database grows too large",
+      "Potential security concerns if the database is not properly secured"
+    ],
+    "security_considerations": [
+      "Proper error handling and exception handling to prevent errors from crashing the program"
+    ],
+    "performance_notes": "Performance could be improved by using a more efficient data structure for storing tools, such as a hash table or tree-based structure.",
+    "maintainability": "Medium maintainability due to the complexity of the code and the need for extensive testing and documentation.",
+    "test_coverage": "Low test coverage due to the complexity of the code and the need for extensive testing to fully exercise all functionalities."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "uuid",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 6
+      }
+    ],
+    "dependencies": [
+      "datetime",
+      "uuid",
+      "typing",
+      "json",
+      "pathlib",
+      "sqlite3"
+    ],
+    "exported": {
+      "functions": [
+        "__init__",
+        "_initialize",
+        "save_tool",
+        "search",
+        "get_tool",
+        "close"
+      ],
+      "classes": [
+        "InventoryDB"
+      ],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

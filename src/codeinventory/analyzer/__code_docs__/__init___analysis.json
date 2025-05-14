@@ -1,0 +1,75 @@
+{
+  "file": "__init__.py",
+  "path": "src/codeinventory/analyzer/__init__.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:53:27.015545",
+  "metrics": {
+    "size": 0,
+    "lines": {
+      "total": 1,
+      "code": 0,
+      "comment": 1
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Initialization file for the analyzer module",
+    "description": "This file defines the initializer function for the analyzer module, which is used to import all necessary modules and set up the environment for analysis.",
+    "category": "utility",
+    "complexity": "simple",
+    "main_functionality": [
+      "Initializes the analyzer module"
+    ],
+    "dependencies_analysis": [],
+    "potential_issues": [],
+    "usage_examples": [],
+    "architectural_role": "Provides a basic structure for the analyzer module",
+    "patterns": [],
+    "test_coverage": "0% (no tests)",
+    "security_considerations": [],
+    "performance_notes": "None (initialization file)",
+    "maintainability": "High (simple functionality)"
+  },
+  "documentation": {
+    "summary": "Initialization file for the analyzer module",
+    "description": "This file defines the initializer function for the analyzer module, which is used to import all necessary modules and set up the environment for analysis.",
+    "category": "utility",
+    "complexity": "simple",
+    "architectural_role": "Provides a basic structure for the analyzer module",
+    "main_functionality": [
+      "Initializes the analyzer module"
+    ],
+    "patterns": [],
+    "dependencies_analysis": [],
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "None (initialization file)",
+    "maintainability": "High (simple functionality)",
+    "test_coverage": "0% (no tests)"
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

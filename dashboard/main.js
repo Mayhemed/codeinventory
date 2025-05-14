@@ -40,6 +40,8 @@ app.on('activate', () => {
 });
 
 // Handle API calls from renderer
+
+// In main.js, update the api-call handler
 ipcMain.handle('api-call', async (event, endpoint, method = 'GET', data = null) => {
   // Force IPv4 by using 127.0.0.1
   const apiUrl = new URL(endpoint, 'http://127.0.0.1:8001');
@@ -53,15 +55,25 @@ ipcMain.handle('api-call', async (event, endpoint, method = 'GET', data = null) 
     }
   };
   
-  if (data) {
+  if (data && (method === 'POST' || method === 'PUT')) {
     options.body = JSON.stringify(data);
   }
   
   try {
     const response = await fetch(apiUrl.toString(), options);
-    const result = await response.json();
-    console.log(`API response:`, result); // Debug log
-    return result;
+    
+    // Check for text vs JSON response
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const result = await response.json();
+      console.log(`API response:`, result); // Debug log
+      return result;
+    } else {
+      // Text response
+      const textResult = await response.text();
+      console.log(`API text response: ${textResult.substring(0, 100)}...`); // Debug log (first 100 chars)
+      return textResult;
+    }
   } catch (error) {
     console.error('API call failed:', error);
     throw error;

@@ -11,6 +11,19 @@ scanner:
     - ".venv"
     - "build"
     - "dist"
+    - "site-packages"
+    - "lib/python"
+    - "egg-info"
+    - "wheels"
+    - "deps"
+    - "vendor"
+    - "cache"
+    - ".idea"
+    - ".vscode"
+    - "migrations"
+    - "test_data"
+    - "tmp"
+    - "temp"
   max_file_size: 1048576  # 1MB
   extensions:
     python: [".py", ".pyw"]
@@ -18,19 +31,8 @@ scanner:
     typescript: [".ts", ".tsx"]
     shell: [".sh", ".bash", ".zsh"]
     config: ["Dockerfile", "Makefile", "package.json", "pyproject.toml"]
-
-analyzer:
-  ollama:
-    host: "http://localhost:11434"
-    model: "codellama"
-    temperature: 0.3
-  batch_size: 10
-  timeout: 30
-
-database:
-  path: "~/.codeinventory/inventory.db"
-  backup_interval: "daily"
-
-watcher:
-  enabled: false
-  poll_interval: 60
+    html: [".html", ".htm"]
+    css: [".css", ".scss", ".sass"]
+    data: [".json", ".yaml", ".yml"]
+    docs: [".md", ".rst"]
+    other: [".java", ".c", ".cpp", ".h", ".go", ".rb", ".php"]

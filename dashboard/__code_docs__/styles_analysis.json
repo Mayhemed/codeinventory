@@ -1,0 +1,119 @@
+{
+  "file": "styles.css",
+  "path": "dashboard/styles.css",
+  "language": "css",
+  "last_analyzed": "2025-05-11T02:49:18.646732",
+  "metrics": {
+    "size": 5691,
+    "lines": {
+      "total": 344,
+      "code": 289,
+      "comment": 55
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "dependencies": []
+  },
+  "analysis": {
+    "purpose": "The purpose of this CSS file is to style a dashboard for displaying various metrics and data.",
+    "description": "This code defines the styles for the dashboard, including the layout, colors, fonts, and other visual elements. It also includes utility classes for displaying different views and animations.",
+    "category": "ui",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Styling",
+      "dashboard",
+      "layout"
+    ],
+    "dependencies_analysis": "No external dependencies are used in this file.",
+    "potential_issues": [
+      "Bugs",
+      "incompatibility",
+      "with",
+      "older",
+      "browsers"
+    ],
+    "usage_examples": [
+      "Importing",
+      "the",
+      "file",
+      "in",
+      "a",
+      "HTML",
+      "document"
+    ],
+    "architectural_role": "Defines the visual styling of the dashboard.",
+    "patterns": [
+      "BEM",
+      "CSS",
+      "architecture",
+      "and",
+      "flexbox"
+    ],
+    "test_coverage": "Insufficient test coverage.",
+    "security_considerations": [
+      "Cross-site",
+      "scripting",
+      "attacks",
+      "are",
+      "possible"
+    ],
+    "performance_notes": "Optimization opportunities: Minifying and compressing the file, using CSS variables to reduce repetition.",
+    "maintainability": "Code is well-structured and easy to read, but additional comments or documentation would be helpful."
+  },
+  "documentation": {
+    "summary": "The purpose of this CSS file is to style a dashboard for displaying various metrics and data.",
+    "description": "This code defines the styles for the dashboard, including the layout, colors, fonts, and other visual elements. It also includes utility classes for displaying different views and animations.",
+    "category": "ui",
+    "complexity": "moderate",
+    "architectural_role": "Defines the visual styling of the dashboard.",
+    "main_functionality": [
+      "Styling",
+      "dashboard",
+      "layout"
+    ],
+    "patterns": [
+      "BEM",
+      "CSS",
+      "architecture",
+      "and",
+      "flexbox"
+    ],
+    "dependencies_analysis": "No external dependencies are used in this file.",
+    "potential_issues": [
+      "Bugs",
+      "incompatibility",
+      "with",
+      "older",
+      "browsers"
+    ],
+    "security_considerations": [
+      "Cross-site",
+      "scripting",
+      "attacks",
+      "are",
+      "possible"
+    ],
+    "performance_notes": "Optimization opportunities: Minifying and compressing the file, using CSS variables to reduce repetition.",
+    "maintainability": "Code is well-structured and easy to read, but additional comments or documentation would be helpful.",
+    "test_coverage": "Insufficient test coverage."
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

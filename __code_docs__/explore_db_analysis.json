@@ -1,0 +1,175 @@
+{
+  "file": "explore_db.py",
+  "path": "explore_db.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:51:11.873759",
+  "metrics": {
+    "size": 810,
+    "lines": {
+      "total": 32,
+      "code": 21,
+      "comment": 11
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 2
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "db_path",
+        "line": 5,
+        "is_constant": false
+      },
+      {
+        "name": "conn",
+        "line": 6,
+        "is_constant": false
+      },
+      {
+        "name": "cursor",
+        "line": 10,
+        "is_constant": false
+      },
+      {
+        "name": "tools",
+        "line": 12,
+        "is_constant": false
+      },
+      {
+        "name": "stats",
+        "line": 25,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "pathlib",
+      "sqlite3"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "The explore_db.py script is used to explore a SQLite database and retrieve information about its contents.",
+    "description": "This code connects to a SQLite database using the sqlite3 module and retrieves information about the tools stored in it. It then prints out the information in a human-readable format. The script also includes a function to retrieve statistics about the data stored in the database, such as the number of files per language.",
+    "category": "utility",
+    "complexity": "moderate",
+    "main_functionality": [
+      "connecting to a SQLite database",
+      "retrieving information about tools"
+    ],
+    "dependencies_analysis": [
+      "sqlite3"
+    ],
+    "potential_issues": [],
+    "usage_examples": [
+      "python explore_db.py"
+    ],
+    "architectural_role": "This script serves as a simple utility to help users explore the contents of a SQLite database.",
+    "patterns": [
+      "SQLite",
+      "database"
+    ],
+    "test_coverage": "",
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": ""
+  },
+  "documentation": {
+    "summary": "The explore_db.py script is used to explore a SQLite database and retrieve information about its contents.",
+    "description": "This code connects to a SQLite database using the sqlite3 module and retrieves information about the tools stored in it. It then prints out the information in a human-readable format. The script also includes a function to retrieve statistics about the data stored in the database, such as the number of files per language.",
+    "category": "utility",
+    "complexity": "moderate",
+    "architectural_role": "This script serves as a simple utility to help users explore the contents of a SQLite database.",
+    "main_functionality": [
+      "connecting to a SQLite database",
+      "retrieving information about tools"
+    ],
+    "patterns": [
+      "SQLite",
+      "database"
+    ],
+    "dependencies_analysis": [
+      "sqlite3"
+    ],
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "",
+    "test_coverage": ""
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "dependencies": [
+      "pathlib",
+      "sqlite3"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [
+        {
+          "name": "db_path",
+          "line": 5,
+          "is_constant": false
+        },
+        {
+          "name": "conn",
+          "line": 6,
+          "is_constant": false
+        },
+        {
+          "name": "cursor",
+          "line": 10,
+          "is_constant": false
+        },
+        {
+          "name": "tools",
+          "line": 12,
+          "is_constant": false
+        },
+        {
+          "name": "stats",
+          "line": 25,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}

@@ -1,0 +1,622 @@
+{
+  "file": "scanner.py",
+  "path": "src/codeinventory/scanner/scanner.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:53:18.344938",
+  "metrics": {
+    "size": 3666,
+    "lines": {
+      "total": 112,
+      "code": 89,
+      "comment": 23
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 7,
+      "classes": 1,
+      "imports": 10
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "hashlib",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "glob",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Set",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "mimetypes",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 7
+      }
+    ],
+    "functions": [
+      {
+        "name": "__init__",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "config",
+            "type": "Dict",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 10,
+        "complexity": 2
+      },
+      {
+        "name": "scan",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "directory",
+            "type": "str",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "List[Dict]",
+        "decorators": [],
+        "docstring": "Scan directory for code files.",
+        "is_async": false,
+        "line": 16,
+        "complexity": 4
+      },
+      {
+        "name": "_find_files",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "directory",
+            "type": "Path",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "List[Path]",
+        "decorators": [],
+        "docstring": "Find all supported files in directory.",
+        "is_async": false,
+        "line": 32,
+        "complexity": 6
+      },
+      {
+        "name": "_is_supported",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "Path",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "bool",
+        "decorators": [],
+        "docstring": "Check if file extension is supported.",
+        "is_async": false,
+        "line": 46,
+        "complexity": 1
+      },
+      {
+        "name": "_process_file",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "Path",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "Optional[Dict]",
+        "decorators": [],
+        "docstring": "Process a single file.",
+        "is_async": false,
+        "line": 50,
+        "complexity": 3
+      },
+      {
+        "name": "_detect_type",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "Path",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "str",
+        "decorators": [],
+        "docstring": "Detect file type.",
+        "is_async": false,
+        "line": 77,
+        "complexity": 6
+      },
+      {
+        "name": "_detect_language",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_path",
+            "type": "Path",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "str",
+        "decorators": [],
+        "docstring": "Detect programming language.",
+        "is_async": false,
+        "line": 95,
+        "complexity": 1
+      }
+    ],
+    "classes": [
+      {
+        "name": "Scanner",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "config",
+                "type": "Dict",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 10,
+            "complexity": 2,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "scan",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "directory",
+                "type": "str",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "List[Dict]",
+            "decorators": [],
+            "docstring": "Scan directory for code files.",
+            "is_async": false,
+            "line": 16,
+            "complexity": 4,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_find_files",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "directory",
+                "type": "Path",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "List[Path]",
+            "decorators": [],
+            "docstring": "Find all supported files in directory.",
+            "is_async": false,
+            "line": 32,
+            "complexity": 6,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_is_supported",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "Path",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "bool",
+            "decorators": [],
+            "docstring": "Check if file extension is supported.",
+            "is_async": false,
+            "line": 46,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_process_file",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "Path",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "Optional[Dict]",
+            "decorators": [],
+            "docstring": "Process a single file.",
+            "is_async": false,
+            "line": 50,
+            "complexity": 3,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_detect_type",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "Path",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "str",
+            "decorators": [],
+            "docstring": "Detect file type.",
+            "is_async": false,
+            "line": 77,
+            "complexity": 6,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_detect_language",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_path",
+                "type": "Path",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "str",
+            "decorators": [],
+            "docstring": "Detect programming language.",
+            "is_async": false,
+            "line": 95,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          }
+        ],
+        "attributes": [],
+        "decorators": [],
+        "docstring": null,
+        "line": 9,
+        "is_dataclass": false,
+        "metaclass": null
+      }
+    ],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "datetime",
+      "typing",
+      "glob",
+      "mimetypes",
+      "pathlib",
+      "hashlib",
+      "os"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Scan a directory for code files using a configuration file.",
+    "description": "This module provides a class called Scanner that can be initialized with a config dictionary containing a 'scanner' key and its corresponding value is a dictionary of parameters used to configure the scanning process. The supported extensions are specified under the 'extensions' key in the config, and the exclude pattern is specified under the 'exclude' key. The scan method takes a directory path as an argument and returns a list of dictionaries containing information about each found file.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "main_functionality": [
+      "scan",
+      "directory",
+      "for",
+      "code",
+      "files"
+    ],
+    "dependencies_analysis": "os, hashlib, glob, pathlib, typing (List, Dict, Optional, Set), mimetypes, datetime",
+    "potential_issues": [
+      "exclusion of files based on a list of patterns",
+      "error handling for processing files and skipping invalid or unsupported files"
+    ],
+    "usage_examples": [
+      "import scanner\nconfig = {\"scanner\": {\"extensions\": [\"py\", \"sh\", \"c\"], \"exclude\": [\"**/*.txt\"]}}\nscan = Scanner(config)\ndirectory = \"/path/to/directory\"\nresults = scan.scan(directory)",
+      "import scanner\nconfig = {\"scanner\": {\"extensions\": [\"py\", \"sh\", \"c\"], \"exclude\": [\"**/*.txt\"]}}\nscan = Scanner(config)\ndirectory = \"/path/to/directory\"\nresults = scan.scan(directory)",
+      "import scanner\nconfig = {\"scanner\": {\"extensions\": [\"py\", \"sh\", \"c\"], \"exclude\": [\"**/*.txt\"]}}\nscan = Scanner(config)\ndirectory = \"/path/to/directory\"\nresults = scan.scan(directory)"
+    ],
+    "architectural_role": "file scanner",
+    "patterns": [
+      "dependency injection",
+      "service object",
+      "configuration"
+    ],
+    "test_coverage": "insufficient, further testing required to validate functionality and error handling",
+    "security_considerations": [
+      "exclusion of files based on a list of patterns may lead to false positives or negatives"
+    ],
+    "performance_notes": "moderate, depends on the number of files in the directory and the complexity of the exclude pattern",
+    "maintainability": "high, well-structured code with clear documentation and minimal technical debt"
+  },
+  "documentation": {
+    "summary": "Scan a directory for code files using a configuration file.",
+    "description": "This module provides a class called Scanner that can be initialized with a config dictionary containing a 'scanner' key and its corresponding value is a dictionary of parameters used to configure the scanning process. The supported extensions are specified under the 'extensions' key in the config, and the exclude pattern is specified under the 'exclude' key. The scan method takes a directory path as an argument and returns a list of dictionaries containing information about each found file.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "architectural_role": "file scanner",
+    "main_functionality": [
+      "scan",
+      "directory",
+      "for",
+      "code",
+      "files"
+    ],
+    "patterns": [
+      "dependency injection",
+      "service object",
+      "configuration"
+    ],
+    "dependencies_analysis": "os, hashlib, glob, pathlib, typing (List, Dict, Optional, Set), mimetypes, datetime",
+    "potential_issues": [
+      "exclusion of files based on a list of patterns",
+      "error handling for processing files and skipping invalid or unsupported files"
+    ],
+    "security_considerations": [
+      "exclusion of files based on a list of patterns may lead to false positives or negatives"
+    ],
+    "performance_notes": "moderate, depends on the number of files in the directory and the complexity of the exclude pattern",
+    "maintainability": "high, well-structured code with clear documentation and minimal technical debt",
+    "test_coverage": "insufficient, further testing required to validate functionality and error handling"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "hashlib",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "glob",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "List",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Set",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "mimetypes",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 7
+      }
+    ],
+    "dependencies": [
+      "datetime",
+      "typing",
+      "glob",
+      "mimetypes",
+      "pathlib",
+      "hashlib",
+      "os"
+    ],
+    "exported": {
+      "functions": [
+        "__init__",
+        "scan",
+        "_find_files",
+        "_is_supported",
+        "_process_file",
+        "_detect_type",
+        "_detect_language"
+      ],
+      "classes": [
+        "Scanner"
+      ],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

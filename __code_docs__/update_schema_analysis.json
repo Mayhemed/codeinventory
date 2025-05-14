@@ -1,0 +1,127 @@
+{
+  "file": "update_schema.py",
+  "path": "update_schema.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:48:10.349333",
+  "metrics": {
+    "size": 1782,
+    "lines": {
+      "total": 55,
+      "code": 42,
+      "comment": 13
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 2
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "db_path",
+        "line": 5,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "pathlib",
+      "sqlite3"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Update the schema of a SQLite database by adding a new column called 'execution_command' to the 'tools' table.",
+    "description": "This code snippet checks if the 'execution_command' column exists in the 'tools' table, and if not, it creates a new database with the correct schema and adds the 'execution_command' column. It also updates the existing database by adding the 'execution_command' column if necessary.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "main_functionality": [
+      "database creation/update"
+    ],
+    "dependencies_analysis": "Imports sqlite3 and pathlib for working with SQLite databases and file paths.",
+    "potential_issues": [],
+    "usage_examples": [],
+    "architectural_role": "manages database schema",
+    "patterns": [
+      "single responsibility principle (SRP)",
+      "open/closed principle (OCP)"
+    ],
+    "test_coverage": "not sufficient",
+    "security_considerations": [],
+    "performance_notes": "creates new database if it doesn't exist, updates existing database by adding column if necessary. Potential for slow performance due to overhead of SQLite and file I/O operations.",
+    "maintainability": "good"
+  },
+  "documentation": {
+    "summary": "Update the schema of a SQLite database by adding a new column called 'execution_command' to the 'tools' table.",
+    "description": "This code snippet checks if the 'execution_command' column exists in the 'tools' table, and if not, it creates a new database with the correct schema and adds the 'execution_command' column. It also updates the existing database by adding the 'execution_command' column if necessary.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "architectural_role": "manages database schema",
+    "main_functionality": [
+      "database creation/update"
+    ],
+    "patterns": [
+      "single responsibility principle (SRP)",
+      "open/closed principle (OCP)"
+    ],
+    "dependencies_analysis": "Imports sqlite3 and pathlib for working with SQLite databases and file paths.",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "creates new database if it doesn't exist, updates existing database by adding column if necessary. Potential for slow performance due to overhead of SQLite and file I/O operations.",
+    "maintainability": "good",
+    "test_coverage": "not sufficient"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      }
+    ],
+    "dependencies": [
+      "pathlib",
+      "sqlite3"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [
+        {
+          "name": "db_path",
+          "line": 5,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}

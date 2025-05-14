@@ -1,0 +1,558 @@
+{
+  "file": "enhanced_scanner.py",
+  "path": "enhanced_scanner.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:47:27.743629",
+  "metrics": {
+    "size": 17690,
+    "lines": {
+      "total": 486,
+      "code": 392,
+      "comment": 94
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 10,
+      "classes": 1,
+      "imports": 10
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "import",
+        "module": "hashlib",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "requests",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "import",
+        "module": "re",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "ast",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_file_info",
+        "args": [
+          {
+            "name": "filepath",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get basic file information.",
+        "is_async": false,
+        "line": 132,
+        "complexity": 1
+      },
+      {
+        "name": "get_language",
+        "args": [
+          {
+            "name": "filepath",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Determine file language from extension.",
+        "is_async": false,
+        "line": 149,
+        "complexity": 1
+      },
+      {
+        "name": "analyze_with_ollama",
+        "args": [
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get high-level analysis from Ollama.",
+        "is_async": false,
+        "line": 163,
+        "complexity": 4
+      },
+      {
+        "name": "generate_documentation",
+        "args": [
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "ollama_analysis",
+            "type": null,
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Generate comprehensive documentation.",
+        "is_async": false,
+        "line": 211,
+        "complexity": 2
+      },
+      {
+        "name": "init_db",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Initialize the database with enhanced schema.",
+        "is_async": false,
+        "line": 241,
+        "complexity": 1
+      },
+      {
+        "name": "save_to_db",
+        "args": [
+          {
+            "name": "conn",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_info",
+            "type": null,
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "structure_info",
+            "type": null,
+            "default": null,
+            "position": 2
+          },
+          {
+            "name": "ollama_analysis",
+            "type": null,
+            "default": null,
+            "position": 3
+          },
+          {
+            "name": "documentation",
+            "type": null,
+            "default": null,
+            "position": 4
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Save enhanced analysis to database.",
+        "is_async": false,
+        "line": 297,
+        "complexity": 5
+      },
+      {
+        "name": "analyze_project_structure",
+        "args": [
+          {
+            "name": "root_path",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Analyze overall project structure.",
+        "is_async": false,
+        "line": 370,
+        "complexity": 5
+      },
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 404,
+        "complexity": 12
+      },
+      {
+        "name": "__init__",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 19,
+        "complexity": 1
+      },
+      {
+        "name": "analyze_python_code",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "code",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Extract detailed information from Python code.",
+        "is_async": false,
+        "line": 26,
+        "complexity": 27
+      }
+    ],
+    "classes": [
+      {
+        "name": "CodeAnalyzer",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 19,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze_python_code",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "code",
+                "type": null,
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": "Extract detailed information from Python code.",
+            "is_async": false,
+            "line": 26,
+            "complexity": 27,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          }
+        ],
+        "attributes": [],
+        "decorators": [],
+        "docstring": null,
+        "line": 18,
+        "is_dataclass": false,
+        "metaclass": null
+      }
+    ],
+    "global_vars": [],
+    "constants": [
+      {
+        "name": "OLLAMA_HOST",
+        "line": 13,
+        "is_constant": true,
+        "value": "http://localhost:11434"
+      },
+      {
+        "name": "MODEL",
+        "line": 14,
+        "is_constant": true,
+        "value": "codellama"
+      },
+      {
+        "name": "DB_PATH",
+        "line": 15,
+        "is_constant": true
+      },
+      {
+        "name": "TIMEOUT",
+        "line": 16,
+        "is_constant": true,
+        "value": 30
+      }
+    ],
+    "dependencies": [
+      "datetime",
+      "re",
+      "time",
+      "ast",
+      "json",
+      "pathlib",
+      "hashlib",
+      "sqlite3",
+      "requests",
+      "os"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This code provides an enhanced scanner for Python code analysis, capable of extracting detailed information from Python source files.",
+    "description": "The CodeAnalyzer class in this module defines a Python interface for analyzing Python code and generating documentation. It uses the Ollama model to generate documentation and provide insights into the code's structure and functionality.",
+    "category": "utility",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Python source file analysis"
+    ],
+    "dependencies_analysis": "The module uses several external dependencies, including ast for parsing Python code, requests for communication with the Ollama model, and sqlite3 for storing data.",
+    "potential_issues": [
+      "External dependency on the Ollama model may affect performance or availability"
+    ],
+    "usage_examples": [
+      "Analyze a Python file by calling the analyze_python_code() method and use the generated documentation."
+    ],
+    "architectural_role": "Provides a Python interface for analyzing Python code and generating documentation.",
+    "patterns": [
+      "Design patterns used include Factory, Adapter, and Dependency Injection"
+    ],
+    "test_coverage": "Test coverage needs are moderate, with test cases covering basic functionality and edge cases.",
+    "security_considerations": [],
+    "performance_notes": "Performance may be affected by the size of the code being analyzed and the complexity of the analysis.",
+    "maintainability": "The code is modular, with clear separation of concerns between the CodeAnalyzer class and its dependencies. However, additional testing and refactoring may be necessary to improve maintainability."
+  },
+  "documentation": {
+    "summary": "This code provides an enhanced scanner for Python code analysis, capable of extracting detailed information from Python source files.",
+    "description": "The CodeAnalyzer class in this module defines a Python interface for analyzing Python code and generating documentation. It uses the Ollama model to generate documentation and provide insights into the code's structure and functionality.",
+    "category": "utility",
+    "complexity": "moderate",
+    "architectural_role": "Provides a Python interface for analyzing Python code and generating documentation.",
+    "main_functionality": [
+      "Python source file analysis"
+    ],
+    "patterns": [
+      "Design patterns used include Factory, Adapter, and Dependency Injection"
+    ],
+    "dependencies_analysis": "The module uses several external dependencies, including ast for parsing Python code, requests for communication with the Ollama model, and sqlite3 for storing data.",
+    "potential_issues": [
+      "External dependency on the Ollama model may affect performance or availability"
+    ],
+    "security_considerations": [],
+    "performance_notes": "Performance may be affected by the size of the code being analyzed and the complexity of the analysis.",
+    "maintainability": "The code is modular, with clear separation of concerns between the CodeAnalyzer class and its dependencies. However, additional testing and refactoring may be necessary to improve maintainability.",
+    "test_coverage": "Test coverage needs are moderate, with test cases covering basic functionality and edge cases."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "import",
+        "module": "hashlib",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "requests",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "import",
+        "module": "re",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "ast",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "dependencies": [
+      "datetime",
+      "re",
+      "time",
+      "ast",
+      "json",
+      "pathlib",
+      "hashlib",
+      "sqlite3",
+      "requests",
+      "os"
+    ],
+    "exported": {
+      "functions": [
+        "get_file_info",
+        "get_language",
+        "analyze_with_ollama",
+        "generate_documentation",
+        "init_db",
+        "save_to_db",
+        "analyze_project_structure",
+        "main",
+        "__init__",
+        "analyze_python_code"
+      ],
+      "classes": [
+        "CodeAnalyzer"
+      ],
+      "variables": [],
+      "constants": [
+        {
+          "name": "OLLAMA_HOST",
+          "line": 13,
+          "is_constant": true,
+          "value": "http://localhost:11434"
+        },
+        {
+          "name": "MODEL",
+          "line": 14,
+          "is_constant": true,
+          "value": "codellama"
+        },
+        {
+          "name": "DB_PATH",
+          "line": 15,
+          "is_constant": true
+        },
+        {
+          "name": "TIMEOUT",
+          "line": 16,
+          "is_constant": true,
+          "value": 30
+        }
+      ]
+    }
+  }
+}

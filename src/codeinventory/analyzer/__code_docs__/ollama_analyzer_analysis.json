@@ -1,0 +1,350 @@
+{
+  "file": "ollama_analyzer.py",
+  "path": "src/codeinventory/analyzer/ollama_analyzer.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:53:35.435209",
+  "metrics": {
+    "size": 2971,
+    "lines": {
+      "total": 82,
+      "code": 68,
+      "comment": 14
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 3,
+      "classes": 1,
+      "imports": 5
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "requests",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.enhanced_scanner",
+        "name": "EnhancedAnalyzer",
+        "alias": null,
+        "line": 4
+      }
+    ],
+    "functions": [
+      {
+        "name": "__init__",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "config",
+            "type": "Dict",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 7,
+        "complexity": 1
+      },
+      {
+        "name": "analyze",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "file_info",
+            "type": "Dict",
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": "Optional[Dict]",
+        "decorators": [],
+        "docstring": "Analyze file content using Ollama.",
+        "is_async": false,
+        "line": 14,
+        "complexity": 4
+      },
+      {
+        "name": "_create_prompt",
+        "args": [
+          {
+            "name": "self",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "content",
+            "type": "str",
+            "default": null,
+            "position": 1
+          },
+          {
+            "name": "language",
+            "type": "str",
+            "default": null,
+            "position": 2
+          }
+        ],
+        "returns": "str",
+        "decorators": [],
+        "docstring": "Create analysis prompt.",
+        "is_async": false,
+        "line": 57,
+        "complexity": 1
+      }
+    ],
+    "classes": [
+      {
+        "name": "OllamaAnalyzer",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "config",
+                "type": "Dict",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": null,
+            "decorators": [],
+            "docstring": null,
+            "is_async": false,
+            "line": 7,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "analyze",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "file_info",
+                "type": "Dict",
+                "default": null,
+                "position": 1
+              }
+            ],
+            "returns": "Optional[Dict]",
+            "decorators": [],
+            "docstring": "Analyze file content using Ollama.",
+            "is_async": false,
+            "line": 14,
+            "complexity": 4,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          },
+          {
+            "name": "_create_prompt",
+            "args": [
+              {
+                "name": "self",
+                "type": null,
+                "default": null,
+                "position": 0
+              },
+              {
+                "name": "content",
+                "type": "str",
+                "default": null,
+                "position": 1
+              },
+              {
+                "name": "language",
+                "type": "str",
+                "default": null,
+                "position": 2
+              }
+            ],
+            "returns": "str",
+            "decorators": [],
+            "docstring": "Create analysis prompt.",
+            "is_async": false,
+            "line": 57,
+            "complexity": 1,
+            "is_property": false,
+            "is_staticmethod": false,
+            "is_classmethod": false
+          }
+        ],
+        "attributes": [],
+        "decorators": [],
+        "docstring": null,
+        "line": 6,
+        "is_dataclass": false,
+        "metaclass": null
+      }
+    ],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "requests",
+      "json",
+      "typing",
+      "codeinventory"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Analyze file content using Ollama.",
+    "description": "This class provides an interface for analyzing file content using Ollama. It takes in a configuration dictionary and uses it to create an instance of the EnhancedAnalyzer class, which is used to analyze files. The analyze function takes in a file_info dictionary with 'content' and 'language' keys and returns an optional dictionary with AI analysis results.",
+    "category": "api",
+    "complexity": "moderate",
+    "main_functionality": [
+      "analyze"
+    ],
+    "dependencies_analysis": [
+      "EnhancedAnalyzer class for analyzing files"
+    ],
+    "potential_issues": [
+      "Handling of HTTP requests and responses",
+      "Exception handling"
+    ],
+    "usage_examples": [
+      "OllamaAnalyzer(config).analyze(file_info)"
+    ],
+    "architectural_role": "A layer that interfaces with the Ollama AI model to analyze file content.",
+    "patterns": [
+      "Dependency injection",
+      "Inversion of control"
+    ],
+    "test_coverage": "Needs improvement. More comprehensive tests are needed to fully exercise the functionality of this class.",
+    "security_considerations": [],
+    "performance_notes": "The performance of this class depends on the complexity of the AI model being used and the size of the input file being analyzed. It may be necessary to optimize or parallelize certain aspects of the analysis process for better performance.",
+    "maintainability": "Moderate"
+  },
+  "documentation": {
+    "summary": "Analyze file content using Ollama.",
+    "description": "This class provides an interface for analyzing file content using Ollama. It takes in a configuration dictionary and uses it to create an instance of the EnhancedAnalyzer class, which is used to analyze files. The analyze function takes in a file_info dictionary with 'content' and 'language' keys and returns an optional dictionary with AI analysis results.",
+    "category": "api",
+    "complexity": "moderate",
+    "architectural_role": "A layer that interfaces with the Ollama AI model to analyze file content.",
+    "main_functionality": [
+      "analyze"
+    ],
+    "patterns": [
+      "Dependency injection",
+      "Inversion of control"
+    ],
+    "dependencies_analysis": [
+      "EnhancedAnalyzer class for analyzing files"
+    ],
+    "potential_issues": [
+      "Handling of HTTP requests and responses",
+      "Exception handling"
+    ],
+    "security_considerations": [],
+    "performance_notes": "The performance of this class depends on the complexity of the AI model being used and the size of the input file being analyzed. It may be necessary to optimize or parallelize certain aspects of the analysis process for better performance.",
+    "maintainability": "Moderate",
+    "test_coverage": "Needs improvement. More comprehensive tests are needed to fully exercise the functionality of this class."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "requests",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Dict",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "typing",
+        "name": "Optional",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.enhanced_scanner",
+        "name": "EnhancedAnalyzer",
+        "alias": null,
+        "line": 4
+      }
+    ],
+    "dependencies": [
+      "requests",
+      "json",
+      "typing",
+      "codeinventory"
+    ],
+    "exported": {
+      "functions": [
+        "__init__",
+        "analyze",
+        "_create_prompt"
+      ],
+      "classes": [
+        "OllamaAnalyzer"
+      ],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

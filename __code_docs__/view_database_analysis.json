@@ -1,0 +1,176 @@
+{
+  "file": "view_database.py",
+  "path": "view_database.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:47:42.206298",
+  "metrics": {
+    "size": 1110,
+    "lines": {
+      "total": 43,
+      "code": 31,
+      "comment": 12
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 1,
+      "classes": 0,
+      "imports": 4
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 4
+      }
+    ],
+    "functions": [
+      {
+        "name": "view_database",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "View contents of the database.",
+        "is_async": false,
+        "line": 8,
+        "complexity": 2
+      }
+    ],
+    "classes": [],
+    "global_vars": [],
+    "constants": [
+      {
+        "name": "DB_PATH",
+        "line": 6,
+        "is_constant": true
+      }
+    ],
+    "dependencies": [
+      "pathlib",
+      "json",
+      "os",
+      "sqlite3"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This Python script is a tool for viewing the contents of an SQLite database.",
+    "description": "The script uses the sqlite3 module to connect to the database and execute SQL queries. The results are printed to the console.",
+    "category": "utility",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Viewing contents of an SQLite database"
+    ],
+    "dependencies_analysis": [
+      "sqlite3 (Python package for working with SQLite databases) and json (library for parsing JSON data)"
+    ],
+    "potential_issues": [],
+    "usage_examples": [
+      "python view_database.py"
+    ],
+    "architectural_role": "",
+    "patterns": [
+      "SQLite database"
+    ],
+    "test_coverage": "None",
+    "security_considerations": [
+      "The script does not accept user input and does not perform any sensitive operations, so there are no security concerns."
+    ],
+    "performance_notes": [],
+    "maintainability": ""
+  },
+  "documentation": {
+    "summary": "This Python script is a tool for viewing the contents of an SQLite database.",
+    "description": "The script uses the sqlite3 module to connect to the database and execute SQL queries. The results are printed to the console.",
+    "category": "utility",
+    "complexity": "moderate",
+    "architectural_role": "",
+    "main_functionality": [
+      "Viewing contents of an SQLite database"
+    ],
+    "patterns": [
+      "SQLite database"
+    ],
+    "dependencies_analysis": [
+      "sqlite3 (Python package for working with SQLite databases) and json (library for parsing JSON data)"
+    ],
+    "potential_issues": [],
+    "security_considerations": [
+      "The script does not accept user input and does not perform any sensitive operations, so there are no security concerns."
+    ],
+    "performance_notes": [],
+    "maintainability": "",
+    "test_coverage": "None"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 4
+      }
+    ],
+    "dependencies": [
+      "pathlib",
+      "json",
+      "os",
+      "sqlite3"
+    ],
+    "exported": {
+      "functions": [
+        "view_database"
+      ],
+      "classes": [],
+      "variables": [],
+      "constants": [
+        {
+          "name": "DB_PATH",
+          "line": 6,
+          "is_constant": true
+        }
+      ]
+    }
+  }
+}

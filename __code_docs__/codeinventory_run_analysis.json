@@ -1,0 +1,149 @@
+{
+  "file": "codeinventory_run.py",
+  "path": "codeinventory_run.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:48:04.169712",
+  "metrics": {
+    "size": 208,
+    "lines": {
+      "total": 12,
+      "code": 6,
+      "comment": 6
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 3
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "main",
+        "alias": null,
+        "line": 8
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "codeinventory",
+      "sys",
+      "os"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This code adds the 'src' directory to the system path so that Python can import modules from it.",
+    "description": "The main function is a simple script that imports and executes the CLI module from the codeinventory package. It uses the sys and os libraries to get the current file location and add it to the system path.",
+    "category": "cli",
+    "complexity": "simple",
+    "main_functionality": [
+      "Adds 'src' directory to system path"
+    ],
+    "dependencies_analysis": {
+      "Dependencies": [
+        "sys",
+        "os"
+      ],
+      "Purpose of dependencies": [
+        "system path manipulation"
+      ]
+    },
+    "potential_issues": [],
+    "usage_examples": [
+      "python codeinventory_run.py"
+    ],
+    "architectural_role": "None",
+    "patterns": [
+      "System path manipulation"
+    ],
+    "test_coverage": "No test coverage",
+    "security_considerations": [
+      "System path manipulation vulnerabilities"
+    ],
+    "performance_notes": [],
+    "maintainability": "Low technical debt"
+  },
+  "documentation": {
+    "summary": "This code adds the 'src' directory to the system path so that Python can import modules from it.",
+    "description": "The main function is a simple script that imports and executes the CLI module from the codeinventory package. It uses the sys and os libraries to get the current file location and add it to the system path.",
+    "category": "cli",
+    "complexity": "simple",
+    "architectural_role": "None",
+    "main_functionality": [
+      "Adds 'src' directory to system path"
+    ],
+    "patterns": [
+      "System path manipulation"
+    ],
+    "dependencies_analysis": {
+      "Dependencies": [
+        "sys",
+        "os"
+      ],
+      "Purpose of dependencies": [
+        "system path manipulation"
+      ]
+    },
+    "potential_issues": [],
+    "security_considerations": [
+      "System path manipulation vulnerabilities"
+    ],
+    "performance_notes": [],
+    "maintainability": "Low technical debt",
+    "test_coverage": "No test coverage"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "main",
+        "alias": null,
+        "line": 8
+      }
+    ],
+    "dependencies": [
+      "codeinventory",
+      "sys",
+      "os"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

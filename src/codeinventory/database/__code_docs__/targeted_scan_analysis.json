@@ -1,0 +1,228 @@
+{
+  "file": "targeted_scan.py",
+  "path": "src/codeinventory/database/targeted_scan.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:52:06.950409",
+  "metrics": {
+    "size": 4813,
+    "lines": {
+      "total": 134,
+      "code": 115,
+      "comment": 19
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 1,
+      "classes": 0,
+      "imports": 8
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "load_config",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "functions": [
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 12,
+        "complexity": 17
+      }
+    ],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "time",
+      "pathlib",
+      "codeinventory",
+      "yaml",
+      "sys"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This python file 'targeted_scan.py' is part of CodeInventory, a software tool that helps developers analyze code quality and identify potential issues in their projects.",
+    "description": "The file defines the main() function, which creates an instance of the Scanner class from the 'codeinventory.scanner' module. The scanner object is then used to scan the project directory for files based on a custom configuration that excludes some massive directories and includes only Python files with a maximum size of 512KB. The resulting file list is then passed to the OllamaAnalyzer class from the 'codeinventory.analyzer' module, which analyzes each file and generates a report based on the project's coding style, architecture, and other factors.",
+    "category": "util",
+    "complexity": "moderate",
+    "main_functionality": [
+      "create an instance of the Scanner class",
+      "scan the project directory for files",
+      "pass the file list to the OllamaAnalyzer class"
+    ],
+    "dependencies_analysis": "The code depends on external libraries such as 'sys', 'time', 'pathlib', and 'yaml' which are used to manage system dependencies, perform basic operations with files, and read configuration files.",
+    "potential_issues": [
+      "Potentially, the custom configuration for the scanner could be too specific and may not be adaptable to different project structures"
+    ],
+    "usage_examples": [
+      "To use this code, the user needs to have a Python environment installed on their system and run 'python targeted_scan.py' from the terminal"
+    ],
+    "architectural_role": "The file serves as an entry point for the CodeInventory software tool and provides the core functionality for analyzing code quality.",
+    "patterns": [
+      "Factory pattern used to create instances of the Scanner class",
+      "Dependency injection pattern used to pass a custom configuration object to the OllamaAnalyzer class"
+    ],
+    "test_coverage": "Code coverage analysis is recommended to ensure that all possible scenarios are tested and the code is robust enough to handle different inputs.",
+    "security_considerations": [
+      "The custom configuration for the scanner may contain sensitive information such as API keys or database credentials, which should be handled with care"
+    ],
+    "performance_notes": "The performance of this code depends on the complexity and size of the project directory being scanned. The file could benefit from optimization techniques such as lazy loading of large data structures or parallel processing.",
+    "maintainability": "This code is well-structured, modular, and easy to read, making it maintainable and scalable for future development."
+  },
+  "documentation": {
+    "summary": "This python file 'targeted_scan.py' is part of CodeInventory, a software tool that helps developers analyze code quality and identify potential issues in their projects.",
+    "description": "The file defines the main() function, which creates an instance of the Scanner class from the 'codeinventory.scanner' module. The scanner object is then used to scan the project directory for files based on a custom configuration that excludes some massive directories and includes only Python files with a maximum size of 512KB. The resulting file list is then passed to the OllamaAnalyzer class from the 'codeinventory.analyzer' module, which analyzes each file and generates a report based on the project's coding style, architecture, and other factors.",
+    "category": "util",
+    "complexity": "moderate",
+    "architectural_role": "The file serves as an entry point for the CodeInventory software tool and provides the core functionality for analyzing code quality.",
+    "main_functionality": [
+      "create an instance of the Scanner class",
+      "scan the project directory for files",
+      "pass the file list to the OllamaAnalyzer class"
+    ],
+    "patterns": [
+      "Factory pattern used to create instances of the Scanner class",
+      "Dependency injection pattern used to pass a custom configuration object to the OllamaAnalyzer class"
+    ],
+    "dependencies_analysis": "The code depends on external libraries such as 'sys', 'time', 'pathlib', and 'yaml' which are used to manage system dependencies, perform basic operations with files, and read configuration files.",
+    "potential_issues": [
+      "Potentially, the custom configuration for the scanner could be too specific and may not be adaptable to different project structures"
+    ],
+    "security_considerations": [
+      "The custom configuration for the scanner may contain sensitive information such as API keys or database credentials, which should be handled with care"
+    ],
+    "performance_notes": "The performance of this code depends on the complexity and size of the project directory being scanned. The file could benefit from optimization techniques such as lazy loading of large data structures or parallel processing.",
+    "maintainability": "This code is well-structured, modular, and easy to read, making it maintainable and scalable for future development.",
+    "test_coverage": "Code coverage analysis is recommended to ensure that all possible scenarios are tested and the code is robust enough to handle different inputs."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "load_config",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 9
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 10
+      }
+    ],
+    "dependencies": [
+      "time",
+      "pathlib",
+      "codeinventory",
+      "yaml",
+      "sys"
+    ],
+    "exported": {
+      "functions": [
+        "main"
+      ],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "file": "__init__.py",
+  "path": "src/codeinventory/__init__.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:52:21.890764",
+  "metrics": {
+    "size": 0,
+    "lines": {
+      "total": 1,
+      "code": 0,
+      "comment": 1
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Initialization file for Python package 'codeinventory'.",
+    "description": "This file is used to initialize the Python package 'codeinventory' and is not intended to be executed directly.",
+    "category": "utility",
+    "complexity": "simple",
+    "main_functionality": [],
+    "dependencies_analysis": {},
+    "potential_issues": [],
+    "usage_examples": [],
+    "architectural_role": "Initialization file for Python package 'codeinventory'.",
+    "patterns": [
+      "Python package initialization"
+    ],
+    "test_coverage": "Not applicable.",
+    "security_considerations": [],
+    "performance_notes": "None.",
+    "maintainability": "Low"
+  },
+  "documentation": {
+    "summary": "Initialization file for Python package 'codeinventory'.",
+    "description": "This file is used to initialize the Python package 'codeinventory' and is not intended to be executed directly.",
+    "category": "utility",
+    "complexity": "simple",
+    "architectural_role": "Initialization file for Python package 'codeinventory'.",
+    "main_functionality": [],
+    "patterns": [
+      "Python package initialization"
+    ],
+    "dependencies_analysis": {},
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "None.",
+    "maintainability": "Low",
+    "test_coverage": "Not applicable."
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

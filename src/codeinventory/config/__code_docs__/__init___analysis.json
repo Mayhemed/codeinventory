@@ -1,0 +1,75 @@
+{
+  "file": "__init__.py",
+  "path": "src/codeinventory/config/__init__.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:52:11.151697",
+  "metrics": {
+    "size": 0,
+    "lines": {
+      "total": 1,
+      "code": 0,
+      "comment": 1
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Initialize config files for codeinventory.",
+    "description": "This file initializes the config module for codeinventory by importing and defining configuration variables.",
+    "category": "config",
+    "complexity": "simple",
+    "main_functionality": [
+      "Initializes config files"
+    ],
+    "dependencies_analysis": {},
+    "potential_issues": [],
+    "usage_examples": [],
+    "architectural_role": "Provides a centralized location for defining configuration variables.",
+    "patterns": [],
+    "test_coverage": "0",
+    "security_considerations": [],
+    "performance_notes": [],
+    "maintainability": "low"
+  },
+  "documentation": {
+    "summary": "Initialize config files for codeinventory.",
+    "description": "This file initializes the config module for codeinventory by importing and defining configuration variables.",
+    "category": "config",
+    "complexity": "simple",
+    "architectural_role": "Provides a centralized location for defining configuration variables.",
+    "main_functionality": [
+      "Initializes config files"
+    ],
+    "patterns": [],
+    "dependencies_analysis": {},
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": [],
+    "maintainability": "low",
+    "test_coverage": "0"
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

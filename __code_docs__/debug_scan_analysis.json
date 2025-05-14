@@ -1,0 +1,220 @@
+{
+  "file": "debug_scan.py",
+  "path": "debug_scan.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:47:37.142364",
+  "metrics": {
+    "size": 1611,
+    "lines": {
+      "total": 46,
+      "code": 37,
+      "comment": 9
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 1,
+      "classes": 0,
+      "imports": 7
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "load_config",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 9
+      }
+    ],
+    "functions": [
+      {
+        "name": "main",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": null,
+        "is_async": false,
+        "line": 11,
+        "complexity": 5
+      }
+    ],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "pathlib",
+      "time",
+      "sys",
+      "codeinventory"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This code is a python script for scanning and analyzing source code using the Ollama analyzer.",
+    "description": "The script uses the CodeInventory framework to scan and analyze source code files in a given directory, and then stores the results in an inventory database. The analysis includes identifying purpose, author, and licensing information for each file, as well as detecting potential security vulnerabilities and technical debt.",
+    "category": "utility",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Scanning source code files",
+      "Analyzing code content using Ollama",
+      "Storing analysis results in inventory database"
+    ],
+    "dependencies_analysis": "Uses the CodeInventory framework for scanning and analyzing source code files, and the Ollama analyzer for detecting potential security vulnerabilities and technical debt.",
+    "potential_issues": [
+      "Potential issues with Ollama analysis",
+      "Issues with inventory database management"
+    ],
+    "usage_examples": [
+      "Run the script in a terminal window: python debug_scan.py"
+    ],
+    "architectural_role": "Main entry point for running the CodeInventory framework and Ollama analyzer, and for managing results in an inventory database.",
+    "patterns": [
+      "Command-line interface",
+      "Configuration management",
+      "Dependency injection"
+    ],
+    "test_coverage": "Limited test coverage due to complexity of analyzing source code files",
+    "security_considerations": [
+      "Potential vulnerabilities with Ollama analysis",
+      "Security concerns for inventory database management"
+    ],
+    "performance_notes": "Performance may be impacted by the number and size of files being scanned and analyzed, as well as the complexity of the source code being analyzed.",
+    "maintainability": "Maintainability can be improved by using a more modular and reusable architecture, and by separating responsibilities into smaller functions with clear names and descriptions."
+  },
+  "documentation": {
+    "summary": "This code is a python script for scanning and analyzing source code using the Ollama analyzer.",
+    "description": "The script uses the CodeInventory framework to scan and analyze source code files in a given directory, and then stores the results in an inventory database. The analysis includes identifying purpose, author, and licensing information for each file, as well as detecting potential security vulnerabilities and technical debt.",
+    "category": "utility",
+    "complexity": "moderate",
+    "architectural_role": "Main entry point for running the CodeInventory framework and Ollama analyzer, and for managing results in an inventory database.",
+    "main_functionality": [
+      "Scanning source code files",
+      "Analyzing code content using Ollama",
+      "Storing analysis results in inventory database"
+    ],
+    "patterns": [
+      "Command-line interface",
+      "Configuration management",
+      "Dependency injection"
+    ],
+    "dependencies_analysis": "Uses the CodeInventory framework for scanning and analyzing source code files, and the Ollama analyzer for detecting potential security vulnerabilities and technical debt.",
+    "potential_issues": [
+      "Potential issues with Ollama analysis",
+      "Issues with inventory database management"
+    ],
+    "security_considerations": [
+      "Potential vulnerabilities with Ollama analysis",
+      "Security concerns for inventory database management"
+    ],
+    "performance_notes": "Performance may be impacted by the number and size of files being scanned and analyzed, as well as the complexity of the source code being analyzed.",
+    "maintainability": "Maintainability can be improved by using a more modular and reusable architecture, and by separating responsibilities into smaller functions with clear names and descriptions.",
+    "test_coverage": "Limited test coverage due to complexity of analyzing source code files"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "import",
+        "module": "time",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.cli.cli",
+        "name": "load_config",
+        "alias": null,
+        "line": 6
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.scanner.scanner",
+        "name": "Scanner",
+        "alias": null,
+        "line": 7
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.analyzer.ollama_analyzer",
+        "name": "OllamaAnalyzer",
+        "alias": null,
+        "line": 8
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 9
+      }
+    ],
+    "dependencies": [
+      "pathlib",
+      "time",
+      "sys",
+      "codeinventory"
+    ],
+    "exported": {
+      "functions": [
+        "main"
+      ],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

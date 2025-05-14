@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://d3js.org; connect-src 'self' http://localhost:8001 http://127.0.0.1:8001; style-src 'self' 'unsafe-inline';">
     <meta charset="UTF-8">
     <title>CodeInventory Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <div id="app">

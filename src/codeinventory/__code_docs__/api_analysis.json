@@ -1,0 +1,335 @@
+{
+  "file": "api.py",
+  "path": "src/codeinventory/api.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:52:54.657465",
+  "metrics": {
+    "size": 3784,
+    "lines": {
+      "total": 144,
+      "code": 111,
+      "comment": 33
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 7,
+      "classes": 0,
+      "imports": 7
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "Flask",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "jsonify",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "request",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask_cors",
+        "name": "CORS",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 5
+      }
+    ],
+    "functions": [
+      {
+        "name": "index",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "API root endpoint.",
+        "is_async": false,
+        "line": 10,
+        "complexity": 1
+      },
+      {
+        "name": "get_db_connection",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Create a new database connection for each request.",
+        "is_async": false,
+        "line": 30,
+        "complexity": 1
+      },
+      {
+        "name": "get_stats",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get overview statistics.",
+        "is_async": false,
+        "line": 38,
+        "complexity": 3
+      },
+      {
+        "name": "get_tools",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get all tools.",
+        "is_async": false,
+        "line": 72,
+        "complexity": 2
+      },
+      {
+        "name": "get_components",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get all components.",
+        "is_async": false,
+        "line": 84,
+        "complexity": 2
+      },
+      {
+        "name": "get_relationships",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get tool relationships for visualization.",
+        "is_async": false,
+        "line": 101,
+        "complexity": 4
+      },
+      {
+        "name": "search",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Search tools.",
+        "is_async": false,
+        "line": 133,
+        "complexity": 2
+      }
+    ],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "app",
+        "line": 7,
+        "is_constant": false
+      },
+      {
+        "name": "config_path",
+        "line": 26,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "flask",
+      "flask_cors",
+      "pathlib",
+      "yaml",
+      "database"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "A RESTful API for managing a code inventory database.",
+    "description": "The CodeInventory API provides a set of endpoints for retrieving and manipulating data in a code inventory database. It is built using Flask, a popular Python web framework, and leverages the sqlite3 module for handling database operations. The API also includes support for CORS (Cross-Origin Resource Sharing) to allow requests from different domains.",
+    "category": "api",
+    "complexity": "moderate",
+    "main_functionality": [
+      "Get overview statistics",
+      "Get all tools",
+      "Get all components",
+      "Get tool relationships for visualization",
+      "Search tools"
+    ],
+    "dependencies_analysis": [
+      "flask",
+      "flask-cors",
+      "pathlib",
+      "yaml",
+      "sqlite3"
+    ],
+    "potential_issues": [
+      "Configurability and customization of the API",
+      "Handling large datasets",
+      "Safeguarding against SQL injection attacks"
+    ],
+    "usage_examples": [
+      "GET /api/stats - Get overview statistics",
+      "GET /api/tools - Get all tools",
+      "POST /api/components - Create a new component",
+      "PUT /api/relationships?tool=<tool-id>&component=<component-id> - Update the relationships between a tool and its components"
+    ],
+    "architectural_role": "API gateway for accessing the code inventory database.",
+    "patterns": [
+      "Model-View-Controller (MVC)",
+      "Data mapper",
+      "Repository pattern"
+    ],
+    "test_coverage": "Moderate test coverage required, with a focus on unit testing and integration testing.",
+    "security_considerations": [
+      "SQL injection attacks",
+      "Cross-site scripting (XSS) vulnerabilities",
+      "Authentication and authorization"
+    ],
+    "performance_notes": "Optimization opportunities for handling large datasets and concurrent requests, such as caching and pagination.",
+    "maintainability": "Moderate maintainability required, with a focus on scalability and readability of the codebase."
+  },
+  "documentation": {
+    "summary": "A RESTful API for managing a code inventory database.",
+    "description": "The CodeInventory API provides a set of endpoints for retrieving and manipulating data in a code inventory database. It is built using Flask, a popular Python web framework, and leverages the sqlite3 module for handling database operations. The API also includes support for CORS (Cross-Origin Resource Sharing) to allow requests from different domains.",
+    "category": "api",
+    "complexity": "moderate",
+    "architectural_role": "API gateway for accessing the code inventory database.",
+    "main_functionality": [
+      "Get overview statistics",
+      "Get all tools",
+      "Get all components",
+      "Get tool relationships for visualization",
+      "Search tools"
+    ],
+    "patterns": [
+      "Model-View-Controller (MVC)",
+      "Data mapper",
+      "Repository pattern"
+    ],
+    "dependencies_analysis": [
+      "flask",
+      "flask-cors",
+      "pathlib",
+      "yaml",
+      "sqlite3"
+    ],
+    "potential_issues": [
+      "Configurability and customization of the API",
+      "Handling large datasets",
+      "Safeguarding against SQL injection attacks"
+    ],
+    "security_considerations": [
+      "SQL injection attacks",
+      "Cross-site scripting (XSS) vulnerabilities",
+      "Authentication and authorization"
+    ],
+    "performance_notes": "Optimization opportunities for handling large datasets and concurrent requests, such as caching and pagination.",
+    "maintainability": "Moderate maintainability required, with a focus on scalability and readability of the codebase.",
+    "test_coverage": "Moderate test coverage required, with a focus on unit testing and integration testing."
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "Flask",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "jsonify",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "request",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask_cors",
+        "name": "CORS",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "database.db",
+        "name": "InventoryDB",
+        "alias": null,
+        "line": 5
+      }
+    ],
+    "dependencies": [
+      "flask",
+      "flask_cors",
+      "pathlib",
+      "yaml",
+      "database"
+    ],
+    "exported": {
+      "functions": [
+        "index",
+        "get_db_connection",
+        "get_stats",
+        "get_tools",
+        "get_components",
+        "get_relationships",
+        "search"
+      ],
+      "classes": [],
+      "variables": [
+        {
+          "name": "app",
+          "line": 7,
+          "is_constant": false
+        },
+        {
+          "name": "config_path",
+          "line": 26,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}

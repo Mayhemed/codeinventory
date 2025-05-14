@@ -1,0 +1,153 @@
+{
+  "file": "run_api.py",
+  "path": "run_api.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:47:59.458437",
+  "metrics": {
+    "size": 252,
+    "lines": {
+      "total": 13,
+      "code": 6,
+      "comment": 7
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 3
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.api",
+        "name": "app",
+        "alias": null,
+        "line": 9
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [],
+    "constants": [],
+    "dependencies": [
+      "codeinventory",
+      "sys",
+      "os"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Starts a web service using Flask framework to serve as an API for managing code inventory",
+    "description": "This code is used to run the CodeInventory API on a local machine. It imports the necessary libraries, adds the 'src' directory to the system path, and then imports and runs the API using the Flask framework.",
+    "category": "api",
+    "complexity": "simple",
+    "main_functionality": [
+      "starting",
+      "a",
+      "web",
+      "service",
+      "using",
+      "Flask"
+    ],
+    "dependencies_analysis": [
+      "sys",
+      "os",
+      "codeinventory.api"
+    ],
+    "potential_issues": [],
+    "usage_examples": [
+      "python run_api.py"
+    ],
+    "architectural_role": "entry point",
+    "patterns": [
+      "importing",
+      "dependencies",
+      "using",
+      "Flask"
+    ],
+    "test_coverage": "none",
+    "security_considerations": [],
+    "performance_notes": "depends on the performance of the Flask framework",
+    "maintainability": "low"
+  },
+  "documentation": {
+    "summary": "Starts a web service using Flask framework to serve as an API for managing code inventory",
+    "description": "This code is used to run the CodeInventory API on a local machine. It imports the necessary libraries, adds the 'src' directory to the system path, and then imports and runs the API using the Flask framework.",
+    "category": "api",
+    "complexity": "simple",
+    "architectural_role": "entry point",
+    "main_functionality": [
+      "starting",
+      "a",
+      "web",
+      "service",
+      "using",
+      "Flask"
+    ],
+    "patterns": [
+      "importing",
+      "dependencies",
+      "using",
+      "Flask"
+    ],
+    "dependencies_analysis": [
+      "sys",
+      "os",
+      "codeinventory.api"
+    ],
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "depends on the performance of the Flask framework",
+    "maintainability": "low",
+    "test_coverage": "none"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sys",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "from",
+        "module": "codeinventory.api",
+        "name": "app",
+        "alias": null,
+        "line": 9
+      }
+    ],
+    "dependencies": [
+      "codeinventory",
+      "sys",
+      "os"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

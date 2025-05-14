@@ -1,0 +1,274 @@
+{
+  "file": "fixed_api_server.py",
+  "path": "fixed_api_server.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:47:54.508224",
+  "metrics": {
+    "size": 10045,
+    "lines": {
+      "total": 310,
+      "code": 253,
+      "comment": 57
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 6,
+      "classes": 0,
+      "imports": 7
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "Flask",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "jsonify",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask_cors",
+        "name": "CORS",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 6
+      }
+    ],
+    "functions": [
+      {
+        "name": "table_exists",
+        "args": [
+          {
+            "name": "conn",
+            "type": null,
+            "default": null,
+            "position": 0
+          },
+          {
+            "name": "table_name",
+            "type": null,
+            "default": null,
+            "position": 1
+          }
+        ],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Check if a table exists in the database.",
+        "is_async": false,
+        "line": 13,
+        "complexity": 1
+      },
+      {
+        "name": "get_stats",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get database statistics.",
+        "is_async": false,
+        "line": 23,
+        "complexity": 7
+      },
+      {
+        "name": "get_tools",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get all tools.",
+        "is_async": false,
+        "line": 111,
+        "complexity": 8
+      },
+      {
+        "name": "get_projects",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get project information.",
+        "is_async": false,
+        "line": 146,
+        "complexity": 11
+      },
+      {
+        "name": "get_insights",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Get insights and analysis.",
+        "is_async": false,
+        "line": 204,
+        "complexity": 5
+      },
+      {
+        "name": "health_check",
+        "args": [],
+        "returns": null,
+        "decorators": [],
+        "docstring": "Health check endpoint.",
+        "is_async": false,
+        "line": 264,
+        "complexity": 3
+      }
+    ],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "app",
+        "line": 8,
+        "is_constant": false
+      }
+    ],
+    "constants": [
+      {
+        "name": "DB_PATH",
+        "line": 11,
+        "is_constant": true
+      }
+    ],
+    "dependencies": [
+      "flask",
+      "flask_cors",
+      "json",
+      "pathlib",
+      "sqlite3",
+      "os"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "Fixed API server that provides data to the CodeInventory app.",
+    "description": "This code defines a Flask application that serves as an API for the CodeInventory app. It connects to a SQLite database and provides various endpoints for retrieving data related to tools, projects, insights, and other information relevant to the development process. The code uses Flask and flask-cors to handle cross-origin resource sharing (CORS) requests and sqlite3 to interact with the database.",
+    "category": "api",
+    "complexity": "moderate"
+  },
+  "documentation": {
+    "summary": "Fixed API server that provides data to the CodeInventory app.",
+    "description": "This code defines a Flask application that serves as an API for the CodeInventory app. It connects to a SQLite database and provides various endpoints for retrieving data related to tools, projects, insights, and other information relevant to the development process. The code uses Flask and flask-cors to handle cross-origin resource sharing (CORS) requests and sqlite3 to interact with the database.",
+    "category": "api",
+    "complexity": "moderate",
+    "architectural_role": "",
+    "main_functionality": [],
+    "patterns": [],
+    "dependencies_analysis": "",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "",
+    "test_coverage": ""
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "Flask",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask",
+        "name": "jsonify",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "flask_cors",
+        "name": "CORS",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 3
+      },
+      {
+        "type": "import",
+        "module": "os",
+        "alias": null,
+        "line": 4
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 5
+      },
+      {
+        "type": "import",
+        "module": "json",
+        "alias": null,
+        "line": 6
+      }
+    ],
+    "dependencies": [
+      "flask",
+      "flask_cors",
+      "json",
+      "pathlib",
+      "sqlite3",
+      "os"
+    ],
+    "exported": {
+      "functions": [
+        "table_exists",
+        "get_stats",
+        "get_tools",
+        "get_projects",
+        "get_insights",
+        "health_check"
+      ],
+      "classes": [],
+      "variables": [
+        {
+          "name": "app",
+          "line": 8,
+          "is_constant": false
+        }
+      ],
+      "constants": [
+        {
+          "name": "DB_PATH",
+          "line": 11,
+          "is_constant": true
+        }
+      ]
+    }
+  }
+}

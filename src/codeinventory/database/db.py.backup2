@@ -1,0 +1,205 @@
+import sqlite3
+import json
+import uuid
+from pathlib import Path
+from typing import Dict, List, Optional
+from datetime import datetime
+
+class InventoryDB:
+    def __init__(self, db_path: str):
+        self.db_path = Path(db_path).expanduser()
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self.conn = sqlite3.connect(self.db_path)
+        self.conn.row_factory = sqlite3.Row
+        self._initialize()
+    
+    def _initialize(self):
+        """Initialize database schema."""
+        cursor = self.conn.cursor()
+        
+        # Create tables
+        cursor.executescript("""
+        CREATE TABLE IF NOT EXISTS tools (
+            id TEXT PRIMARY KEY,
+            path TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            language TEXT NOT NULL,
+            file_hash TEXT NOT NULL,
+            purpose TEXT,
+            description TEXT,
+            category TEXT,
+            complexity TEXT,
+            last_modified INTEGER,
+            last_analyzed INTEGER,
+            created_at INTEGER DEFAULT (strftime('%s', 'now')),
+            execution_command TEXT,
+            requires_args BOOLEAN,
+            environment_vars TEXT,
+            importable_items TEXT
+        );
+        
+        CREATE TABLE IF NOT EXISTS components (
+            id TEXT PRIMARY KEY,
+            tool_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            purpose TEXT,
+            signature TEXT,
+            FOREIGN KEY (tool_id) REFERENCES tools(id)
+        );
+        
+        CREATE TABLE IF NOT EXISTS dependencies (
+            id TEXT PRIMARY KEY,
+            tool_id TEXT NOT NULL,
+            dependency_type TEXT NOT NULL,
+            dependency_name TEXT NOT NULL,
+            version TEXT,
+            FOREIGN KEY (tool_id) REFERENCES tools(id)
+        );
+        
+        CREATE TABLE IF NOT EXISTS relationships (
+            id TEXT PRIMARY KEY,
+            source_tool_id TEXT NOT NULL,
+            target_tool_id TEXT NOT NULL,
+            relationship_type TEXT NOT NULL,
+            confidence REAL,
+            FOREIGN KEY (source_tool_id) REFERENCES tools(id),
+            FOREIGN KEY (target_tool_id) REFERENCES tools(id)
+        );
+        
+        CREATE TABLE IF NOT EXISTS examples (
+            id TEXT PRIMARY KEY,
+            tool_id TEXT NOT NULL,
+            example_code TEXT,
+            description TEXT,
+            FOREIGN KEY (tool_id) REFERENCES tools(id)
+        );
+        """)
+        
+        self.conn.commit()
+    
+    def save_tool(self, file_info: Dict, analysis: Optional[Dict]) -> Optional[str]:
+        """Save tool and its analysis to database."""
+        tool_id = str(uuid.uuid4())
+        cursor = self.conn.cursor()
+        
+        try:
+            # Check if tool already exists by path
+            cursor.execute("SELECT id FROM tools WHERE path = ?", (file_info['path'],))
+            existing = cursor.fetchone()
+            
+            # Serialize complex data structures
+            if analysis is None:
+            return None
+        environment_vars = json.dumps(analysis.get('environment_vars', []))
+            importable_items = json.dumps(analysis.get('importable_items', {}))
+            
+            if existing:
+                tool_id = existing[0]
+                # Update existing tool
+                cursor.execute("""
+                    UPDATE tools SET
+                        name = ?, type = ?, language = ?, file_hash = ?,
+                        purpose = ?, description = ?, category = ?, complexity = ?,
+                        last_modified = ?, last_analyzed = ?,
+                        execution_command = ?, requires_args = ?,
+                        environment_vars = ?, importable_items = ?
+                    WHERE id = ?
+                """, (
+                    file_info['name'],
+                    file_info['type'],
+                    file_info['language'],
+                    file_info['hash'],
+                    analysis.get('purpose'),
+                    analysis.get('description'),
+                    analysis.get('category'),
+                    analysis.get('complexity'),
+                    file_info['last_modified'],
+                    int(datetime.now().timestamp() * 1000),
+                    analysis.get('execution_command'),
+                    analysis.get('requires_args', False),
+                    environment_vars,
+                    importable_items,
+                    tool_id
+                ))
+            else:
+                # Insert new tool
+                cursor.execute("""
+                    INSERT INTO tools (
+                        id, path, name, type, language, file_hash,
+                        purpose, description, category, complexity,
+                        last_modified, last_analyzed,
+                        execution_command, requires_args,
+                        environment_vars, importable_items
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    tool_id,
+                    file_info['path'],
+                    file_info['name'],
+                    file_info['type'],
+                    file_info['language'],
+                    file_info['hash'],
+                    analysis.get('purpose'),
+                    analysis.get('description'),
+                    analysis.get('category'),
+                    analysis.get('complexity'),
+                    file_info['last_modified'],
+                    int(datetime.now().timestamp() * 1000),
+                    analysis.get('execution_command'),
+                    analysis.get('requires_args', False),
+                    environment_vars,
+                    importable_items
+                )) 
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Database error: {e}")
+            print(f"File info: {file_info}")
+            print(f"Analysis: {analysis}")
+            raise e
+    
+    def search(self, query: str) -> List[Dict]:
+        """Search tools using LIKE queries."""
+        cursor = self.conn.cursor()
+        
+        cursor.execute("""
+            SELECT * FROM tools 
+            WHERE name LIKE ? OR purpose LIKE ? OR description LIKE ?
+            ORDER BY name
+        """, (f'%{query}%', f'%{query}%', f'%{query}%'))
+        
+        results = []
+        for row in cursor.fetchall():
+            results.append(dict(row))
+        
+        return results
+
+    def get_tool(self, tool_id: str) -> Optional[Dict]:
+        """Get tool by ID."""
+        cursor = self.conn.cursor()
+        
+        cursor.execute("SELECT * FROM tools WHERE id = ?", (tool_id,))
+        row = cursor.fetchone()
+        
+        if row:
+            tool = dict(row)
+            
+            # Get components
+            cursor.execute("SELECT * FROM components WHERE tool_id = ?", (tool_id,))
+            tool['components'] = [dict(row) for row in cursor.fetchall()]
+            
+            # Get dependencies
+            cursor.execute("SELECT * FROM dependencies WHERE tool_id = ?", (tool_id,))
+            tool['dependencies'] = [dict(row) for row in cursor.fetchall()]
+            
+            # Get examples
+            cursor.execute("SELECT * FROM examples WHERE tool_id = ?", (tool_id,))
+            tool['examples'] = [dict(row) for row in cursor.fetchall()]
+            
+            return tool
+        
+        return None
+    
+    def close(self):
+        """Close database connection."""
+        self.conn.close()

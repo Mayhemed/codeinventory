@@ -1,0 +1,77 @@
+{
+  "file": "default.yaml",
+  "path": "src/codeinventory/config/default.yaml",
+  "language": "yaml",
+  "last_analyzed": "2025-05-11T02:52:17.480101",
+  "metrics": {
+    "size": 710,
+    "lines": {
+      "total": 37,
+      "code": 33,
+      "comment": 4
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "dependencies": []
+  },
+  "analysis": {
+    "purpose": "This yaml file is a configuration file for CodeInventory, an open-source project that helps developers keep track of their coding activities.",
+    "description": "The default.yaml file contains the basic configurations for CodeInventory, such as the paths to scan, the excluded directories and files, the maximum file size allowed, and the extensions supported. The analyzer section defines the analysis settings for Ollama, the AI-powered code analysis tool used by CodeInventory.",
+    "category": "config",
+    "complexity": "simple",
+    "main_functionality": [
+      "Define basic configurations for CodeInventory"
+    ],
+    "dependencies_analysis": [],
+    "potential_issues": [],
+    "usage_examples": [
+      "Run `codeinventory` in the terminal to start the analyzer"
+    ],
+    "architectural_role": "Configuration",
+    "patterns": [
+      "YAML syntax"
+    ],
+    "test_coverage": "None",
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "High"
+  },
+  "documentation": {
+    "summary": "This yaml file is a configuration file for CodeInventory, an open-source project that helps developers keep track of their coding activities.",
+    "description": "The default.yaml file contains the basic configurations for CodeInventory, such as the paths to scan, the excluded directories and files, the maximum file size allowed, and the extensions supported. The analyzer section defines the analysis settings for Ollama, the AI-powered code analysis tool used by CodeInventory.",
+    "category": "config",
+    "complexity": "simple",
+    "architectural_role": "Configuration",
+    "main_functionality": [
+      "Define basic configurations for CodeInventory"
+    ],
+    "patterns": [
+      "YAML syntax"
+    ],
+    "dependencies_analysis": [],
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "High",
+    "test_coverage": "None"
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

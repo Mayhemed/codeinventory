@@ -342,3 +342,955 @@ h3 {
     margin-bottom: 0.5rem;
     color: #2c3e50;
 }
+
+/* Improve file tree display */
+.tree-item {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.tree-item:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.tree-icon {
+  margin-right: 8px;
+}
+
+.directory {
+  font-weight: 500;
+  position: relative;
+}
+
+.tree-children {
+  padding-left: 15px;
+  overflow: hidden;
+  max-height: 2000px;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.tree-children.collapsed {
+  max-height: 0;
+}
+
+.directory::before {
+  content: "▶";
+  font-size: 10px;
+  margin-right: 5px;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.directory.expanded::before {
+  transform: rotate(90deg);
+}
+
+/* Fix file details panel */
+.file-details {
+  padding: 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.file-details h2 {
+  margin-top: 0;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+/* Improve metrics display */
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.metric-label {
+  font-weight: 500;
+  color: #34495e;
+}
+
+.metric-value {
+  color: #3498db;
+}
+/* File details styles */
+.file-path {
+  font-family: monospace;
+  padding: 5px 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  word-break: break-all;
+}
+
+.file-meta {
+  margin-bottom: 20px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.metric-label {
+  font-weight: 500;
+  color: #34495e;
+}
+
+.metric-value {
+  color: #3498db;
+}
+
+.file-purpose h3, .file-description h3, .file-execution h3, .file-components h3 {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.file-execution pre {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.components-list {
+  list-style: none;
+  padding: 0;
+}
+
+.component-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.component-item:last-child {
+  border-bottom: none;
+}
+
+.component-type {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.no-results, .error-message {
+  text-align: center;
+  padding: 30px;
+  color: #7f8c8d;
+}
+
+.error-message {
+  color: #e74c3c;
+}
+/* Pattern and recommendation styles */
+.pattern-list, .recommendations-list {
+  list-style: none;
+  padding: 0;
+}
+
+.pattern-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #3498db;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pattern-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.pattern-count {
+  color: #3498db;
+}
+
+.recommendation-item {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  background-color: #ebf8ff;
+  border-left: 4px solid #3498db;
+  border-radius: 0 4px 4px 0;
+}
+
+.recommendation-item h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.recommendation-item p {
+  margin: 0;
+  color: #34495e;
+}
+
+/* Fix for empty cards */
+.empty-card {
+  padding: 30px;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+.empty-card p {
+  margin-bottom: 8px;
+}
+/* Enhanced File Tree Styles */
+.file-tree-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.tree-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.tree-controls button {
+  padding: 5px 10px;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.tree-controls button:hover {
+  background-color: #dee2e6;
+}
+
+.tree-dir-container {
+  margin-bottom: 2px;
+}
+
+.tree-subdir-container {
+  margin-left: 10px;
+}
+
+.tree-item {
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.tree-item:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.tree-icon {
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.expand-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.file-count {
+  margin-left: 8px;
+  color: #7f8c8d;
+  font-size: 0.85em;
+}
+
+.directory {
+  font-weight: 500;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+/* Style for project level directories */
+.project-dir {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-bottom: 1px solid #bbdefb;
+}
+
+/* Style for subdirectories */
+.subdir {
+  background-color: #f5f5f5;
+  color: #424242;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tree-children {
+  padding-left: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.tree-children.collapsed {
+  display: none;
+}
+
+.file {
+  font-size: 0.95em;
+  padding: 6px 10px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.file.selected {
+  background-color: #e3f2fd;
+  border-left: 3px solid #3498db;
+}
+
+.tree-notice {
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff8e6;
+  border-left: 4px solid #f39c12;
+  font-size: 0.9em;
+  color: #7f8c8d;
+}
+
+/* Ensure directory names and file names wrap properly */
+.dir-name, .file-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* Recent Activity Styles */
+.activity-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.activity-item:hover {
+  background-color: #f8f9fa;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.activity-file {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.activity-time {
+  color: #7f8c8d;
+  font-size: 0.85em;
+}
+
+.activity-description {
+  color: #34495e;
+  font-size: 0.9em;
+  display: -webkit-box;
+  -line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Project Summary Styles */
+.project-summary-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.project-summary-item:hover {
+  background-color: #f8f9fa;
+}
+
+.project-summary-item:last-child {
+  border-bottom: none;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.project-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.project-stats {
+  color: #3498db;
+  font-size: 0.9em;
+}
+
+.project-languages {
+  color: #7f8c8d;
+  font-size: 0.85em;
+}
+
+.projects-total {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  color: #7f8c8d;
+  font-size: 0.9em;
+  text-align: right;
+}
+
+/* CSS for file tree controls */
+.file-tree-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.tree-control {
+  padding: 5px 10px;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tree-control:hover {
+  background-color: #dee2e6;
+}
+
+.tree-search {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tree-search input {
+  padding: 5px 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.tree-search button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.search-results-info {
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #e3f2fd;
+  border-left: 4px solid #3498db;
+  font-size: 0.9rem;
+}
+
+.no-results {
+  padding: 15px;
+  text-align: center;
+  color: #7f8c8d;
+}
+/* Explorer Layout */
+.explorer-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+  height: calc(100vh - 220px);
+  min-height: 500px;
+}
+
+.file-structure, .file-details-panel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-structure h3, .file-details-panel h3 {
+  margin: 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 1.1rem;
+  color: #343a40;
+}
+
+#fileTree, #fileDetails {
+  flex: 1;
+  overflow: auto;
+  padding: 0;
+}
+
+#fileDetails {
+  padding: 15px;
+}
+
+/* Modal dialog styles */
+.exclusion-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.exclusion-modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.exclusion-modal-header {
+    padding: 15px;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exclusion-modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+.exclusion-modal-body {
+    padding: 20px;
+}
+
+.exclusion-modal-body code {
+    display: block;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin: 10px 0;
+    word-break: break-all;
+    font-family: monospace;
+}
+
+.exclusion-options {
+    margin: 15px 0;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.option input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.exclusion-warning {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #856404;
+}
+
+.exclusion-modal-footer {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-btn, .confirm-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+.cancel-btn {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.cancel-btn:hover {
+    background-color: #dee2e6;
+}
+
+.confirm-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #c82333;
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    background-color: #2c3e50;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
+    transition: opacity 0.5s;
+    max-width: 350px;
+}
+
+.notification.success {
+    background-color: #2ecc71;
+}
+
+.notification.error {
+    background-color: #e74c3c;
+}
+
+.notification.info {
+    background-color: #3498db;
+}
+
+.notification.fade-out {
+    opacity: 0;
+}
+
+/* Styles for excluded items */
+.excluded {
+    text-decoration: line-through;
+    opacity: 0.7;
+    color: #e74c3c;
+}
+
+.tree-item.excluded {
+    background-color: #fff5f5;
+    border-left: 3px solid #e74c3c;
+}
+
+/* Source modal styles */
+.source-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.source-modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 80%;
+    height: 80%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.source-modal-header {
+    padding: 15px;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.source-modal-body {
+    flex: 1;
+    overflow: auto;
+}
+
+.source-modal-body pre {
+    margin: 0;
+    padding: 15px;
+}
+
+.source-modal-body code {
+    font-family: monospace;
+    white-space: pre;
+    tab-size: 2;
+}
+
+/* Context menu styles */
+.context-menu {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.context-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Modal dialog styles */
+.exclusion-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.exclusion-modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.exclusion-modal-header {
+    padding: 15px;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exclusion-modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+.exclusion-modal-body {
+    padding: 20px;
+}
+
+.exclusion-modal-body code {
+    display: block;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin: 10px 0;
+    word-break: break-all;
+    font-family: monospace;
+}
+
+.exclusion-options {
+    margin: 15px 0;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.option input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.exclusion-warning {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #856404;
+}
+
+.exclusion-modal-footer {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-btn, .confirm-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+.cancel-btn {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.cancel-btn:hover {
+    background-color: #dee2e6;
+}
+
+.confirm-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #c82333;
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    background-color: #2c3e50;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
+    transition: opacity 0.5s;
+    max-width: 350px;
+}
+
+.notification.success {
+    background-color: #2ecc71;
+}
+
+.notification.error {
+    background-color: #e74c3c;
+}
+
+.notification.info {
+    background-color: #3498db;
+}
+
+.notification.fade-out {
+    opacity: 0;
+}
+
+/* Tree controls toolbar */
+.tree-controls {
+    display: flex;
+    gap: 10px;
+    padding: 8px;
+    background-color: #f5f7fa;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.tree-control {
+    padding: 6px 12px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tree-control:hover {
+    background-color: #dee2e6;
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+}
+
+.exclude-dir-btn {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
+
+.exclude-dir-btn:hover {
+    background-color: #ffecb5;
+}
+
+/* Selection styles */
+.tree-item.directory.selected {
+    background-color: #e3f2fd;
+    border-left: 3px solid #3498db;
+}
+
+/* Styles for excluded items */
+.tree-item.excluded {
+    text-decoration: line-through;
+    opacity: 0.7;
+    color: #e74c3c;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .explorer-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "file": "make-readme.sh",
+  "path": "make-readme.sh",
+  "language": "shell",
+  "last_analyzed": "2025-05-11T02:50:57.824369",
+  "metrics": {
+    "size": 4604,
+    "lines": {
+      "total": 146,
+      "code": 117,
+      "comment": 29
+    },
+    "complexity": {
+      "overall": "simple",
+      "functions": 0,
+      "classes": 0,
+      "imports": 0
+    }
+  },
+  "structure": {
+    "imports": [],
+    "functions": [],
+    "classes": [],
+    "dependencies": []
+  },
+  "analysis": {
+    "purpose": "A utility module",
+    "description": "A simple utility module",
+    "category": "utility",
+    "complexity": "simple",
+    "main_functionality": [],
+    "dependencies_analysis": "Uses 0 imports from 0 packages",
+    "architectural_role": "utility component",
+    "patterns": [],
+    "maintainability": "simple complexity with 0 main entities"
+  },
+  "documentation": {
+    "summary": "A utility module",
+    "description": "A simple utility module",
+    "category": "utility",
+    "complexity": "simple",
+    "architectural_role": "utility component",
+    "main_functionality": [],
+    "patterns": [],
+    "dependencies_analysis": "Uses 0 imports from 0 packages",
+    "potential_issues": [],
+    "security_considerations": [],
+    "performance_notes": "",
+    "maintainability": "simple complexity with 0 main entities",
+    "test_coverage": ""
+  },
+  "dependency_graph": {
+    "imports": [],
+    "dependencies": [],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [],
+      "constants": []
+    }
+  }
+}

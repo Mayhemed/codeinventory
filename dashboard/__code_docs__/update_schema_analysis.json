@@ -1,0 +1,191 @@
+{
+  "file": "update_schema.py",
+  "path": "dashboard/update_schema.py",
+  "language": "python",
+  "last_analyzed": "2025-05-11T02:49:26.607154",
+  "metrics": {
+    "size": 1374,
+    "lines": {
+      "total": 48,
+      "code": 39,
+      "comment": 9
+    },
+    "complexity": {
+      "overall": "moderate",
+      "functions": 0,
+      "classes": 0,
+      "imports": 3
+    }
+  },
+  "structure": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "functions": [],
+    "classes": [],
+    "global_vars": [
+      {
+        "name": "config_path",
+        "line": 6,
+        "is_constant": false
+      },
+      {
+        "name": "db_path",
+        "line": 10,
+        "is_constant": false
+      },
+      {
+        "name": "conn",
+        "line": 11,
+        "is_constant": false
+      },
+      {
+        "name": "cursor",
+        "line": 12,
+        "is_constant": false
+      }
+    ],
+    "constants": [],
+    "dependencies": [
+      "yaml",
+      "pathlib",
+      "sqlite3"
+    ],
+    "decorators": [],
+    "docstrings": []
+  },
+  "analysis": {
+    "purpose": "This code updates the schema of a sqlite database to include new columns for project/module grouping, file relationships, and projects/modules tables.",
+    "description": "The code uses the sqlite3 library to connect to the database and execute SQL commands to add new columns and tables. It loads configuration from a YAML file and uses pathlib to expand user-specific paths. The code creates tables for file relationships and projects/modules, adds new columns to the tools table for project/module grouping, and commits and closes the connection.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "main_functionality": [
+      "updating schema"
+    ],
+    "dependencies_analysis": "The code depends on the sqlite3 library to interact with the database, as well as pathlib for file manipulation and yaml for loading configuration.",
+    "potential_issues": [
+      "Handling of external dependencies",
+      "Error handling",
+      "Database connection security",
+      "Test coverage"
+    ],
+    "usage_examples": [
+      "Updating the schema of a sqlite database to add new columns and tables"
+    ],
+    "architectural_role": "Data processing",
+    "patterns": [
+      "SQL injection prevention",
+      "Input validation",
+      "Error handling"
+    ],
+    "test_coverage": "Moderate",
+    "security_considerations": [
+      "Handling of user-specific paths",
+      "Proper error handling and input validation"
+    ],
+    "performance_notes": "The code may have performance issues if the database is large, as it uses a single connection to execute multiple commands.",
+    "maintainability": "Moderate"
+  },
+  "documentation": {
+    "summary": "This code updates the schema of a sqlite database to include new columns for project/module grouping, file relationships, and projects/modules tables.",
+    "description": "The code uses the sqlite3 library to connect to the database and execute SQL commands to add new columns and tables. It loads configuration from a YAML file and uses pathlib to expand user-specific paths. The code creates tables for file relationships and projects/modules, adds new columns to the tools table for project/module grouping, and commits and closes the connection.",
+    "category": "data-processing",
+    "complexity": "moderate",
+    "architectural_role": "Data processing",
+    "main_functionality": [
+      "updating schema"
+    ],
+    "patterns": [
+      "SQL injection prevention",
+      "Input validation",
+      "Error handling"
+    ],
+    "dependencies_analysis": "The code depends on the sqlite3 library to interact with the database, as well as pathlib for file manipulation and yaml for loading configuration.",
+    "potential_issues": [
+      "Handling of external dependencies",
+      "Error handling",
+      "Database connection security",
+      "Test coverage"
+    ],
+    "security_considerations": [
+      "Handling of user-specific paths",
+      "Proper error handling and input validation"
+    ],
+    "performance_notes": "The code may have performance issues if the database is large, as it uses a single connection to execute multiple commands.",
+    "maintainability": "Moderate",
+    "test_coverage": "Moderate"
+  },
+  "dependency_graph": {
+    "imports": [
+      {
+        "type": "import",
+        "module": "sqlite3",
+        "alias": null,
+        "line": 1
+      },
+      {
+        "type": "from",
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null,
+        "line": 2
+      },
+      {
+        "type": "import",
+        "module": "yaml",
+        "alias": null,
+        "line": 3
+      }
+    ],
+    "dependencies": [
+      "yaml",
+      "pathlib",
+      "sqlite3"
+    ],
+    "exported": {
+      "functions": [],
+      "classes": [],
+      "variables": [
+        {
+          "name": "config_path",
+          "line": 6,
+          "is_constant": false
+        },
+        {
+          "name": "db_path",
+          "line": 10,
+          "is_constant": false
+        },
+        {
+          "name": "conn",
+          "line": 11,
+          "is_constant": false
+        },
+        {
+          "name": "cursor",
+          "line": 12,
+          "is_constant": false
+        }
+      ],
+      "constants": []
+    }
+  }
+}
